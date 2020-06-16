@@ -1,0 +1,43 @@
+{
+  "name": "moneystream-wallet",
+  "version": "0.1.0",
+  "description": "A bitcoin wallet for streaming data",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "jest --passWithNoTests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/moneystreamdev/moneystream-wallet.git"
+  },
+  "keywords": [
+    "bitcoin",
+    "streaming",
+    "wallet",
+    "money-stream",
+    "web-monetization"
+  ],
+  "author": "Dave Foderick",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/moneystreamdev/moneystream-wallet/issues"
+  },
+  "homepage": "https://github.com/moneystreamdev/moneystream-wallet#readme",
+  "dependencies": {
+    "bsv": "git+https://github.com/moneystreamdev/bsv.git#bsv-legacy",
+    "long": "^4.0.0",
+    "node-fetch": "^2.6.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.10.2",
+    "@babel/preset-env": "^7.10.2",
+    "@babel/preset-typescript": "^7.10.1",
+    "@types/jest": "^26.0.0",
+    "@types/long": "^4.0.1",
+    "babel-jest": "^26.0.1",
+    "jest": "^26.0.1"
+  }
+}
