@@ -42,7 +42,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Wallet = void 0;
 var fs_1 = __importDefault(require("fs"));
 var bsv_1 = require("bsv");
-var node_fetch_1 = __importDefault(require("node-fetch"));
+var portableFetch_1 = require("./utils/portableFetch");
 var KeyPair_1 = require("./KeyPair");
 var TransactionBuilder_1 = require("./TransactionBuilder");
 // base calss for streaming wallet
@@ -316,7 +316,7 @@ var Wallet = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         url = "https://api.whatsonchain.com/v1/bsv/main/tx/hash/" + txhash;
-                        return [4 /*yield*/, node_fetch_1.default(url)];
+                        return [4 /*yield*/, portableFetch_1.portableFetch(url)];
                     case 1:
                         response = _a.sent();
                         return [2 /*return*/, response.json()];
@@ -332,7 +332,7 @@ var Wallet = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         url = "https://api.whatsonchain.com/v1/bsv/main/address/" + address.toString() + "/unspent";
-                        return [4 /*yield*/, node_fetch_1.default(url)];
+                        return [4 /*yield*/, portableFetch_1.portableFetch(url)];
                     case 1:
                         response = _a.sent();
                         return [2 /*return*/, response.json()];
@@ -351,7 +351,7 @@ var Wallet = /** @class */ (function () {
                             "txhex": txhex
                         };
                         body = JSON.stringify(data);
-                        return [4 /*yield*/, node_fetch_1.default(url, {
+                        return [4 /*yield*/, portableFetch_1.portableFetch(url, {
                                 method: "POST",
                                 headers: { 'Content-Type': 'application/json' },
                                 body: body

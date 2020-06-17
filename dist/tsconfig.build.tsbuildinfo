@@ -426,23 +426,13 @@
         "signature": "4ac62c67f94a5ea711df6ea2f3aa47b3a683ed0b50a01cc92b5f7d514c7b9c9c",
         "affectsGlobalScope": false
       },
-      "../node_modules/@types/node-fetch/node_modules/form-data/index.d.ts": {
-        "version": "cbb7029e32a6a72178cda8baa9129b1ee6d1d779a35e46c780e38b4909d42a89",
-        "signature": "cbb7029e32a6a72178cda8baa9129b1ee6d1d779a35e46c780e38b4909d42a89",
-        "affectsGlobalScope": false
-      },
-      "../node_modules/@types/node-fetch/externals.d.ts": {
-        "version": "972f1e91dab93b182624a17eeed02f683b8cb3fefbda7b689cc84570029d5f73",
-        "signature": "972f1e91dab93b182624a17eeed02f683b8cb3fefbda7b689cc84570029d5f73",
-        "affectsGlobalScope": false
-      },
-      "../node_modules/@types/node-fetch/index.d.ts": {
-        "version": "f51382950fa81e3a54e9fd9f343fe583cfbb221f15a51936e12411699347effe",
-        "signature": "f51382950fa81e3a54e9fd9f343fe583cfbb221f15a51936e12411699347effe",
+      "../src/utils/portableFetch.ts": {
+        "version": "65a4108cd01f948e090279fb63c1ddfa731ae5057eee36198a57d6087f1ad0e8",
+        "signature": "f031e7644650c2d3a867fb7d4fd3f6c98e42ebd3106e68b396e12e8592ed6b8e",
         "affectsGlobalScope": false
       },
       "../src/Wallet.ts": {
-        "version": "513039954e8582a18895550bda9f58f8f0fec06222dca1e94800c9969bd10d72",
+        "version": "ca3abfe98372fd9d438215e88e4b9a28c748affd67298a733e33d844b9532841",
         "signature": "394dc053ea02e1d3259f98b8081facfab3343df4d4ef90cb93e9cb56b5847e3a",
         "affectsGlobalScope": false
       },
@@ -570,6 +560,21 @@
         "version": "d3002f620eab4bf6476c9da5c0efb2041d46f7df8b3032a5631bd206abef2c75",
         "signature": "d3002f620eab4bf6476c9da5c0efb2041d46f7df8b3032a5631bd206abef2c75",
         "affectsGlobalScope": true
+      },
+      "../node_modules/@types/node-fetch/node_modules/form-data/index.d.ts": {
+        "version": "cbb7029e32a6a72178cda8baa9129b1ee6d1d779a35e46c780e38b4909d42a89",
+        "signature": "cbb7029e32a6a72178cda8baa9129b1ee6d1d779a35e46c780e38b4909d42a89",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@types/node-fetch/externals.d.ts": {
+        "version": "972f1e91dab93b182624a17eeed02f683b8cb3fefbda7b689cc84570029d5f73",
+        "signature": "972f1e91dab93b182624a17eeed02f683b8cb3fefbda7b689cc84570029d5f73",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@types/node-fetch/index.d.ts": {
+        "version": "f51382950fa81e3a54e9fd9f343fe583cfbb221f15a51936e12411699347effe",
+        "signature": "f51382950fa81e3a54e9fd9f343fe583cfbb221f15a51936e12411699347effe",
+        "affectsGlobalScope": false
       },
       "../node_modules/@types/normalize-package-data/index.d.ts": {
         "version": "c9ad058b2cc9ce6dc2ed92960d6d009e8c04bef46d3f5312283debca6869f613",
@@ -1331,14 +1336,14 @@
       ],
       "../src/Wallet.ts": [
         "../node_modules/@types/graceful-fs/index.d.ts",
-        "../node_modules/@types/node-fetch/index.d.ts",
         "../node_modules/@types/node/fs.d.ts",
         "../node_modules/@types/node/ts3.2/fs.d.ts",
         "../node_modules/@types/node/ts3.2/util.d.ts",
         "../node_modules/@types/node/util.d.ts",
         "../node_modules/bsv/index.d.ts",
         "../src/KeyPair.ts",
-        "../src/TransactionBuilder.ts"
+        "../src/TransactionBuilder.ts",
+        "../src/utils/portableFetch.ts"
       ],
       "../src/index.ts": [
         "../node_modules/@types/graceful-fs/index.d.ts",
@@ -1349,6 +1354,13 @@
         "../src/KeyPair.ts",
         "../src/TransactionBuilder.ts",
         "../src/Wallet.ts"
+      ],
+      "../src/utils/portableFetch.ts": [
+        "../node_modules/@types/graceful-fs/index.d.ts",
+        "../node_modules/@types/node/fs.d.ts",
+        "../node_modules/@types/node/ts3.2/fs.d.ts",
+        "../node_modules/@types/node/ts3.2/util.d.ts",
+        "../node_modules/@types/node/util.d.ts"
       ],
       "../test/functional/simplespend.test.ts": [
         "../node_modules/@types/graceful-fs/index.d.ts",
@@ -2613,6 +2625,7 @@
       "../src/TransactionBuilder.ts",
       "../src/Wallet.ts",
       "../src/index.ts",
+      "../src/utils/portableFetch.ts",
       "../test/functional/simplespend.test.ts",
       "../test/unit/keypair.test.ts",
       "../test/unit/wallet.test.ts",
