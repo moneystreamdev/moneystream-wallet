@@ -2,12 +2,14 @@
   "name": "moneystream-wallet",
   "version": "0.1.0",
   "description": "A bitcoin wallet for streaming data",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "test": "jest --passWithNoTests"
+    "test": "jest --passWithNoTests",
+    "prepublish": "tsc"
   },
   "repository": {
     "type": "git",
@@ -27,6 +29,7 @@
   },
   "homepage": "https://github.com/moneystreamdev/moneystream-wallet#readme",
   "dependencies": {
+    "@types/node-fetch": "^2.5.7",
     "bsv": "git+https://github.com/moneystreamdev/bsv.git#bsv-legacy",
     "long": "^4.0.0",
     "node-fetch": "^2.6.0"

@@ -30,7 +30,7 @@ export default class TransactionBuilder {
     }
 
     //sighash not used until bsv2
-    addInput(utxo:any, sigHash) {
+    addInput(utxo:any, sigHash:any) {
         //spend utxo as input, first 3 param required
         //inputFromPubKeyHash (txHashBuf, txOutNum, txOut, pubKey, nSequence, nHashType)
         // txhashbuf is tx hash/id as 32 byte buffer (tx_hash)
