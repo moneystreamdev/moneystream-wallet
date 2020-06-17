@@ -2,14 +2,17 @@
   "name": "moneystream-wallet",
   "version": "0.1.0",
   "description": "A bitcoin wallet for streaming data",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "./build",
+  "types": "./build",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "test": "jest --passWithNoTests",
-    "prepublish": "tsc"
+    "build:ts": "tsc --build tsconfig.json",
+    "build:ts:verbose": "yarn build:ts --verbose",
+    "build:ts:watch": "yarn build:ts --watch",
+    "clean:build": "rimraf build",
+    "test": "jest --passWithNoTests"
   },
   "repository": {
     "type": "git",
