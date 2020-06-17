@@ -1,7 +1,7 @@
 import {Transaction} from 'bsv'
 
 //constructs a transaction
-export default class TransactionBuilder {
+export class TransactionBuilder {
     // the transaction we are building
     tx:any
     // build future transactions with locktime

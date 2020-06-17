@@ -1,4 +1,4 @@
-import Wallet from '../../src/Wallet'
+import { Wallet } from '../../src/Wallet'
 import * as Long from 'long'
 
 describe('wallet broadcasts simple spend', () => {

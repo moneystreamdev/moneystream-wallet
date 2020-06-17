@@ -1,16 +1,16 @@
 'use strict'
 import fs from 'fs'
-import { Transaction, crypto} from 'bsv'
+import { Transaction, crypto } from 'bsv'
 import fetch from 'node-fetch'
-import KeyPair from './KeyPair'
-import TransactionBuilder from './TransactionBuilder'
+import { KeyPair } from './KeyPair'
+import { TransactionBuilder } from './TransactionBuilder'
 
 // base calss for streaming wallet
 // A wallet generates transactions
 // TODO: extract wallet storage into separate class
 // TODO: extract external API calls into separate class
 // TODO: extract debugging formatting into separate class
-export default class Wallet {
+export class Wallet {
     public _isDebug: boolean
     protected _walletFileName: string
     protected _dustLimit: number

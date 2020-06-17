@@ -1,7 +1,7 @@
-import Wallet from '../../src/Wallet'
+import { Wallet } from '../../src/Wallet'
 import * as Long from 'long'
-import {Transaction} from 'bsv'
-import KeyPair from '../../src/KeyPair'
+import { Transaction } from 'bsv'
+import { KeyPair } from '../../src/KeyPair'
 
 const dummyOutput = new Transaction.UnspentOutput(
   {

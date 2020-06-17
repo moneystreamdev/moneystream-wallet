@@ -3,7 +3,7 @@ import {
     Address, Script} from 'bsv'
 
 // a public and private pair of keys
-export default class KeyPair {
+export class KeyPair {
     privKey:any
     pubKey:any
     constructor(privKey?:any, pubKey?:any) {
