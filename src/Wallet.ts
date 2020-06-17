@@ -1,7 +1,7 @@
 'use strict'
 import fs from 'fs'
 import { Transaction, crypto } from 'bsv'
-import fetch from 'node-fetch'
+import { portableFetch } from './utils/portableFetch'
 import { KeyPair } from './KeyPair'
 import { TransactionBuilder } from './TransactionBuilder'
 
@@ -269,14 +269,14 @@ export class Wallet {
 
     async getApiTxJSON(txhash:string) {
         const url = `https://api.whatsonchain.com/v1/bsv/main/tx/hash/${txhash}`
-        const response = await fetch(url)
+        const response = await portableFetch(url)
         return response.json()
     }
 
     //address object
     async getUtxos(address:any) {
         const url = `https://api.whatsonchain.com/v1/bsv/main/address/${address.toString()}/unspent`
-        const response = await fetch(url)
+        const response = await portableFetch(url)
         return response.json()
     }
 
@@ -286,7 +286,7 @@ export class Wallet {
             "txhex": txhex
         }
         const body = JSON.stringify(data);
-        const broadcast = await fetch(url, 
+        const broadcast = await portableFetch(url, 
             {
                 method: "POST", 
                 headers: { 'Content-Type': 'application/json' },
