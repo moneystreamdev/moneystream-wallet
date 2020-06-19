@@ -63,7 +63,6 @@ var dummyOutput = new bsv_1.Transaction.UnspentOutput({
     txId: "1aebb7d0776cec663cbbdd87f200bf15406adb0ef91916d102bcd7f86c86934e",
     vout: 0,
     scriptPubKey: new KeyPair_1.KeyPair().fromRandom().toScript(),
-    amount: 1000,
     satoshis: 1000
 });
 describe('Wallet tests', function () {

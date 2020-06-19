@@ -432,7 +432,7 @@
         "affectsGlobalScope": false
       },
       "../src/Wallet.ts": {
-        "version": "ca3abfe98372fd9d438215e88e4b9a28c748affd67298a733e33d844b9532841",
+        "version": "443e05d8d76c3285c56b807ab57f0bd84bc7fcd62407d45d4dd80cbf845a77dc",
         "signature": "394dc053ea02e1d3259f98b8081facfab3343df4d4ef90cb93e9cb56b5847e3a",
         "affectsGlobalScope": false
       },
@@ -457,7 +457,7 @@
         "affectsGlobalScope": false
       },
       "../test/unit/wallet.test.ts": {
-        "version": "1c8a040eab38bf813d2375fcc0032349301fabd9d30e95cd542e88b3af77fce6",
+        "version": "dec19e307acb96e9795ed94b2ad0d0b9cfad62b35a757d3f885112c05b3525a7",
         "signature": "a747a591cf4e8c55cb44f079d82b31556e902fcea79ce8c49ded66ee039eaa11",
         "affectsGlobalScope": false
       },
