@@ -188,6 +188,7 @@ export class Wallet {
             //console.log(utxos)
             if (utxos.length > 0) {
                 const utxo0 = this.getUtxoFrom(utxos, satoshis)[0]
+                console.log(utxo0)
                 //from woc. height 0 means unconfirmed
                 //"height": 578325,
                 // "tx_pos": 0,
@@ -200,10 +201,11 @@ export class Wallet {
                         txid: utxo0.tx_hash,
                         vout: utxo0.tx_pos,
                         scriptPubKey: this._keypair.toScript(),
-                        amount: utxo0.value,
+                        //use satoshis, never amount!
                         satoshis: utxo0.value
                     }
                 )
+                console.log(this._utxo)
                 //this._utxo_tx_hash = utxo0.tx_hash
                 //this._utxo.amount = utxo0.value
             }

@@ -8,7 +8,6 @@ const dummyOutput = new Transaction.UnspentOutput(
       txId:"1aebb7d0776cec663cbbdd87f200bf15406adb0ef91916d102bcd7f86c86934e",
       vout:0,
       scriptPubKey:new KeyPair().fromRandom().toScript(),
-      amount:1000,
       satoshis:1000
   })
 
