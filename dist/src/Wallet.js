@@ -81,6 +81,9 @@ var Wallet = /** @class */ (function () {
         }
         return 0;
     };
+    Wallet.prototype.logDetailsLastTx = function () {
+        this.logDetails(this.lastTx);
+    };
     Wallet.prototype.logDetails = function (tx) {
         var details = "";
         details += "\n" + this._keypair.toWif();
@@ -119,7 +122,7 @@ var Wallet = /** @class */ (function () {
             platformTotal = fund - this._dustLimit;
             details += "\nPlatform:" + platformTotal;
             var fees = inputTotal - outputTotal;
-            details += "\nFees:" + fees;
+            details += "\nMiner Fees:" + fees;
             details += "\nFullySigned?" + tx.isFullySigned();
         }
         if (details)

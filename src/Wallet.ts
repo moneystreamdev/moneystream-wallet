@@ -60,6 +60,9 @@ export class Wallet {
         }
         return 0
     }
+    logDetailsLastTx() {
+        this.logDetails(this.lastTx)
+    }
     logDetails(tx?: any) {
         let details = ""
         details += `\n${this._keypair.toWif()}`
@@ -95,7 +98,7 @@ export class Wallet {
             platformTotal = fund - this._dustLimit
             details += `\nPlatform:${platformTotal}`
             const fees = inputTotal - outputTotal
-            details += `\nFees:${fees}`
+            details += `\nMiner Fees:${fees}`
             details += `\nFullySigned?${tx.isFullySigned()}`
         }
         if (details) console.log(details)

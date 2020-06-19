@@ -15,6 +15,7 @@ export declare class Wallet {
         desc: string;
     };
     getTxFund(tx: any): number;
+    logDetailsLastTx(): void;
     logDetails(tx?: any): void;
     toJSON(): {
         wif: string;
