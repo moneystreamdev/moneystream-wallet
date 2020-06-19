@@ -1,0 +1,1 @@
+{"version":3,"file":"OutputCollection.d.ts","sourceRoot":"","sources":["../../src/OutputCollection.ts"],"names":[],"mappings":";AACA,qBAAa,gBAAgB;IACzB,OAAO,CAAC,KAAK,CAAU;gBACX,OAAO,CAAC,EAAC,GAAG;IAGxB,IAAI,KAAK,QAAwB;IAEjC,MAAM;IAIN,GAAG,CAAC,MAAM,EAAC,GAAG;IAId,KAAK,IAAI,MAAM;IAEf,QAAQ,IAAG,MAAM;IAUjB,MAAM,CAAC,QAAQ,EAAC,IAAI,GAAI,gBAAgB;CAgB3C"}

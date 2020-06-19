@@ -45,6 +45,7 @@ var bsv_1 = require("bsv");
 var portableFetch_1 = require("./utils/portableFetch");
 var KeyPair_1 = require("./KeyPair");
 var TransactionBuilder_1 = require("./TransactionBuilder");
+var OutputCollection_1 = require("./OutputCollection");
 // base calss for streaming wallet
 // A wallet generates transactions
 // TODO: extract wallet storage into separate class
@@ -52,6 +53,10 @@ var TransactionBuilder_1 = require("./TransactionBuilder");
 // TODO: extract debugging formatting into separate class
 var Wallet = /** @class */ (function () {
     function Wallet() {
+        //true if user can combine inputs to extend session
+        this._allowMultipleInputs = true;
+        // a previously encumbered utxo
+        this._selectedUtxos = new OutputCollection_1.OutputCollection();
         // certifies "I am signing for my input and output, 
         // anyone else can add inputs and outputs"
         this.SIGN_MY_INPUT = bsv_1.crypto.Signature.SIGHASH_SINGLE
@@ -191,6 +196,9 @@ var Wallet = /** @class */ (function () {
             return result;
         if (utxos.length < 2)
             return [utxos[0]];
+        if (!this._allowMultipleInputs) {
+            return [utxos[0]];
+        }
         //TODO: sort the utxos by some criteria? value?
         this.logUtxos(utxos);
         var amountremaining = satoshis.toNumber();
@@ -207,40 +215,33 @@ var Wallet = /** @class */ (function () {
     //todo cache utxos
     Wallet.prototype.getAnUnspentOutput = function (satoshis) {
         return __awaiter(this, void 0, void 0, function () {
-            var utxos, utxo0;
+            var utxos, utxoFiltered, i, utxo0, newutxo;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        if (!!this._utxo) return [3 /*break*/, 2];
-                        return [4 /*yield*/, this.getUtxos(this._keypair.toAddress())
-                            //console.log(utxos)
-                        ];
+                        if (!!this._selectedUtxos.hasAny()) return [3 /*break*/, 2];
+                        return [4 /*yield*/, this.getUtxosAPI(this._keypair.toAddress())];
                     case 1:
                         utxos = _a.sent();
-                        //console.log(utxos)
                         if (utxos.length > 0) {
-                            utxo0 = this.getUtxoFrom(utxos, satoshis)[0];
-                            console.log(utxo0);
-                            //from woc. height 0 means unconfirmed
-                            //"height": 578325,
-                            // "tx_pos": 0,
-                            // "tx_hash": "62824e3af3d01113e9bce8b73576b833990d231357bd718385958c21d50bbddd",
-                            // "value": 1250020815
-                            // would be nice to get output script!
-                            //expecting valueBn, scriptVi, script
-                            this._utxo = new bsv_1.Transaction.UnspentOutput({
-                                txid: utxo0.tx_hash,
-                                vout: utxo0.tx_pos,
-                                scriptPubKey: this._keypair.toScript(),
-                                //use satoshis, never amount!
-                                satoshis: utxo0.value
-                            });
-                            console.log(this._utxo);
-                            //this._utxo_tx_hash = utxo0.tx_hash
-                            //this._utxo.amount = utxo0.value
+                            utxoFiltered = this.getUtxoFrom(utxos, satoshis);
+                            if (utxoFiltered && utxoFiltered.length > 0) {
+                                for (i = 0; i < utxoFiltered.length; i++) {
+                                    utxo0 = utxoFiltered[i];
+                                    console.log(utxo0);
+                                    newutxo = new bsv_1.Transaction.UnspentOutput({
+                                        txid: utxo0.tx_hash,
+                                        vout: utxo0.tx_pos,
+                                        scriptPubKey: this._keypair.toScript(),
+                                        //use satoshis, never amount!
+                                        satoshis: utxo0.value
+                                    });
+                                    this._selectedUtxos.add(newutxo);
+                                }
+                            }
                         }
                         _a.label = 2;
-                    case 2: return [2 /*return*/];
+                    case 2: return [2 /*return*/, this._selectedUtxos];
                 }
             });
         });
@@ -248,27 +249,25 @@ var Wallet = /** @class */ (function () {
     // legacy p2pkh spend
     Wallet.prototype.makeSimpleSpend = function (satoshis) {
         return __awaiter(this, void 0, void 0, function () {
-            var utxoSatoshis, changeSatoshis, tx;
+            var utxos, utxoSatoshis, changeSatoshis, tx;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.getAnUnspentOutput(satoshis)];
                     case 1:
-                        _a.sent();
-                        if (!this._utxo) {
-                            throw Error('your wallet is empty');
+                        utxos = _a.sent();
+                        if (!utxos || utxos.length < 0) {
+                            throw Error("insufficient wallet funds.");
                         }
-                        utxoSatoshis = this._utxo.satoshis;
+                        utxoSatoshis = utxos.satoshis();
                         changeSatoshis = utxoSatoshis - satoshis.toNumber();
                         if (changeSatoshis < 0) {
                             throw Error("the utxo ran out of money " + changeSatoshis);
                         }
                         tx = new bsv_1.Transaction()
-                            .from(this._utxo)
+                            .from(this._selectedUtxos.items)
                             .to(this._keypair.toAddress(), changeSatoshis)
                             .change(this._keypair.toAddress());
                         tx.sign(this._keypair.privKey);
-                        if (this._isDebug)
-                            this.logDetails(tx);
                         this.lastTx = tx;
                         return [2 /*return*/, tx.toString('hex')
                             // tx can be broadcast and put on chain
@@ -279,31 +278,40 @@ var Wallet = /** @class */ (function () {
     };
     Wallet.prototype.makeAnyoneCanSpendTx = function (satoshis) {
         return __awaiter(this, void 0, void 0, function () {
-            var utxoSatoshis, changeSatoshis, txb, tx;
+            var filteredUtxos, utxoSatoshis, changeSatoshis, txb, dustTotal, index, element, outSatoshis, tx;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        if (!!this._utxo) return [3 /*break*/, 2];
+                        if (!!this._selectedUtxos.hasAny()) return [3 /*break*/, 2];
                         return [4 /*yield*/, this.getAnUnspentOutput(satoshis)];
                     case 1:
                         _a.sent();
                         _a.label = 2;
                     case 2:
-                        if (!this._utxo) {
+                        if (!this._selectedUtxos.hasAny()) {
                             throw Error('your wallet is empty');
                         }
-                        utxoSatoshis = this._utxo.satoshis;
+                        filteredUtxos = this._selectedUtxos.filter(satoshis);
+                        utxoSatoshis = filteredUtxos.satoshis();
                         changeSatoshis = utxoSatoshis - satoshis.toNumber();
                         if (changeSatoshis < 0) {
                             throw Error("the utxo ran out of money " + changeSatoshis);
                         }
                         txb = new TransactionBuilder_1.TransactionBuilder();
                         txb.setChangeAddress(this._keypair.toAddress());
-                        txb.addInput(this._utxo, this.SIGN_MY_INPUT);
-                        txb.addOutput(changeSatoshis, this._keypair.toAddress());
+                        dustTotal = filteredUtxos.count() * this._dustLimit;
+                        //add range of utxos, change in first, others are dust
+                        //TODO: could spread them out?
+                        for (index = 0; index < filteredUtxos.count(); index++) {
+                            element = filteredUtxos.items[index];
+                            txb.addInput(element, this.SIGN_MY_INPUT);
+                            outSatoshis = index === 0 ? changeSatoshis - dustTotal : this._dustLimit;
+                            if (outSatoshis > 0) {
+                                txb.addOutput(outSatoshis, this._keypair.toAddress());
+                            }
+                        }
                         txb.build();
                         tx = txb.sign(this._keypair.privKey, this.SIGN_MY_INPUT);
-                        //if (this._isDebug) console.log(tx.toJSON())
                         this.lastTx = tx;
                         return [2 /*return*/, tx.toString()
                             // at this point, tx is spendable by anyone!
@@ -330,7 +338,7 @@ var Wallet = /** @class */ (function () {
         });
     };
     //address object
-    Wallet.prototype.getUtxos = function (address) {
+    Wallet.prototype.getUtxosAPI = function (address) {
         return __awaiter(this, void 0, void 0, function () {
             var url, response;
             return __generator(this, function (_a) {

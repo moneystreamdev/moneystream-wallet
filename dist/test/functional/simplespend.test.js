@@ -1,23 +1,4 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -55,28 +36,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var Wallet_1 = require("../../src/Wallet");
-var Long = __importStar(require("long"));
 describe('wallet broadcasts simple spend', function () {
     it('broadcasts', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var sender, sender_hex, sent;
         return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    sender = new Wallet_1.Wallet();
-                    sender.loadWallet('L5o1VbLNhELT6uCu8v7KdZpvVocHWnHBqaHe686ZkMkyszyU6D7n');
-                    sender.logDetails();
-                    return [4 /*yield*/, sender.makeAnyoneCanSpendTx(Long.fromNumber(600))
-                        //TODO: might not be 1 if multiple utxo combined
-                    ];
-                case 1:
-                    sender_hex = _a.sent();
-                    //TODO: might not be 1 if multiple utxo combined
-                    expect(sender.lastTx.inputs.length).toBe(1);
-                    console.log(sender_hex);
-                    console.log(sender.logDetails(sender.lastTx));
-                    return [2 /*return*/];
-            }
+            return [2 /*return*/];
         });
     }); }, 10000);
 });

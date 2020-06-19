@@ -4,6 +4,7 @@ import { Transaction, crypto } from 'bsv'
 import { portableFetch } from './utils/portableFetch'
 import { KeyPair } from './KeyPair'
 import { TransactionBuilder } from './TransactionBuilder'
+import { OutputCollection } from './OutputCollection'
 
 // base calss for streaming wallet
 // A wallet generates transactions
@@ -14,19 +15,19 @@ export class Wallet {
     public _isDebug: boolean
     protected _walletFileName: string
     protected _dustLimit: number
+    //true if user can combine inputs to extend session
+    protected _allowMultipleInputs: boolean = true
     //outputs that this wallet needs to deal with
     //could be outputs for our wallet
     //or others, if we import tx from others
     //txoutmap is collection to know the value of the TxIn
     private _txOutMap:any
     // a previously encumbered utxo
-    //TODO: protected
-    _utxo : any
-    //protected _utxo_tx_hash: any
+    _selectedUtxos: OutputCollection = new OutputCollection()
     //wallet pub/priv key pair for signing tx
     _keypair!: KeyPair
     //the last transaction this wallet made
-    lastTx:any
+    lastTx: any
     // certifies "I am signing for my input and output, 
     // anyone else can add inputs and outputs"
     protected SIGN_MY_INPUT = 
@@ -171,6 +172,9 @@ export class Wallet {
         const result:any[] = []
         if (utxos.length < 1 ) return result
         if (utxos.length < 2) return [utxos[0]]
+        if (!this._allowMultipleInputs) {
+            return [utxos[0]]
+        }
         //TODO: sort the utxos by some criteria? value?
         this.logUtxos(utxos)
         let amountremaining = satoshis.toNumber()
@@ -185,86 +189,92 @@ export class Wallet {
     }
 
     //todo cache utxos
-    async getAnUnspentOutput(satoshis: Long) {
-        if (!this._utxo) {
-            const utxos = await this.getUtxos(this._keypair.toAddress())
-            //console.log(utxos)
+    async getAnUnspentOutput(satoshis: Long): Promise<any> {
+        if (!this._selectedUtxos.hasAny()) {
+            const utxos = await this.getUtxosAPI(this._keypair.toAddress())
             if (utxos.length > 0) {
-                const utxo0 = this.getUtxoFrom(utxos, satoshis)[0]
-                console.log(utxo0)
-                //from woc. height 0 means unconfirmed
-                //"height": 578325,
-                // "tx_pos": 0,
-                // "tx_hash": "62824e3af3d01113e9bce8b73576b833990d231357bd718385958c21d50bbddd",
-                // "value": 1250020815
-                // would be nice to get output script!
-                //expecting valueBn, scriptVi, script
-                this._utxo = new Transaction.UnspentOutput(
+                const utxoFiltered = this.getUtxoFrom(utxos, satoshis)
+                if (utxoFiltered && utxoFiltered.length > 0) 
+                {
+                    for(let i=0; i<utxoFiltered.length; i++)
                     {
-                        txid: utxo0.tx_hash,
-                        vout: utxo0.tx_pos,
-                        scriptPubKey: this._keypair.toScript(),
-                        //use satoshis, never amount!
-                        satoshis: utxo0.value
+                        const utxo0 = utxoFiltered[i]
+                        console.log(utxo0)
+                        const newutxo = new Transaction.UnspentOutput(
+                            {
+                                txid: utxo0.tx_hash,
+                                vout: utxo0.tx_pos,
+                                scriptPubKey: this._keypair.toScript(),
+                                //use satoshis, never amount!
+                                satoshis: utxo0.value
+                            }
+                        )
+                        this._selectedUtxos.add(newutxo)
                     }
-                )
-                console.log(this._utxo)
-                //this._utxo_tx_hash = utxo0.tx_hash
-                //this._utxo.amount = utxo0.value
+                }
             }
         }
+        return this._selectedUtxos
     }
 
     // legacy p2pkh spend
     async makeSimpleSpend(satoshis: Long): Promise<string> {
-        await this.getAnUnspentOutput(satoshis)
-        if (!this._utxo) {
-            throw Error('your wallet is empty')
+        const utxos = await this.getAnUnspentOutput(satoshis)
+        if (!utxos || utxos.length < 0) {
+            throw Error(`insufficient wallet funds.`)
         }
-        const utxoSatoshis: number = this._utxo.satoshis
+        const utxoSatoshis: number = utxos.satoshis()
         const changeSatoshis = utxoSatoshis - satoshis.toNumber()
         if (changeSatoshis < 0) {
             throw Error(`the utxo ran out of money ${changeSatoshis}`)
         }
 
         const tx = new Transaction()
-            .from(this._utxo)
+            .from(this._selectedUtxos.items)
             .to(this._keypair.toAddress(), changeSatoshis)
             .change(this._keypair.toAddress())
         tx.sign(this._keypair.privKey)
 
-        if (this._isDebug) this.logDetails(tx)
         this.lastTx = tx
         return tx.toString('hex')
         // tx can be broadcast and put on chain
     }
 
     async makeAnyoneCanSpendTx(satoshis:Long) {
-        if (!this._utxo) await this.getAnUnspentOutput(satoshis)
-        if (!this._utxo) {
+        //populate utxo cache if needed
+        if (!this._selectedUtxos.hasAny()) await this.getAnUnspentOutput(satoshis)
+        if (!this._selectedUtxos.hasAny()) {
             throw Error('your wallet is empty')
         }
-        const utxoSatoshis = this._utxo.satoshis
+        //from all possible utxos, select enough to pay amount
+        const filteredUtxos = this._selectedUtxos.filter(satoshis)
+        const utxoSatoshis = filteredUtxos.satoshis()
         const changeSatoshis = utxoSatoshis - satoshis.toNumber()
         if (changeSatoshis < 0) {
             throw Error(`the utxo ran out of money ${changeSatoshis}`)
         }
         const txb = new TransactionBuilder()
         txb.setChangeAddress(this._keypair.toAddress())
-        txb.addInput(
-            this._utxo, 
-            this.SIGN_MY_INPUT
-        )
-        txb.addOutput(
-            changeSatoshis, 
-            this._keypair.toAddress()
-            )
+        //TODO: for now, inputs have to be more than dust limit!
+        const dustTotal = filteredUtxos.count() * this._dustLimit
+        //add range of utxos, change in first, others are dust
+        //TODO: could spread them out?
+        for (let index = 0; index < filteredUtxos.count(); index++) {
+            const element = filteredUtxos.items[index]
+            txb.addInput(element, this.SIGN_MY_INPUT)
+            const outSatoshis = index === 0 ? changeSatoshis-dustTotal: this._dustLimit
+            if (outSatoshis > 0) {
+                txb.addOutput(
+                    outSatoshis, 
+                    this._keypair.toAddress()
+                )
+            }
+        }
         txb.build()
         const tx = txb.sign(
             this._keypair.privKey, 
             this.SIGN_MY_INPUT
         )
-        //if (this._isDebug) console.log(tx.toJSON())
         this.lastTx = tx
         return tx.toString()
         // at this point, tx is spendable by anyone!
@@ -279,7 +289,7 @@ export class Wallet {
     }
 
     //address object
-    async getUtxos(address:any) {
+    async getUtxosAPI(address:any) {
         const url = `https://api.whatsonchain.com/v1/bsv/main/address/${address.toString()}/unspent`
         const response = await portableFetch(url)
         return response.json()

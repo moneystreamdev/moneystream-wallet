@@ -8,6 +8,7 @@
     "test": "test"
   },
   "scripts": {
+    "build": "tsc --build tsconfig.json",
     "build:ts": "tsc --build tsconfig.json",
     "build:ts:verbose": "yarn build:ts --verbose",
     "build:ts:watch": "yarn build:ts --watch",
@@ -35,7 +36,8 @@
     "@types/node-fetch": "^2.5.7",
     "bsv": "git+https://github.com/moneystreamdev/bsv.git#bsv-legacy",
     "long": "^4.0.0",
-    "node-fetch": "^2.6.0"
+    "node-fetch": "^2.6.0",
+    "typescript": "^3.9.5"
   },
   "devDependencies": {
     "@babel/core": "^7.10.2",
@@ -44,6 +46,8 @@
     "@types/jest": "^26.0.0",
     "@types/long": "^4.0.1",
     "babel-jest": "^26.0.1",
-    "jest": "^26.0.1"
+    "jest": "^26.0.1",
+    "ts-jest": "^26.1.0",
+    "ts-node": "^8.10.2"
   }
 }
