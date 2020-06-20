@@ -29,9 +29,9 @@ export declare class Wallet {
     store(wallet: any): any;
     backup(): void;
     logUtxos(utxos: any): void;
-    getUtxoFrom(utxos: any, satoshis: Long): any[];
-    getAnUnspentOutput(satoshis: Long): Promise<any>;
+    getAnUnspentOutput(): Promise<any>;
     makeSimpleSpend(satoshis: Long): Promise<string>;
+    tryLoadWalletUtxos(): Promise<void>;
     makeAnyoneCanSpendTx(satoshis: Long): Promise<any>;
     getApiTxJSON(txhash: string): Promise<any>;
     getUtxosAPI(address: any): Promise<any>;

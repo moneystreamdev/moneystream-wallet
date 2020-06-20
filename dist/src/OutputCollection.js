@@ -34,6 +34,7 @@ var OutputCollection = /** @class */ (function () {
         //sort by satoshis descending
         //TODO: put non-confirmed at bottom!
         this._outs.sort(function (a, b) { return b.satoshis - a.satoshis; });
+        console.log(this._outs);
         var amountremaining = satoshis.toNumber();
         //keep adding outputs until we can cover the amount
         var result = new OutputCollection();

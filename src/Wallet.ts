@@ -6,7 +6,7 @@ import { KeyPair } from './KeyPair'
 import { TransactionBuilder } from './TransactionBuilder'
 import { OutputCollection } from './OutputCollection'
 
-// base calss for streaming wallet
+// base class for streaming wallet
 // A wallet generates transactions
 // TODO: extract wallet storage into separate class
 // TODO: extract external API calls into separate class
@@ -166,34 +166,12 @@ export class Wallet {
         console.log(logit)
     }
 
-    //get utxos to cover number of satoshis
-    //return array of utxos
-    getUtxoFrom(utxos:any, satoshis:Long):any[] {
-        const result:any[] = []
-        if (utxos.length < 1 ) return result
-        if (utxos.length < 2) return [utxos[0]]
-        if (!this._allowMultipleInputs) {
-            return [utxos[0]]
-        }
-        //TODO: sort the utxos by some criteria? value?
-        this.logUtxos(utxos)
-        let amountremaining = satoshis.toNumber()
-        //keep adding outputs until we can cover the amount
-        for (let i:number = 0; i<utxos.length; i++) {
-            const utxo = utxos[i]
-            result.push(utxo)
-            amountremaining -= utxo.value
-            if (amountremaining < 0) break
-        }
-        return result
-    }
-
     //todo cache utxos
-    async getAnUnspentOutput(satoshis: Long): Promise<any> {
+    async getAnUnspentOutput(): Promise<any> {
         if (!this._selectedUtxos.hasAny()) {
             const utxos = await this.getUtxosAPI(this._keypair.toAddress())
             if (utxos.length > 0) {
-                const utxoFiltered = this.getUtxoFrom(utxos, satoshis)
+                const utxoFiltered = utxos
                 if (utxoFiltered && utxoFiltered.length > 0) 
                 {
                     for(let i=0; i<utxoFiltered.length; i++)
@@ -219,7 +197,7 @@ export class Wallet {
 
     // legacy p2pkh spend
     async makeSimpleSpend(satoshis: Long): Promise<string> {
-        const utxos = await this.getAnUnspentOutput(satoshis)
+        const utxos = await this.getAnUnspentOutput()
         if (!utxos || utxos.length < 0) {
             throw Error(`insufficient wallet funds.`)
         }
@@ -240,12 +218,17 @@ export class Wallet {
         // tx can be broadcast and put on chain
     }
 
-    async makeAnyoneCanSpendTx(satoshis:Long) {
-        //populate utxo cache if needed
-        if (!this._selectedUtxos.hasAny()) await this.getAnUnspentOutput(satoshis)
+    //tries to load utxos for wallet and
+    //throws error if it cannot get any
+    async tryLoadWalletUtxos() {
+        if (!this._selectedUtxos.hasAny()) await this.getAnUnspentOutput()
         if (!this._selectedUtxos.hasAny()) {
-            throw Error('your wallet is empty')
+            throw Error('Manager wallet does not have available utxo!')
         }
+    }
+
+    async makeAnyoneCanSpendTx(satoshis:Long) {
+        await this.tryLoadWalletUtxos()
         //from all possible utxos, select enough to pay amount
         const filteredUtxos = this._selectedUtxos.filter(satoshis)
         const utxoSatoshis = filteredUtxos.satoshis()

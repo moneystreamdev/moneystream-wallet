@@ -30,6 +30,7 @@ export class OutputCollection {
         //sort by satoshis descending
         //TODO: put non-confirmed at bottom!
         this._outs.sort((a:any,b:any) => b.satoshis - a.satoshis)
+        console.log(this._outs)
         let amountremaining = satoshis.toNumber()
         //keep adding outputs until we can cover the amount
         const result = new OutputCollection()

@@ -46,7 +46,7 @@ var portableFetch_1 = require("./utils/portableFetch");
 var KeyPair_1 = require("./KeyPair");
 var TransactionBuilder_1 = require("./TransactionBuilder");
 var OutputCollection_1 = require("./OutputCollection");
-// base calss for streaming wallet
+// base class for streaming wallet
 // A wallet generates transactions
 // TODO: extract wallet storage into separate class
 // TODO: extract external API calls into separate class
@@ -188,32 +188,8 @@ var Wallet = /** @class */ (function () {
         logit += "\nTotal:" + tot;
         console.log(logit);
     };
-    //get utxos to cover number of satoshis
-    //return array of utxos
-    Wallet.prototype.getUtxoFrom = function (utxos, satoshis) {
-        var result = [];
-        if (utxos.length < 1)
-            return result;
-        if (utxos.length < 2)
-            return [utxos[0]];
-        if (!this._allowMultipleInputs) {
-            return [utxos[0]];
-        }
-        //TODO: sort the utxos by some criteria? value?
-        this.logUtxos(utxos);
-        var amountremaining = satoshis.toNumber();
-        //keep adding outputs until we can cover the amount
-        for (var i = 0; i < utxos.length; i++) {
-            var utxo = utxos[i];
-            result.push(utxo);
-            amountremaining -= utxo.value;
-            if (amountremaining < 0)
-                break;
-        }
-        return result;
-    };
     //todo cache utxos
-    Wallet.prototype.getAnUnspentOutput = function (satoshis) {
+    Wallet.prototype.getAnUnspentOutput = function () {
         return __awaiter(this, void 0, void 0, function () {
             var utxos, utxoFiltered, i, utxo0, newutxo;
             return __generator(this, function (_a) {
@@ -224,7 +200,7 @@ var Wallet = /** @class */ (function () {
                     case 1:
                         utxos = _a.sent();
                         if (utxos.length > 0) {
-                            utxoFiltered = this.getUtxoFrom(utxos, satoshis);
+                            utxoFiltered = utxos;
                             if (utxoFiltered && utxoFiltered.length > 0) {
                                 for (i = 0; i < utxoFiltered.length; i++) {
                                     utxo0 = utxoFiltered[i];
@@ -252,7 +228,7 @@ var Wallet = /** @class */ (function () {
             var utxos, utxoSatoshis, changeSatoshis, tx;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.getAnUnspentOutput(satoshis)];
+                    case 0: return [4 /*yield*/, this.getAnUnspentOutput()];
                     case 1:
                         utxos = _a.sent();
                         if (!utxos || utxos.length < 0) {
@@ -276,21 +252,37 @@ var Wallet = /** @class */ (function () {
             });
         });
     };
-    Wallet.prototype.makeAnyoneCanSpendTx = function (satoshis) {
+    //tries to load utxos for wallet and
+    //throws error if it cannot get any
+    Wallet.prototype.tryLoadWalletUtxos = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var filteredUtxos, utxoSatoshis, changeSatoshis, txb, dustTotal, index, element, outSatoshis, tx;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         if (!!this._selectedUtxos.hasAny()) return [3 /*break*/, 2];
-                        return [4 /*yield*/, this.getAnUnspentOutput(satoshis)];
+                        return [4 /*yield*/, this.getAnUnspentOutput()];
                     case 1:
                         _a.sent();
                         _a.label = 2;
                     case 2:
                         if (!this._selectedUtxos.hasAny()) {
-                            throw Error('your wallet is empty');
+                            throw Error('Manager wallet does not have available utxo!');
                         }
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    Wallet.prototype.makeAnyoneCanSpendTx = function (satoshis) {
+        return __awaiter(this, void 0, void 0, function () {
+            var filteredUtxos, utxoSatoshis, changeSatoshis, txb, dustTotal, index, element, outSatoshis, tx;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.tryLoadWalletUtxos()
+                        //from all possible utxos, select enough to pay amount
+                    ];
+                    case 1:
+                        _a.sent();
                         filteredUtxos = this._selectedUtxos.filter(satoshis);
                         utxoSatoshis = filteredUtxos.satoshis();
                         changeSatoshis = utxoSatoshis - satoshis.toNumber();
