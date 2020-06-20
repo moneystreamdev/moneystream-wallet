@@ -1,6 +1,6 @@
 'use strict'
 import fs from 'fs'
-import { Transaction, crypto } from 'bsv'
+import { Transaction, Address, crypto } from 'bsv'
 import { portableFetch } from './utils/portableFetch'
 import { KeyPair } from './KeyPair'
 import { TransactionBuilder } from './TransactionBuilder'
@@ -259,7 +259,7 @@ export class Wallet {
         if (payTo) {
             txb.addOutput(
                 satoshis.toNumber(),
-                payTo
+                Address.fromString(payTo)
             )
         }
         txb.build()
