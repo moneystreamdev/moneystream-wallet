@@ -273,7 +273,8 @@ var Wallet = /** @class */ (function () {
             });
         });
     };
-    Wallet.prototype.makeAnyoneCanSpendTx = function (satoshis) {
+    // standard method for a streaming wallet
+    Wallet.prototype.makeAnyoneCanSpendTx = function (satoshis, payTo) {
         return __awaiter(this, void 0, void 0, function () {
             var filteredUtxos, utxoSatoshis, changeSatoshis, txb, dustTotal, index, element, outSatoshis, tx;
             return __generator(this, function (_a) {
@@ -301,6 +302,11 @@ var Wallet = /** @class */ (function () {
                             if (outSatoshis > 0) {
                                 txb.addOutput(outSatoshis, this._keypair.toAddress());
                             }
+                        }
+                        //balance goes to payto address
+                        //payout address is not signed
+                        if (payTo) {
+                            txb.addOutput(satoshis.toNumber(), payTo);
                         }
                         txb.build();
                         tx = txb.sign(this._keypair.privKey, this.SIGN_MY_INPUT);

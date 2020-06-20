@@ -128,6 +128,7 @@ describe('Wallet tests', function () {
                 case 1:
                     _a.sent();
                     expect(w.lastTx.inputs.length).toBe(1);
+                    expect(w.lastTx.outputs.length).toBe(1);
                     return [2 /*return*/];
             }
         });
@@ -141,10 +142,11 @@ describe('Wallet tests', function () {
                     w.loadWallet();
                     w._selectedUtxos = dummyUtxosTwo;
                     tokensLessDust = 1000 - 500;
-                    return [4 /*yield*/, w.makeAnyoneCanSpendTx(Long.fromNumber(tokensLessDust))];
+                    return [4 /*yield*/, w.makeAnyoneCanSpendTx(Long.fromNumber(tokensLessDust), '1KUrv2Ns8SwNkLgVKrVbSHJmdXLpsEvaDf')];
                 case 1:
                     _a.sent();
                     expect(w.lastTx.inputs.length).toBe(1);
+                    expect(w.lastTx.outputs.length).toBe(2);
                     return [2 /*return*/];
             }
         });

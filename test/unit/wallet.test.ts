@@ -56,6 +56,7 @@ describe('Wallet tests', () => {
       Long.fromNumber(dummyOutput1.satoshis-dustLimit-1)
     )
     expect (w.lastTx.inputs.length).toBe(1)
+    expect (w.lastTx.outputs.length).toBe(1)
   })
   it('should create streamable tx with exactly input', async () => {
     const w = new Wallet()
@@ -63,9 +64,11 @@ describe('Wallet tests', () => {
     w._selectedUtxos = dummyUtxosTwo
     const tokensLessDust = 1000 - 500
     await w.makeAnyoneCanSpendTx(
-      Long.fromNumber(tokensLessDust)
+      Long.fromNumber(tokensLessDust),
+      '1KUrv2Ns8SwNkLgVKrVbSHJmdXLpsEvaDf'
     )
     expect (w.lastTx.inputs.length).toBe(1)
+    expect (w.lastTx.outputs.length).toBe(2)
   })
 
   it('should create streamable tx with multiple inputs', async () => {

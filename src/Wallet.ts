@@ -227,7 +227,8 @@ export class Wallet {
         }
     }
 
-    async makeAnyoneCanSpendTx(satoshis:Long) {
+    // standard method for a streaming wallet
+    async makeAnyoneCanSpendTx(satoshis:Long, payTo?:string) {
         await this.tryLoadWalletUtxos()
         //from all possible utxos, select enough to pay amount
         const filteredUtxos = this._selectedUtxos.filter(satoshis)
@@ -252,6 +253,14 @@ export class Wallet {
                     this._keypair.toAddress()
                 )
             }
+        }
+        //balance goes to payto address
+        //payout address is not signed
+        if (payTo) {
+            txb.addOutput(
+                satoshis.toNumber(),
+                payTo
+            )
         }
         txb.build()
         const tx = txb.sign(
