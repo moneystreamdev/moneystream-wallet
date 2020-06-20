@@ -1132,7 +1132,7 @@
     "@types/node" "*"
     form-data "^3.0.0"
 
-"@types/node@*":
+"@types/node@*", "@types/node@^14.0.13":
   version "14.0.13"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-14.0.13.tgz#ee1128e881b874c371374c1f72201893616417c9"
   integrity sha512-rouEWBImiRaSJsVA+ITTFM6ZxibuAlTuNOCyxVbwreu6k6+ujs7DfnU9o+PShFhET78pMBl3eH+AGSI5eOTkPA==
@@ -1495,8 +1495,9 @@ bser@2.1.1:
 
 "bsv@git+https://github.com/moneystreamdev/bsv.git#bsv-legacy":
   version "1.5.3"
-  resolved "git+https://github.com/moneystreamdev/bsv.git#308f3f756e2af7b179e92a5aaac87ba784639851"
+  resolved "git+https://github.com/moneystreamdev/bsv.git#6a3095050290194cf9986c51b1302ebc92031e93"
   dependencies:
+    "@types/node" "^14.0.13"
     aes-js "^3.1.2"
     bn.js "=4.11.8"
     bs58 "=4.0.1"
