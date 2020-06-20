@@ -306,7 +306,7 @@ var Wallet = /** @class */ (function () {
                         //balance goes to payto address
                         //payout address is not signed
                         if (payTo) {
-                            txb.addOutput(satoshis.toNumber(), payTo);
+                            txb.addOutput(satoshis.toNumber(), bsv_1.Address.fromString(payTo));
                         }
                         txb.build();
                         tx = txb.sign(this._keypair.privKey, this.SIGN_MY_INPUT);

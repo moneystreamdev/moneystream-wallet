@@ -417,8 +417,8 @@
         "affectsGlobalScope": false
       },
       "../node_modules/bsv/index.d.ts": {
-        "version": "3e3174822633e0ec1db75db730df0fdee1de68ca90b38242fde752ae58ba06fa",
-        "signature": "3e3174822633e0ec1db75db730df0fdee1de68ca90b38242fde752ae58ba06fa",
+        "version": "7e34e4e2ff598604fab034ef9669c4b22e69f73f31eae77455e38106c3fbd748",
+        "signature": "7e34e4e2ff598604fab034ef9669c4b22e69f73f31eae77455e38106c3fbd748",
         "affectsGlobalScope": false
       },
       "../src/KeyPair.ts": {
@@ -442,7 +442,7 @@
         "affectsGlobalScope": false
       },
       "../src/Wallet.ts": {
-        "version": "0b98a8793ed27299bc22691c0d75ce0df338d5923abcf2a07c7e30020c896d00",
+        "version": "c46024b2edfa7a0dcde26f12eefd73fbefdaaa277e0dbeb653379a73f482a65e",
         "signature": "f419edeb3bc8b803d4786fac5b1ee89b605899fd0402ff3f1e4289346089795e",
         "affectsGlobalScope": false
       },
@@ -571,7 +571,7 @@
         "signature": "d3002f620eab4bf6476c9da5c0efb2041d46f7df8b3032a5631bd206abef2c75",
         "affectsGlobalScope": true
       },
-      "../node_modules/@types/node-fetch/node_modules/form-data/index.d.ts": {
+      "../node_modules/form-data/index.d.ts": {
         "version": "cbb7029e32a6a72178cda8baa9129b1ee6d1d779a35e46c780e38b4909d42a89",
         "signature": "cbb7029e32a6a72178cda8baa9129b1ee6d1d779a35e46c780e38b4909d42a89",
         "affectsGlobalScope": false
@@ -810,24 +810,14 @@
       "../node_modules/@types/node-fetch/index.d.ts": [
         "../node_modules/@types/graceful-fs/index.d.ts",
         "../node_modules/@types/node-fetch/externals.d.ts",
-        "../node_modules/@types/node-fetch/node_modules/form-data/index.d.ts",
         "../node_modules/@types/node/fs.d.ts",
         "../node_modules/@types/node/http.d.ts",
         "../node_modules/@types/node/ts3.2/fs.d.ts",
         "../node_modules/@types/node/ts3.2/util.d.ts",
         "../node_modules/@types/node/ts3.7/index.d.ts",
         "../node_modules/@types/node/url.d.ts",
-        "../node_modules/@types/node/util.d.ts"
-      ],
-      "../node_modules/@types/node-fetch/node_modules/form-data/index.d.ts": [
-        "../node_modules/@types/graceful-fs/index.d.ts",
-        "../node_modules/@types/node/fs.d.ts",
-        "../node_modules/@types/node/http.d.ts",
-        "../node_modules/@types/node/stream.d.ts",
-        "../node_modules/@types/node/ts3.2/fs.d.ts",
-        "../node_modules/@types/node/ts3.2/util.d.ts",
-        "../node_modules/@types/node/ts3.7/index.d.ts",
-        "../node_modules/@types/node/util.d.ts"
+        "../node_modules/@types/node/util.d.ts",
+        "../node_modules/form-data/index.d.ts"
       ],
       "../node_modules/@types/node/async_hooks.d.ts": [
         "../node_modules/@types/graceful-fs/index.d.ts",
@@ -1323,6 +1313,16 @@
       "../node_modules/bsv/index.d.ts": [
         "../node_modules/@types/graceful-fs/index.d.ts",
         "../node_modules/@types/node/fs.d.ts",
+        "../node_modules/@types/node/ts3.2/fs.d.ts",
+        "../node_modules/@types/node/ts3.2/util.d.ts",
+        "../node_modules/@types/node/ts3.7/index.d.ts",
+        "../node_modules/@types/node/util.d.ts"
+      ],
+      "../node_modules/form-data/index.d.ts": [
+        "../node_modules/@types/graceful-fs/index.d.ts",
+        "../node_modules/@types/node/fs.d.ts",
+        "../node_modules/@types/node/http.d.ts",
+        "../node_modules/@types/node/stream.d.ts",
         "../node_modules/@types/node/ts3.2/fs.d.ts",
         "../node_modules/@types/node/ts3.2/util.d.ts",
         "../node_modules/@types/node/ts3.7/index.d.ts",
@@ -1827,16 +1827,6 @@
         "../node_modules/@types/node/url.d.ts",
         "../node_modules/@types/node/util.d.ts"
       ],
-      "../node_modules/@types/node-fetch/node_modules/form-data/index.d.ts": [
-        "../node_modules/@types/graceful-fs/index.d.ts",
-        "../node_modules/@types/node/fs.d.ts",
-        "../node_modules/@types/node/http.d.ts",
-        "../node_modules/@types/node/stream.d.ts",
-        "../node_modules/@types/node/ts3.2/fs.d.ts",
-        "../node_modules/@types/node/ts3.2/util.d.ts",
-        "../node_modules/@types/node/ts3.7/index.d.ts",
-        "../node_modules/@types/node/util.d.ts"
-      ],
       "../node_modules/@types/node/async_hooks.d.ts": [
         "../node_modules/@types/graceful-fs/index.d.ts",
         "../node_modules/@types/node/fs.d.ts",
@@ -2336,6 +2326,16 @@
         "../node_modules/@types/node/ts3.7/index.d.ts",
         "../node_modules/@types/node/util.d.ts"
       ],
+      "../node_modules/form-data/index.d.ts": [
+        "../node_modules/@types/graceful-fs/index.d.ts",
+        "../node_modules/@types/node/fs.d.ts",
+        "../node_modules/@types/node/http.d.ts",
+        "../node_modules/@types/node/stream.d.ts",
+        "../node_modules/@types/node/ts3.2/fs.d.ts",
+        "../node_modules/@types/node/ts3.2/util.d.ts",
+        "../node_modules/@types/node/ts3.7/index.d.ts",
+        "../node_modules/@types/node/util.d.ts"
+      ],
       "../src/KeyPair.ts": [
         "../node_modules/bsv/index.d.ts"
       ],
@@ -2590,7 +2590,6 @@
       "../node_modules/@types/long/index.d.ts",
       "../node_modules/@types/node-fetch/externals.d.ts",
       "../node_modules/@types/node-fetch/index.d.ts",
-      "../node_modules/@types/node-fetch/node_modules/form-data/index.d.ts",
       "../node_modules/@types/node/async_hooks.d.ts",
       "../node_modules/@types/node/base.d.ts",
       "../node_modules/@types/node/buffer.d.ts",
@@ -2648,6 +2647,7 @@
       "../node_modules/@types/yargs-parser/index.d.ts",
       "../node_modules/@types/yargs/index.d.ts",
       "../node_modules/bsv/index.d.ts",
+      "../node_modules/form-data/index.d.ts",
       "../src/InputCollection.ts",
       "../src/KeyPair.ts",
       "../src/OutputCollection.ts",
