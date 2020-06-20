@@ -1495,7 +1495,7 @@ bser@2.1.1:
 
 "bsv@git+https://github.com/moneystreamdev/bsv.git#bsv-legacy":
   version "1.5.3"
-  resolved "git+https://github.com/moneystreamdev/bsv.git#cc8aa91a90e35b3ee1a886d8eb26e42e7dc1cd22"
+  resolved "git+https://github.com/moneystreamdev/bsv.git#308f3f756e2af7b179e92a5aaac87ba784639851"
   dependencies:
     aes-js "^3.1.2"
     bn.js "=4.11.8"
