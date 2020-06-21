@@ -192,7 +192,7 @@
         "affectsGlobalScope": false
       },
       "../src/Wallet.ts": {
-        "version": "47c1ef6a191118c11c59eadcfdb1150fece4e70da598638f3a5f823b6721de2e",
+        "version": "fc5baac9a308f80f21d439b8a268deea33512f7a0c33b8cb6d9824a58e282786",
         "signature": "d20bdb247f44d60d55aab8b1e5072697333e9de788fedcf6320b4c2e31f527d7",
         "affectsGlobalScope": false
       },
@@ -207,7 +207,7 @@
         "affectsGlobalScope": false
       },
       "../test/functional/simplespend.test.ts": {
-        "version": "69a5a6bb39d7d92f6ce40ba9ad8e43654248aa19970183f00f18eba4fe96ffed",
+        "version": "5e2f1c881d26473525e1709899e09b1f21a6336d6214e85c09814fbce9683ab7",
         "signature": "e3080866f5da32f06e18e06d704f5760a9916d2bb09de5c9594731fdbac8bd98",
         "affectsGlobalScope": false
       },
@@ -1383,6 +1383,7 @@
         "../src/KeyPair.ts",
         "../src/OutputCollection.ts",
         "../src/TransactionBuilder.ts",
+        "../src/UnspentOutput.ts",
         "../src/utils/portableFetch.ts"
       ],
       "../src/index.ts": [

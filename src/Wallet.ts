@@ -5,6 +5,7 @@ import { portableFetch } from './utils/portableFetch'
 import { KeyPair } from './KeyPair'
 import { TransactionBuilder } from './TransactionBuilder'
 import { OutputCollection } from './OutputCollection'
+import { UnspentOutput } from './UnspentOutput'
 
 // base class for streaming wallet
 // A wallet generates transactions
@@ -177,16 +178,12 @@ export class Wallet {
                     for(let i=0; i<utxoFiltered.length; i++)
                     {
                         const utxo0 = utxoFiltered[i]
-                        console.log(utxo0)
-                        const newutxo = new TxOut(
-                            {
-                                txid: utxo0.tx_hash,
-                                vout: utxo0.tx_pos,
-                                scriptPubKey: this._keypair.toScript(),
-                                //use satoshis, never amount!
-                                satoshis: utxo0.value
-                            }
-                        )
+                        const newutxo = new UnspentOutput(
+                            utxo0.value, 
+                            this._keypair.toScript(),
+                            utxo0.tx_hash,
+                            utxo0.tx_pos
+                          )
                         this._selectedUtxos.add(newutxo)
                     }
                 }
@@ -244,7 +241,7 @@ export class Wallet {
         //TODO: could spread them out?
         for (let index = 0; index < filteredUtxos.count(); index++) {
             const element = filteredUtxos.items[index]
-            console.log(`[${index}] adding input ${element.satoshis}`)
+            //console.log(`[${index}] adding input ${element.satoshis}`)
             const inputCount = txb.addInput(element, this._keypair.pubKey, this.SIGN_MY_INPUT)
             if (inputCount !== index + 1) throw Error(`Input did not get added!`)
             //TODO: need many more unit tests

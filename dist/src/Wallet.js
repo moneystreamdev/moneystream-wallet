@@ -46,6 +46,7 @@ var portableFetch_1 = require("./utils/portableFetch");
 var KeyPair_1 = require("./KeyPair");
 var TransactionBuilder_1 = require("./TransactionBuilder");
 var OutputCollection_1 = require("./OutputCollection");
+var UnspentOutput_1 = require("./UnspentOutput");
 // base class for streaming wallet
 // A wallet generates transactions
 // TODO: extract wallet storage into separate class
@@ -204,14 +205,7 @@ var Wallet = /** @class */ (function () {
                             if (utxoFiltered && utxoFiltered.length > 0) {
                                 for (i = 0; i < utxoFiltered.length; i++) {
                                     utxo0 = utxoFiltered[i];
-                                    console.log(utxo0);
-                                    newutxo = new bsv_1.TxOut({
-                                        txid: utxo0.tx_hash,
-                                        vout: utxo0.tx_pos,
-                                        scriptPubKey: this._keypair.toScript(),
-                                        //use satoshis, never amount!
-                                        satoshis: utxo0.value
-                                    });
+                                    newutxo = new UnspentOutput_1.UnspentOutput(utxo0.value, this._keypair.toScript(), utxo0.tx_hash, utxo0.tx_pos);
                                     this._selectedUtxos.add(newutxo);
                                 }
                             }
@@ -298,7 +292,6 @@ var Wallet = /** @class */ (function () {
                         //TODO: could spread them out?
                         for (index = 0; index < filteredUtxos.count(); index++) {
                             element = filteredUtxos.items[index];
-                            console.log("[" + index + "] adding input " + element.satoshis);
                             inputCount = txb.addInput(element, this._keypair.pubKey, this.SIGN_MY_INPUT);
                             if (inputCount !== index + 1)
                                 throw Error("Input did not get added!");
