@@ -12,7 +12,7 @@ export declare class TransactionBuilder {
     from(utxos: any[], pubKey: any, sigHash?: number): TransactionBuilder;
     toAddress(satoshis: number, address: string): TransactionBuilder;
     change(address: any): TransactionBuilder;
-    addInput(utxo: UnspentOutput, pubKey: any, sigHash?: any): void;
+    addInput(utxo: UnspentOutput, pubKey: any, sigHash?: any): number;
     addOutput(satoshis: number, address: any): void;
     buildAndSign(keypair: KeyPair, makeFuture?: boolean): any;
     sign(keyPair: any, makeFuture?: boolean): any;

@@ -225,7 +225,7 @@ var Wallet = /** @class */ (function () {
     // legacy p2pkh spend
     Wallet.prototype.makeSimpleSpend = function (satoshis) {
         return __awaiter(this, void 0, void 0, function () {
-            var utxos, utxoSatoshis, changeSatoshis, txb, tx;
+            var utxos, utxoSatoshis, changeSatoshis, txb;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.getAnUnspentOutput()];
@@ -243,9 +243,9 @@ var Wallet = /** @class */ (function () {
                             .from(this._selectedUtxos.items, this._keypair.pubKey)
                             .toAddress(changeSatoshis, this._keypair.toAddress())
                             .change(this._keypair.toAddress());
-                        tx = txb.buildAndSign(this._keypair);
-                        this.lastTx = tx;
-                        return [2 /*return*/, tx.toHex()
+                        //txb.sign(this._keypair)
+                        this.lastTx = txb.buildAndSign(this._keypair);
+                        return [2 /*return*/, this.lastTx.toHex()
                             // tx can be broadcast and put on chain
                         ];
                 }
@@ -276,7 +276,7 @@ var Wallet = /** @class */ (function () {
     // standard method for a streaming wallet
     Wallet.prototype.makeAnyoneCanSpendTx = function (satoshis, payTo) {
         return __awaiter(this, void 0, void 0, function () {
-            var filteredUtxos, utxoSatoshis, changeSatoshis, txb, dustTotal, index, element, outSatoshis, tx;
+            var filteredUtxos, utxoSatoshis, changeSatoshis, txb, dustTotal, index, element, inputCount, outSatoshis, tx;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.tryLoadWalletUtxos()
@@ -285,6 +285,7 @@ var Wallet = /** @class */ (function () {
                     case 1:
                         _a.sent();
                         filteredUtxos = this._selectedUtxos.filter(satoshis);
+                        console.log(filteredUtxos);
                         utxoSatoshis = filteredUtxos.satoshis();
                         changeSatoshis = utxoSatoshis - satoshis.toNumber();
                         if (changeSatoshis < 0) {
@@ -297,10 +298,18 @@ var Wallet = /** @class */ (function () {
                         //TODO: could spread them out?
                         for (index = 0; index < filteredUtxos.count(); index++) {
                             element = filteredUtxos.items[index];
-                            txb.addInput(element, this._keypair.pubKey, this.SIGN_MY_INPUT);
-                            outSatoshis = index === 0 ? changeSatoshis - dustTotal : this._dustLimit;
-                            if (outSatoshis > 0) {
+                            console.log("[" + index + "] adding input " + element.satoshis);
+                            inputCount = txb.addInput(element, this._keypair.pubKey, this.SIGN_MY_INPUT);
+                            if (inputCount !== index + 1)
+                                throw Error("Input did not get added!");
+                            outSatoshis = index === 0 ? Math.max(changeSatoshis - dustTotal, 0)
+                                : this._dustLimit;
+                            if (outSatoshis >= 0) {
+                                console.log("[" + index + "] adding output " + outSatoshis);
                                 txb.addOutput(outSatoshis, this._keypair.toAddress());
+                            }
+                            else {
+                                console.log("[" + index + "] skipped adding output " + outSatoshis);
                             }
                         }
                         //balance goes to payto address

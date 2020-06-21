@@ -83,6 +83,7 @@ var TransactionBuilder = /** @class */ (function () {
         //     script: utxo.script
         // })
         //this.tx.addInput(txin)
+        return this.txb.txIns.length;
     };
     TransactionBuilder.prototype.addOutput = function (satoshis, address) {
         this.txb.outputToAddress(new bsv_1.Bn().fromNumber(satoshis), address);
@@ -94,7 +95,7 @@ var TransactionBuilder = /** @class */ (function () {
         //this.txb.build()
         this.txb.tx = new bsv_1.Tx();
         var outAmountBn = this.txb.buildOutputs();
-        var inAmountBn = this.txb.buildInputs(outAmountBn, 0);
+        var inAmountBn = this.txb.buildInputs(outAmountBn, 1);
         this.sign(keypair, makeFuture);
         return this.txb.tx;
     };
