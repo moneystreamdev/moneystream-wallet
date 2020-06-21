@@ -1,7 +1,9 @@
+import { UnspentOutput } from "./UnspentOutput"
+
 //a list of transaction outputs
 export class OutputCollection {
-    private _outs: any = []
-    constructor(outputs?:any) {
+    private _outs: UnspentOutput[] = []
+    constructor(outputs?:UnspentOutput[]) {
         if (outputs) this._outs = outputs
     }
     get items() { return this._outs }

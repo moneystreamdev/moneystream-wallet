@@ -59,9 +59,9 @@ var Wallet = /** @class */ (function () {
         this._selectedUtxos = new OutputCollection_1.OutputCollection();
         // certifies "I am signing for my input and output, 
         // anyone else can add inputs and outputs"
-        this.SIGN_MY_INPUT = bsv_1.crypto.Signature.SIGHASH_SINGLE
-            | bsv_1.crypto.Signature.SIGHASH_ANYONECANPAY
-            | bsv_1.crypto.Signature.SIGHASH_FORKID;
+        this.SIGN_MY_INPUT = bsv_1.Sig.SIGHASH_SINGLE
+            | bsv_1.Sig.SIGHASH_ANYONECANPAY
+            | bsv_1.Sig.SIGHASH_FORKID;
         this._isDebug = true;
         this._walletFileName = 'wallet.json';
         this._dustLimit = 500;
@@ -205,7 +205,7 @@ var Wallet = /** @class */ (function () {
                                 for (i = 0; i < utxoFiltered.length; i++) {
                                     utxo0 = utxoFiltered[i];
                                     console.log(utxo0);
-                                    newutxo = new bsv_1.Transaction.UnspentOutput({
+                                    newutxo = new bsv_1.TxOut({
                                         txid: utxo0.tx_hash,
                                         vout: utxo0.tx_pos,
                                         scriptPubKey: this._keypair.toScript(),
@@ -225,7 +225,7 @@ var Wallet = /** @class */ (function () {
     // legacy p2pkh spend
     Wallet.prototype.makeSimpleSpend = function (satoshis) {
         return __awaiter(this, void 0, void 0, function () {
-            var utxos, utxoSatoshis, changeSatoshis, tx;
+            var utxos, utxoSatoshis, changeSatoshis, txb, tx;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.getAnUnspentOutput()];
@@ -239,13 +239,13 @@ var Wallet = /** @class */ (function () {
                         if (changeSatoshis < 0) {
                             throw Error("the utxo ran out of money " + changeSatoshis);
                         }
-                        tx = new bsv_1.Transaction()
-                            .from(this._selectedUtxos.items)
-                            .to(this._keypair.toAddress(), changeSatoshis)
+                        txb = new TransactionBuilder_1.TransactionBuilder()
+                            .from(this._selectedUtxos.items, this._keypair.pubKey)
+                            .toAddress(changeSatoshis, this._keypair.toAddress())
                             .change(this._keypair.toAddress());
-                        tx.sign(this._keypair.privKey);
+                        tx = txb.buildAndSign(this._keypair);
                         this.lastTx = tx;
-                        return [2 /*return*/, tx.toString('hex')
+                        return [2 /*return*/, tx.toHex()
                             // tx can be broadcast and put on chain
                         ];
                 }
@@ -297,7 +297,7 @@ var Wallet = /** @class */ (function () {
                         //TODO: could spread them out?
                         for (index = 0; index < filteredUtxos.count(); index++) {
                             element = filteredUtxos.items[index];
-                            txb.addInput(element, this.SIGN_MY_INPUT);
+                            txb.addInput(element, this._keypair.pubKey, this.SIGN_MY_INPUT);
                             outSatoshis = index === 0 ? changeSatoshis - dustTotal : this._dustLimit;
                             if (outSatoshis > 0) {
                                 txb.addOutput(outSatoshis, this._keypair.toAddress());
@@ -308,10 +308,9 @@ var Wallet = /** @class */ (function () {
                         if (payTo) {
                             txb.addOutput(satoshis.toNumber(), bsv_1.Address.fromString(payTo));
                         }
-                        txb.build();
-                        tx = txb.sign(this._keypair.privKey, this.SIGN_MY_INPUT);
+                        tx = txb.buildAndSign(this._keypair, true);
                         this.lastTx = tx;
-                        return [2 /*return*/, tx.toString()
+                        return [2 /*return*/, tx.toHex()
                             // at this point, tx is spendable by anyone!
                             // only pass it through secure channel to recipient
                             // tx needs further processing before broadcast

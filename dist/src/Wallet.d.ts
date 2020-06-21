@@ -22,7 +22,7 @@ export declare class Wallet {
     toJSON(): {
         wif: string;
         xpub: string;
-        address: string;
+        address: any;
     };
     loadWallet(wif?: string): any;
     generateKey(): any;

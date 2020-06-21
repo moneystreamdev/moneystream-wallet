@@ -57,22 +57,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var Wallet_1 = require("../../src/Wallet");
 var Long = __importStar(require("long"));
-var bsv_1 = require("bsv");
 var KeyPair_1 = require("../../src/KeyPair");
 var OutputCollection_1 = require("../../src/OutputCollection");
+var UnspentOutput_1 = require("../../src/UnspentOutput");
 var dustLimit = 500;
-var dummyOutput1 = new bsv_1.Transaction.UnspentOutput({
-    txId: "1aebb7d0776cec663cbbdd87f200bf15406adb0ef91916d102bcd7f86c86934e",
-    vout: 0,
-    scriptPubKey: new KeyPair_1.KeyPair().fromRandom().toScript(),
-    satoshis: 1000
-});
-var dummyOutput2 = new bsv_1.Transaction.UnspentOutput({
-    txId: "1aebb7d0776cec663cbbdd87f200bf15406adb0ef91916d102bcd7f86c86934e",
-    vout: 1,
-    scriptPubKey: new KeyPair_1.KeyPair().fromRandom().toScript(),
-    satoshis: 2000
-});
+var dummyOutput1 = new UnspentOutput_1.UnspentOutput(1000, new KeyPair_1.KeyPair().fromRandom().toScript(), '1aebb7d0776cec663cbbdd87f200bf15406adb0ef91916d102bcd7f86c86934e', 0);
+var dummyOutput2 = new UnspentOutput_1.UnspentOutput(2000, new KeyPair_1.KeyPair().fromRandom().toScript(), '1aebb7d0776cec663cbbdd87f200bf15406adb0ef91916d102bcd7f86c86934e', 1);
 var dummyUtxosOne = new OutputCollection_1.OutputCollection();
 dummyUtxosOne.add(dummyOutput1);
 var dummyUtxosTwo = new OutputCollection_1.OutputCollection();
@@ -85,7 +75,7 @@ describe('Wallet tests', function () {
         expect(w).toBeInstanceOf(Wallet_1.Wallet);
     });
     it('should create simple tx with no lock time', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var w;
+        var w, txhex;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -94,80 +84,59 @@ describe('Wallet tests', function () {
                     w._selectedUtxos = dummyUtxosOne;
                     return [4 /*yield*/, w.makeSimpleSpend(Long.fromNumber(1000))];
                 case 1:
-                    _a.sent();
+                    txhex = _a.sent();
+                    expect(txhex.length).toBeGreaterThan(20);
                     expect(w.lastTx.nLockTime).toBe(0);
+                    console.log(txhex);
+                    console.log(w.lastTx.TxIns);
+                    expect(w.lastTx.TxIns.length).toBeGreaterThan(0);
+                    expect(w.lastTx.TxOuts.length).toBeGreaterThan(0);
                     return [2 /*return*/];
             }
         });
     }); });
-    it('should create streamable tx with lock time', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var w;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    w = new Wallet_1.Wallet();
-                    w.loadWallet();
-                    w._selectedUtxos = dummyUtxosOne;
-                    return [4 /*yield*/, w.makeAnyoneCanSpendTx(Long.fromNumber(1000))];
-                case 1:
-                    _a.sent();
-                    expect(w.lastTx.nLockTime).toBeGreaterThan(0);
-                    return [2 /*return*/];
-            }
-        });
-    }); });
-    it('should create streamable tx with one input', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var w;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    w = new Wallet_1.Wallet();
-                    w.loadWallet();
-                    w._selectedUtxos = dummyUtxosTwo;
-                    return [4 /*yield*/, w.makeAnyoneCanSpendTx(Long.fromNumber(dummyOutput1.satoshis - dustLimit - 1))];
-                case 1:
-                    _a.sent();
-                    expect(w.lastTx.inputs.length).toBe(1);
-                    expect(w.lastTx.outputs.length).toBe(1);
-                    return [2 /*return*/];
-            }
-        });
-    }); });
-    it('should create streamable tx with exactly input', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var w, tokensLessDust;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    w = new Wallet_1.Wallet();
-                    w.loadWallet();
-                    w._selectedUtxos = dummyUtxosTwo;
-                    tokensLessDust = 1000 - 500;
-                    return [4 /*yield*/, w.makeAnyoneCanSpendTx(Long.fromNumber(tokensLessDust), '1KUrv2Ns8SwNkLgVKrVbSHJmdXLpsEvaDf')];
-                case 1:
-                    _a.sent();
-                    expect(w.lastTx.inputs.length).toBe(1);
-                    expect(w.lastTx.outputs.length).toBe(2);
-                    return [2 /*return*/];
-            }
-        });
-    }); });
-    it('should create streamable tx with multiple inputs', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var w;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    w = new Wallet_1.Wallet();
-                    w.loadWallet();
-                    w._selectedUtxos = dummyUtxosTwo;
-                    //wallet will sort utxo by sats
-                    return [4 /*yield*/, w.makeAnyoneCanSpendTx(Long.fromNumber(2500))];
-                case 1:
-                    //wallet will sort utxo by sats
-                    _a.sent();
-                    expect(w.lastTx.inputs.length).toBe(2);
-                    return [2 /*return*/];
-            }
-        });
-    }); });
+    // it('should create streamable tx with lock time', async () => {
+    //   const w = new Wallet()
+    //   w.loadWallet()
+    //   w._selectedUtxos = dummyUtxosOne
+    //   const txhex = await w.makeAnyoneCanSpendTx(
+    //     Long.fromNumber(1000)
+    //   )
+    //   expect (txhex.length).toBeGreaterThan(20)
+    //   expect (w.lastTx.nLockTime).toBeGreaterThan(0)
+    //   expect (w.lastTx.TxIns.length).toBeGreaterThan(0)
+    //   expect (w.lastTx.TxOuts.length).toBeGreaterThan(0)
+    // })
+    // it('should create streamable tx with one input', async () => {
+    //   const w = new Wallet()
+    //   w.loadWallet()
+    //   w._selectedUtxos = dummyUtxosTwo
+    //   const txhex = await w.makeAnyoneCanSpendTx(
+    //     Long.fromNumber(dummyOutput1.satoshis-dustLimit-1)
+    //   )
+    //   expect (txhex.length).toBeGreaterThan(20)
+    //   expect (w.lastTx.TxIns.length).toBe(1)
+    //   expect (w.lastTx.TxOuts.length).toBe(1)
+    // })
+    // it('should create streamable tx with exactly input', async () => {
+    //   const w = new Wallet()
+    //   w.loadWallet()
+    //   w._selectedUtxos = dummyUtxosTwo
+    //   const tokensLessDust = 1000 - 500
+    //   await w.makeAnyoneCanSpendTx(
+    //     Long.fromNumber(tokensLessDust),
+    //     '1KUrv2Ns8SwNkLgVKrVbSHJmdXLpsEvaDf'
+    //   )
+    //   expect (w.lastTx.inputs.length).toBe(1)
+    //   expect (w.lastTx.outputs.length).toBe(2)
+    // })
+    // it('should create streamable tx with multiple inputs', async () => {
+    //   const w = new Wallet()
+    //   w.loadWallet()
+    //   w._selectedUtxos = dummyUtxosTwo
+    //   //wallet will sort utxo by sats
+    //   await w.makeAnyoneCanSpendTx(Long.fromNumber(2500))
+    //   expect (w.lastTx.inputs.length).toBe(2)
+    // })
 });
 //# sourceMappingURL=wallet.test.js.map

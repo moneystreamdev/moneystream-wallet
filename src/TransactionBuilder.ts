@@ -1,14 +1,18 @@
-import {Transaction} from 'bsv'
+import { Bn, TxBuilder, Tx, TxIn } from 'bsv'
+import { KeyPair } from './KeyPair'
+import { UnspentOutput } from './UnspentOutput'
 
 //constructs a transaction
 export class TransactionBuilder {
-    // the transaction we are building
-    tx:any
+    // our builder is wrapper around bsv.TxBuilder
+    txb: any = new TxBuilder()
     // build future transactions with locktime
     futureSeconds:number = 60
+    private FINAL = 0xffffffff
     constructor() {
-        this.tx = new Transaction()
     }
+
+    get tx (): any { return this.txb.tx}
 
     inTheFuture(tx:any):any {
         let nowTimeStampInSeconds 
@@ -22,15 +26,33 @@ export class TransactionBuilder {
     }
 
     importPartiallySignedTx(tx:any) {
-        this.tx = tx
+        this.txb = new TxBuilder().importPartiallySignedTx(tx)
         //TODO: make sure tx can be signed!
         //TODO: verify that tx has input.output
         //verify inputs.input should be type PublicKeyHash
         // i.e. script.isPublicKeyHashOut()
     }
 
+    from(utxos:any[], pubKey:any, sigHash?:number):TransactionBuilder {
+        for (let index = 0; index < utxos.length; index++) {
+            const utxo = utxos[index]
+            this.addInput(utxo,pubKey,sigHash)
+        }
+        return this
+    }
+
+    toAddress(satoshis:number,address:string):TransactionBuilder {
+        this.addOutput(satoshis,address)
+        return this
+    }
+
+    change(address:any): TransactionBuilder {
+        this.txb.setChangeAddress(address)
+        return this
+    }
+
     //sighash not used until bsv2
-    addInput(utxo:any, sigHash:any) {
+    addInput(utxo:UnspentOutput, pubKey:any, sigHash?:any): number {
         //spend utxo as input, first 3 param required
         //inputFromPubKeyHash (txHashBuf, txOutNum, txOut, pubKey, nSequence, nHashType)
         // txhashbuf is tx hash/id as 32 byte buffer (tx_hash)
@@ -41,43 +63,60 @@ export class TransactionBuilder {
         // for now, output script is our address
         // later have to do in more sophisticated way
         // pubKeyHash out
-        // txb.inputFromPubKeyHash(
-        //     //txHashBuf
-        //     Buffer.from(this._utxo_tx_hash,'hex'), 
-        //     //txOutNum
-        //     this._utxo.outputIndex, 
+        this.txb.inputFromPubKeyHash(
+             //txHashBuf
+             Buffer.from(utxo.txId,'hex'), 
+             //txOutNum
+             utxo.outputIndex, 
         //     //txOut
-        //     this._utxo,
-        //     this._keypair.pubKey,
-        //     //nSequence
+             utxo.toTxOut(),
+             pubKey
+             //nSequence
         //     0xffffffff,
         //     Sig.SIGHASH_SINGLE 
+        )
+
+        // const txin = new TxIn(
+        //     Buffer.from(utxo.txId,'hex'),
+        //     utxo.outputIndex,
+        //     utxo.script,
+        //     this.FINAL
         // )
-        const txin = new Transaction.Input.PublicKeyHash({
-            prevTxId:Buffer.from(utxo.txId,'hex'),
-            output:utxo,
-            outputIndex: utxo.outputIndex,
-            sequenceNumber: 0xffffffff,
-            script: utxo.script
-        })
-        this.tx.addInput(txin)
+
+        //     {
+        //     prevTxId:Buffer.from(utxo.txId,'hex'),
+        //     output:utxo,
+        //     outputIndex: utxo.outputIndex,
+        //     sequenceNumber: 0xffffffff,
+        //     script: utxo.script
+        // })
+        //this.tx.addInput(txin)
+        return this.txb.txIns.length
     }
 
-    addOutput(amount:number, address:any) {
-        //txb.outputToAddress(new Bn.Bn().fromNumber(changeAmount), this._address)
-        this.tx.to(address, amount)
+    addOutput(satoshis:number, address:any) {
+        this.txb.outputToAddress(new Bn().fromNumber(satoshis), address)
+        //this.txb.to(address, amount)
     }
 
-    build() { /* bsv2 */ 
-        // txb.tx = new Tx.Tx()
-        // const outAmountBn = txb.buildOutputs()
-        // const inAmountBn = txb.buildInputs(outAmountBn, 0)
-        // txb.sign([this._keypair])
+    buildAndSign(keypair:KeyPair, makeFuture?:boolean): any { /* bsv2 */ 
+        // txb.build too restrictive!
+        // i.e. "cannot create output lesser than dust"
+        //this.txb.build()
+        this.txb.tx = new Tx()
+        const outAmountBn = this.txb.buildOutputs()
+        const inAmountBn = this.txb.buildInputs(outAmountBn, 1)
+        this.sign(keypair, makeFuture)
+        return this.txb.tx
     }
 
-    sign(keyPair:any, sigtype:any) {
-        this.tx = this.inTheFuture(this.tx)
-        this.tx.sign(keyPair, sigtype)
-        return this.tx
+    //sigtype should be passed in to each input
+    sign(keyPair:any, makeFuture?:boolean): any {
+        if (makeFuture) {
+            //make the tx in the future
+            this.txb.tx = this.inTheFuture(this.txb.tx)
+        }
+        this.txb.signWithKeyPairs([keyPair])
+        return this.txb.tx
     }
 }

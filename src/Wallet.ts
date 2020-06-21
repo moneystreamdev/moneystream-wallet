@@ -1,6 +1,6 @@
 'use strict'
 import fs from 'fs'
-import { Transaction, Address, crypto } from 'bsv'
+import { Tx, TxOut, Address, Sig } from 'bsv'
 import { portableFetch } from './utils/portableFetch'
 import { KeyPair } from './KeyPair'
 import { TransactionBuilder } from './TransactionBuilder'
@@ -31,9 +31,9 @@ export class Wallet {
     // certifies "I am signing for my input and output, 
     // anyone else can add inputs and outputs"
     protected SIGN_MY_INPUT = 
-        crypto.Signature.SIGHASH_SINGLE 
-        | crypto.Signature.SIGHASH_ANYONECANPAY
-        | crypto.Signature.SIGHASH_FORKID
+        Sig.SIGHASH_SINGLE 
+        | Sig.SIGHASH_ANYONECANPAY
+        | Sig.SIGHASH_FORKID
 
     constructor() {
         this._isDebug = true
@@ -178,7 +178,7 @@ export class Wallet {
                     {
                         const utxo0 = utxoFiltered[i]
                         console.log(utxo0)
-                        const newutxo = new Transaction.UnspentOutput(
+                        const newutxo = new TxOut(
                             {
                                 txid: utxo0.tx_hash,
                                 vout: utxo0.tx_pos,
@@ -206,15 +206,13 @@ export class Wallet {
         if (changeSatoshis < 0) {
             throw Error(`the utxo ran out of money ${changeSatoshis}`)
         }
-
-        const tx = new Transaction()
-            .from(this._selectedUtxos.items)
-            .to(this._keypair.toAddress(), changeSatoshis)
+        const txb = new TransactionBuilder()
+            .from(this._selectedUtxos.items, this._keypair.pubKey)
+            .toAddress(changeSatoshis, this._keypair.toAddress())
             .change(this._keypair.toAddress())
-        tx.sign(this._keypair.privKey)
-
-        this.lastTx = tx
-        return tx.toString('hex')
+        //txb.sign(this._keypair)
+        this.lastTx = txb.buildAndSign(this._keypair)
+        return this.lastTx.toHex()
         // tx can be broadcast and put on chain
     }
 
@@ -232,6 +230,7 @@ export class Wallet {
         await this.tryLoadWalletUtxos()
         //from all possible utxos, select enough to pay amount
         const filteredUtxos = this._selectedUtxos.filter(satoshis)
+        console.log(filteredUtxos)
         const utxoSatoshis = filteredUtxos.satoshis()
         const changeSatoshis = utxoSatoshis - satoshis.toNumber()
         if (changeSatoshis < 0) {
@@ -245,13 +244,21 @@ export class Wallet {
         //TODO: could spread them out?
         for (let index = 0; index < filteredUtxos.count(); index++) {
             const element = filteredUtxos.items[index]
-            txb.addInput(element, this.SIGN_MY_INPUT)
-            const outSatoshis = index === 0 ? changeSatoshis-dustTotal: this._dustLimit
-            if (outSatoshis > 0) {
+            console.log(`[${index}] adding input ${element.satoshis}`)
+            const inputCount = txb.addInput(element, this._keypair.pubKey, this.SIGN_MY_INPUT)
+            if (inputCount !== index + 1) throw Error(`Input did not get added!`)
+            //TODO: need many more unit tests
+            const outSatoshis = 
+                index === 0 ? Math.max(changeSatoshis-dustTotal,0)
+                : this._dustLimit
+            if (outSatoshis >= 0) {
+                console.log(`[${index}] adding output ${outSatoshis}`)
                 txb.addOutput(
                     outSatoshis, 
                     this._keypair.toAddress()
                 )
+            } else {
+                console.log(`[${index}] skipped adding output ${outSatoshis}`)
             }
         }
         //balance goes to payto address
@@ -262,13 +269,9 @@ export class Wallet {
                 Address.fromString(payTo)
             )
         }
-        txb.build()
-        const tx = txb.sign(
-            this._keypair.privKey, 
-            this.SIGN_MY_INPUT
-        )
+        const tx = txb.buildAndSign(this._keypair, true)
         this.lastTx = tx
-        return tx.toString()
+        return tx.toHex()
         // at this point, tx is spendable by anyone!
         // only pass it through secure channel to recipient
         // tx needs further processing before broadcast

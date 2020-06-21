@@ -1,8 +1,9 @@
 /// <reference types="long" />
+import { UnspentOutput } from "./UnspentOutput";
 export declare class OutputCollection {
     private _outs;
-    constructor(outputs?: any);
-    get items(): any;
+    constructor(outputs?: UnspentOutput[]);
+    get items(): UnspentOutput[];
     hasAny(): boolean;
     add(output: any): void;
     count(): number;

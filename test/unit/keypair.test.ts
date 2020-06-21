@@ -1,7 +1,9 @@
 //these can only be run when bsv2
 // is installed in node_modules
 import { KeyPair } from '../../src/KeyPair'
-import { PrivateKey,PublicKey } from 'bsv'
+import { PrivKey as PrivateKey,
+  PubKey as PublicKey
+} from 'bsv'
 
 describe('Instantiate KeyPair', () => {
   it('should instantiate a keypair object', () => {

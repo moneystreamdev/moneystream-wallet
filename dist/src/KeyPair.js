@@ -9,27 +9,28 @@ var KeyPair = /** @class */ (function () {
         this.pubKey = pubKey;
     }
     KeyPair.prototype.toAddress = function () {
-        return bsv_1.Address.fromPublicKey(this.pubKey, 'livenet');
+        return bsv_1.Address.fromPubKey(this.pubKey, 'livenet');
     };
     //pay to pub key hash of address
     KeyPair.prototype.toScript = function () {
-        return bsv_1.Script.buildPublicKeyHashOut(this.toAddress());
+        return this.toAddress().toTxOutScript();
+        //return Script.buildPublicKeyHashOut(this.toAddress())
     };
     KeyPair.prototype.fromRandom = function () {
-        var privKey = bsv_1.PrivateKey.fromRandom();
+        var privKey = bsv_1.PrivKey.fromRandom();
         return this.fromPrivKey(privKey);
     };
     KeyPair.prototype.fromPrivKey = function (privKey) {
         this.privKey = privKey;
-        this.pubKey = bsv_1.PublicKey.fromPrivateKey(privKey);
+        this.pubKey = bsv_1.PubKey.fromPrivKey(privKey);
         return this;
     };
     KeyPair.prototype.fromWif = function (wif) {
-        var privKey = bsv_1.PrivateKey.fromWIF(wif);
+        var privKey = bsv_1.PrivKey.fromWif(wif);
         return this.fromPrivKey(privKey);
     };
     KeyPair.prototype.toWif = function () {
-        return this.privKey.toWIF();
+        return this.privKey.toWif();
     };
     KeyPair.prototype.toXpub = function () {
         return this.pubKey.toString();
