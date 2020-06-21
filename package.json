@@ -13,7 +13,9 @@
     "build:ts:verbose": "yarn build:ts --verbose",
     "build:ts:watch": "yarn build:ts --watch",
     "clean:build": "rimraf build",
-    "test": "jest --passWithNoTests"
+    "test": "jest --passWithNoTests",
+    "bsv2": "yarn remove bsv && yarn add https://github.com/moneystreamdev/bsv#master",
+    "bsvlegacy": "yarn remove bsv && yarn add https://github.com/moneystreamdev/bsv#bsv-legacy"
   },
   "repository": {
     "type": "git",
