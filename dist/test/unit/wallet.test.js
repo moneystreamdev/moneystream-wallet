@@ -89,6 +89,7 @@ describe('Wallet tests', function () {
                     expect(w.lastTx.nLockTime).toBe(0);
                     expect(w.lastTx.txIns.length).toBeGreaterThan(0);
                     expect(w.lastTx.txOuts.length).toBeGreaterThan(0);
+                    w.logDetailsLastTx();
                     return [2 /*return*/];
             }
         });
@@ -161,7 +162,7 @@ describe('Wallet tests', function () {
                 case 1:
                     txhex = _a.sent();
                     expect(txhex.length).toBeGreaterThan(20);
-                    console.log(w.lastTx);
+                    //console.log(w.lastTx)
                     expect(w.lastTx.txIns.length).toBe(2);
                     expect(w.lastTx.txOuts.length).toBe(2);
                     return [2 /*return*/];

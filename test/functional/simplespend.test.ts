@@ -7,10 +7,9 @@ describe('wallet broadcasts simple spend', () => {
         expect(w).toBeInstanceOf(Wallet)
         w.loadWallet('L5o1VbLNhELT6uCu8v7KdZpvVocHWnHBqaHe686ZkMkyszyU6D7n')
         const nftx = await w.makeAnyoneCanSpendTx(Long.fromNumber(100))
-        console.log(w.lastTx.toJSON())
+        //console.log(w.lastTx.toJSON())
         //cannot get input satoshis?
         expect(w.lastTx.txIns.length).toBe(1)
-
     })
 
     // it('broadcasts', async () => {

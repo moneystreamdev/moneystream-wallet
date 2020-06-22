@@ -30,11 +30,25 @@ var OutputCollection = /** @class */ (function () {
         }
         return sum;
     };
+    OutputCollection.prototype.find = function (txHashBuf, txOutNum) {
+        // console.log(txHashBuf.toString('hex'))
+        // console.log(txOutNum)
+        for (var i = 0; i < this._outs.length; i++) {
+            var thisOut = this._outs[i];
+            // console.log(thisOut.outputIndex)
+            // console.log(thisOut.txId)
+            if (thisOut.outputIndex === txOutNum
+                && thisOut.txId === txHashBuf.toString('hex')) {
+                return thisOut;
+            }
+        }
+        return null;
+    };
     OutputCollection.prototype.filter = function (satoshis) {
         //sort by satoshis descending
         //TODO: put non-confirmed at bottom!
         this._outs.sort(function (a, b) { return b.satoshis - a.satoshis; });
-        console.log(this._outs);
+        //console.log(this._outs)
         var amountremaining = satoshis.toNumber();
         //keep adding outputs until we can cover the amount
         var result = new OutputCollection();

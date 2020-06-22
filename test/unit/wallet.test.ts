@@ -40,6 +40,7 @@ describe('Wallet tests', () => {
     expect (w.lastTx.nLockTime).toBe(0)
     expect (w.lastTx.txIns.length).toBeGreaterThan(0)
     expect (w.lastTx.txOuts.length).toBeGreaterThan(0)
+    w.logDetailsLastTx()
   })
   it('should create streamable tx with lock time', async () => {
     const w = new Wallet()
@@ -85,7 +86,7 @@ describe('Wallet tests', () => {
     //wallet will sort utxo by sats, user biggest first
     const txhex = await w.makeAnyoneCanSpendTx(Long.fromNumber(2500))
     expect (txhex.length).toBeGreaterThan(20)
-    console.log(w.lastTx)
+    //console.log(w.lastTx)
     expect (w.lastTx.txIns.length).toBe(2)
     expect (w.lastTx.txOuts.length).toBe(2)
   })

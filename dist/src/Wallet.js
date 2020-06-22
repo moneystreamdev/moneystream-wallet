@@ -56,6 +56,12 @@ var Wallet = /** @class */ (function () {
     function Wallet() {
         //true if user can combine inputs to extend session
         this._allowMultipleInputs = true;
+        //outputs that this wallet needs to deal with
+        //could be outputs for our wallet
+        //or others, if we import tx from others
+        //txoutmap is collection to know the value of the TxIn
+        //txbuilder has reference to txoutmap, use that instead?
+        //private _txOutMap:any
         // a previously encumbered utxo
         this._selectedUtxos = new OutputCollection_1.OutputCollection();
         // certifies "I am signing for my input and output, 
@@ -68,21 +74,29 @@ var Wallet = /** @class */ (function () {
         this._dustLimit = 500;
     }
     Wallet.prototype.txInDescription = function (txIn, index) {
-        var inputValue = txIn.output.satoshis;
-        var inputSeq = txIn.sequenceNumber || 0xffffff;
-        var inputPrevHash = txIn.prevTxId.toString('hex');
-        var inputPrevIndex = txIn.outputIndex;
+        var _a;
+        var inputValue = (_a = this.getInputOutput(txIn)) === null || _a === void 0 ? void 0 : _a.satoshis;
+        var inputSeq = txIn.nSequence || 0xffffff;
+        var inputPrevHash = txIn.txHashBuf.toString('hex');
+        var inputPrevIndex = txIn.txOutNum;
         var inputPrevHashCondensed = inputPrevHash.slice(0, 4) + "..." + inputPrevHash.slice(-4) + ":" + inputPrevIndex;
         var signingText = (txIn.constructor.name === 'Input' ? "CANNOT SIGN ABSTRACT! " : '')
             + txIn.constructor.name;
         return { value: inputValue, desc: "[" + index + "]" + inputValue + ":" + (inputSeq === 0xffffffff ? 'Final' : inputSeq.toString()) + " spends " + inputPrevHashCondensed + " Type:" + signingText };
     };
+    //get the txout that the txin is spending
+    Wallet.prototype.getInputOutput = function (txin) {
+        //txout being spent will probably be in _selectedUtxos
+        return this._selectedUtxos.find(txin.txHashBuf, txin.txOutNum);
+    };
     Wallet.prototype.getTxFund = function (tx) {
-        if (tx.inputs.length > 0 && tx.outputs.length > 0) {
-            var txIn = tx.inputs[0];
-            var txout = tx.outputs[0];
-            var txInputOut = txIn.output;
-            var fund = (txInputOut ? txInputOut.satoshis : 0) - txout.satoshis;
+        if (tx.txIns.length > 0 && tx.txOuts.length > 0) {
+            var txIn = tx.txIns[0];
+            var txout = tx.txOuts[0];
+            var txInputOut = this.getInputOutput(txIn);
+            //console.log(txInputOut)
+            //console.log(txout)
+            var fund = (txInputOut ? txInputOut.satoshis : 0) - txout.valueBn.toNumber();
             return fund;
         }
         return 0;
@@ -96,13 +110,14 @@ var Wallet = /** @class */ (function () {
         details += "\n" + this._keypair.toXpub();
         details += "\n" + this._keypair.toAddress().toString();
         if (tx) {
-            details += "\nLocked until " + tx.getLockTime();
-            if (tx.inputs && tx.inputs.length > 0) {
-                details += "\nInputs " + tx.inputs.length;
+            //TODO: translate locktime to date time
+            details += "\nLocked until " + tx.nLockTime;
+            if (tx.txIns && tx.txIns.length > 0) {
+                details += "\nInputs " + tx.txIns.length;
             }
             var inputTotal = 0;
-            for (var i = 0; i < tx.inputs.length; i++) {
-                var txIn = tx.inputs[i];
+            for (var i = 0; i < tx.txIns.length; i++) {
+                var txIn = tx.txIns[i];
                 var _a = this.txInDescription(txIn, i), value = _a.value, desc = _a.desc;
                 details += "\n   " + desc;
                 inputTotal += value;
@@ -114,12 +129,14 @@ var Wallet = /** @class */ (function () {
             }
             var platformTotal = 0;
             var outputTotal = 0;
-            for (var i = 0; i < tx.outputs.length; i++) {
-                var txout = tx.outputs[i];
-                details += "\n   [" + i + "]" + txout.satoshis;
-                outputTotal += txout.satoshis;
+            for (var i = 0; i < tx.txOuts.length; i++) {
+                var txout = tx.txOuts[i];
+                //console.log(txout)
+                var satoshis = txout.valueBn.toNumber();
+                details += "\n   [" + i + "]" + satoshis;
+                outputTotal += satoshis;
                 if (i > 2)
-                    platformTotal += txout.satoshis;
+                    platformTotal += satoshis;
             }
             if (outputTotal)
                 details += "\nTotal Out:" + outputTotal;
@@ -129,7 +146,8 @@ var Wallet = /** @class */ (function () {
             details += "\nPlatform:" + platformTotal;
             var fees = inputTotal - outputTotal;
             details += "\nMiner Fees:" + fees;
-            details += "\nFullySigned?" + tx.isFullySigned();
+            //TODO: add back to bsv2
+            //details += `\nFullySigned?${tx.isFullySigned()}`
         }
         if (details)
             console.log(details);
@@ -279,7 +297,6 @@ var Wallet = /** @class */ (function () {
                     case 1:
                         _a.sent();
                         filteredUtxos = this._selectedUtxos.filter(satoshis);
-                        console.log(filteredUtxos);
                         utxoSatoshis = filteredUtxos.satoshis();
                         changeSatoshis = utxoSatoshis - satoshis.toNumber();
                         if (changeSatoshis < 0) {
@@ -298,7 +315,7 @@ var Wallet = /** @class */ (function () {
                             outSatoshis = index === 0 ? Math.max(changeSatoshis - dustTotal, 0)
                                 : this._dustLimit;
                             if (outSatoshis >= 0) {
-                                console.log("[" + index + "] adding output " + outSatoshis);
+                                //console.log(`[${index}] adding output ${outSatoshis}`)
                                 txb.addOutput(outSatoshis, this._keypair.toAddress());
                             }
                             else {

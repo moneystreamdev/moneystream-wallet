@@ -22,7 +22,8 @@ export class Wallet {
     //could be outputs for our wallet
     //or others, if we import tx from others
     //txoutmap is collection to know the value of the TxIn
-    private _txOutMap:any
+    //txbuilder has reference to txoutmap, use that instead?
+    //private _txOutMap:any
     // a previously encumbered utxo
     _selectedUtxos: OutputCollection = new OutputCollection()
     //wallet pub/priv key pair for signing tx
@@ -43,21 +44,30 @@ export class Wallet {
     }
 
     txInDescription(txIn:any, index:number) {
-        const inputValue = txIn.output.satoshis
-        const inputSeq = txIn.sequenceNumber || 0xffffff
-        const inputPrevHash = txIn.prevTxId.toString('hex')
-        const inputPrevIndex = txIn.outputIndex
+        const inputValue = this.getInputOutput(txIn)?.satoshis
+        const inputSeq = txIn.nSequence || 0xffffff
+        const inputPrevHash = txIn.txHashBuf.toString('hex')
+        const inputPrevIndex = txIn.txOutNum
         const inputPrevHashCondensed = `${inputPrevHash.slice(0,4)}...${inputPrevHash.slice(-4)}:${inputPrevIndex}`
         const signingText = (txIn.constructor.name === 'Input' ? `CANNOT SIGN ABSTRACT! `:'')
             + txIn.constructor.name
         return {value:inputValue, desc:`[${index}]${inputValue}:${inputSeq === 0xffffffff?'Final':inputSeq.toString()} spends ${inputPrevHashCondensed} Type:${signingText}`}
     }
+
+    //get the txout that the txin is spending
+    getInputOutput(txin:any):any {
+        //txout being spent will probably be in _selectedUtxos
+        return this._selectedUtxos.find(txin.txHashBuf, txin.txOutNum)
+    }
+
     getTxFund(tx:any):number {
-        if (tx.inputs.length > 0 && tx.outputs.length > 0) {
-            const txIn = tx.inputs[0]
-            const txout = tx.outputs[0]
-            const txInputOut = txIn.output
-            const fund = (txInputOut ? txInputOut.satoshis:0) - txout.satoshis
+        if (tx.txIns.length > 0 && tx.txOuts.length > 0) {
+            const txIn = tx.txIns[0]
+            const txout = tx.txOuts[0]
+            const txInputOut = this.getInputOutput(txIn)
+            //console.log(txInputOut)
+            //console.log(txout)
+            const fund = (txInputOut ? txInputOut.satoshis:0) - txout.valueBn.toNumber()
             return fund
         }
         return 0
@@ -71,13 +81,14 @@ export class Wallet {
         details += `\n${this._keypair.toXpub()}`
         details += `\n${this._keypair.toAddress().toString()}`
         if (tx) {
-            details += `\nLocked until ${tx.getLockTime()}`
-            if (tx.inputs && tx.inputs.length > 0) {
-                details += `\nInputs ${tx.inputs.length}`
+            //TODO: translate locktime to date time
+            details += `\nLocked until ${tx.nLockTime}`
+            if (tx.txIns && tx.txIns.length > 0) {
+                details += `\nInputs ${tx.txIns.length}`
             }
             let inputTotal = 0
-            for (let i = 0; i < tx.inputs.length; i++) {
-                const txIn = tx.inputs[i]
+            for (let i = 0; i < tx.txIns.length; i++) {
+                const txIn = tx.txIns[i]
                 const {value,desc} = this.txInDescription(txIn, i)
                 details += `\n   ${desc}`
                 inputTotal += value
@@ -88,11 +99,13 @@ export class Wallet {
             }
             let platformTotal = 0
             let outputTotal = 0
-            for (let i = 0; i < tx.outputs.length; i++) {
-                const txout = tx.outputs[i]
-                details += `\n   [${i}]${txout.satoshis}`
-                outputTotal += txout.satoshis
-                if (i > 2) platformTotal += txout.satoshis
+            for (let i = 0; i < tx.txOuts.length; i++) {
+                const txout = tx.txOuts[i]
+                //console.log(txout)
+                const satoshis = txout.valueBn.toNumber()
+                details += `\n   [${i}]${satoshis}`
+                outputTotal += satoshis
+                if (i > 2) platformTotal += satoshis
             }
             if (outputTotal) details += `\nTotal Out:${outputTotal}`
             const fund = this.getTxFund(tx)
@@ -101,7 +114,8 @@ export class Wallet {
             details += `\nPlatform:${platformTotal}`
             const fees = inputTotal - outputTotal
             details += `\nMiner Fees:${fees}`
-            details += `\nFullySigned?${tx.isFullySigned()}`
+            //TODO: add back to bsv2
+            //details += `\nFullySigned?${tx.isFullySigned()}`
         }
         if (details) console.log(details)
     }
@@ -227,7 +241,7 @@ export class Wallet {
         await this.tryLoadWalletUtxos()
         //from all possible utxos, select enough to pay amount
         const filteredUtxos = this._selectedUtxos.filter(satoshis)
-        console.log(filteredUtxos)
+        //console.log(filteredUtxos)
         const utxoSatoshis = filteredUtxos.satoshis()
         const changeSatoshis = utxoSatoshis - satoshis.toNumber()
         if (changeSatoshis < 0) {
@@ -249,7 +263,7 @@ export class Wallet {
                 index === 0 ? Math.max(changeSatoshis-dustTotal,0)
                 : this._dustLimit
             if (outSatoshis >= 0) {
-                console.log(`[${index}] adding output ${outSatoshis}`)
+                //console.log(`[${index}] adding output ${outSatoshis}`)
                 txb.addOutput(
                     outSatoshis, 
                     this._keypair.toAddress()

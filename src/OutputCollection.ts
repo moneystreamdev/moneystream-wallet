@@ -28,11 +28,26 @@ export class OutputCollection {
         return sum
     }
 
+    find(txHashBuf:any, txOutNum:number):UnspentOutput|null {
+        // console.log(txHashBuf.toString('hex'))
+        // console.log(txOutNum)
+        for (let i=0; i<this._outs.length; i++ ) {
+            const thisOut = this._outs[i]
+            // console.log(thisOut.outputIndex)
+            // console.log(thisOut.txId)
+            if (thisOut.outputIndex === txOutNum
+                && thisOut.txId === txHashBuf.toString('hex')) {
+                    return thisOut
+            }
+        }
+        return null
+    }
+
     filter(satoshis:Long) : OutputCollection {
         //sort by satoshis descending
         //TODO: put non-confirmed at bottom!
         this._outs.sort((a:any,b:any) => b.satoshis - a.satoshis)
-        console.log(this._outs)
+        //console.log(this._outs)
         let amountremaining = satoshis.toNumber()
         //keep adding outputs until we can cover the amount
         const result = new OutputCollection()

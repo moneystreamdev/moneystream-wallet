@@ -6,7 +6,6 @@ export declare class Wallet {
     protected _walletFileName: string;
     protected _dustLimit: number;
     protected _allowMultipleInputs: boolean;
-    private _txOutMap;
     _selectedUtxos: OutputCollection;
     _keypair: KeyPair;
     lastTx: any;
@@ -16,6 +15,7 @@ export declare class Wallet {
         value: any;
         desc: string;
     };
+    getInputOutput(txin: any): any;
     getTxFund(tx: any): number;
     logDetailsLastTx(): void;
     logDetails(tx?: any): void;
