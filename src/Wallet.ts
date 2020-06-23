@@ -61,17 +61,20 @@ export class Wallet {
     }
 
     getTxFund(tx:any):number {
+        let fundingTotal = 0
         if (tx.txIns.length > 0 && tx.txOuts.length > 0) {
-            const txIn = tx.txIns[0]
-            const txout = tx.txOuts[0]
-            const txInputOut = this.getInputOutput(txIn)
-            //console.log(txInputOut)
-            //console.log(txout)
-            const fund = (txInputOut ? txInputOut.satoshis:0) - txout.valueBn.toNumber()
-            return fund
+            for (let index = 0; index < tx.txIns.length; index++) {
+                const txin = tx.txIns[index]
+                const txout = tx.txOuts[index]
+                const txInputOut = this.getInputOutput(txin)
+                //console.log(txInputOut)
+                //console.log(txout)
+                fundingTotal += (txInputOut ? txInputOut.satoshis:0) - txout.valueBn.toNumber()
+            }
         }
-        return 0
+        return fundingTotal
     }
+
     logDetailsLastTx() {
         this.logDetails(this.lastTx)
     }
@@ -117,7 +120,7 @@ export class Wallet {
             //TODO: add back to bsv2
             //details += `\nFullySigned?${tx.isFullySigned()}`
         }
-        if (details) console.log(details)
+        console.log(details)
     }
 
     toJSON() {
@@ -259,9 +262,15 @@ export class Wallet {
             const inputCount = txb.addInput(element, this._keypair.pubKey, this.SIGN_MY_INPUT)
             if (inputCount !== index + 1) throw Error(`Input did not get added!`)
             //TODO: need many more unit tests
-            const outSatoshis = 
-                index === 0 ? Math.max(changeSatoshis-dustTotal,0)
-                : this._dustLimit
+            let outSatoshis = this._dustLimit
+            if (index === 0) {
+                if (filteredUtxos.count() < 2) {
+                    // only one output, put all change there
+                    outSatoshis = Math.max(changeSatoshis,0)
+                } else {
+                    outSatoshis = Math.max(changeSatoshis-dustTotal,0)
+                }
+            }
             if (outSatoshis >= 0) {
                 //console.log(`[${index}] adding output ${outSatoshis}`)
                 txb.addOutput(

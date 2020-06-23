@@ -1,6 +1,5 @@
 import { Wallet } from '../../src/Wallet'
 import * as Long from 'long'
-import { Transaction, TxOut } from 'bsv'
 import { KeyPair } from '../../src/KeyPair'
 import { OutputCollection } from '../../src/OutputCollection'
 import { UnspentOutput } from '../../src/UnspentOutput'
@@ -35,7 +34,7 @@ describe('Wallet tests', () => {
     w.loadWallet()
     w._selectedUtxos = dummyUtxosOne
 
-    const txhex = await w.makeSimpleSpend(Long.fromNumber(1000))
+    const txhex = await w.makeSimpleSpend(Long.fromNumber(600))
     expect (txhex.length).toBeGreaterThan(20)
     expect (w.lastTx.nLockTime).toBe(0)
     expect (w.lastTx.txIns.length).toBeGreaterThan(0)
@@ -86,9 +85,20 @@ describe('Wallet tests', () => {
     //wallet will sort utxo by sats, user biggest first
     const txhex = await w.makeAnyoneCanSpendTx(Long.fromNumber(2500))
     expect (txhex.length).toBeGreaterThan(20)
-    //console.log(w.lastTx)
+    w.logDetailsLastTx()
     expect (w.lastTx.txIns.length).toBe(2)
     expect (w.lastTx.txOuts.length).toBe(2)
+    expect(w.lastTx.txOuts[0].valueBn.toNumber()).toBe(0)
+    expect(w.lastTx.txOuts[1].valueBn.toNumber()).toBe(500)
+    expect(w.getTxFund(w.lastTx)).toBe(2500)
+  })
+  it('funds tx with one input', async () => {
+    const w = new Wallet()
+    w.loadWallet()
+    w._selectedUtxos = dummyUtxosOne
+    const txhex = await w.makeAnyoneCanSpendTx(Long.fromNumber(100))
+    expect(w.lastTx).toBeDefined()
+    expect(w.getTxFund(w.lastTx)).toBe(100)
   })
 
 })

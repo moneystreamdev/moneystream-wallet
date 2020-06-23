@@ -90,16 +90,18 @@ var Wallet = /** @class */ (function () {
         return this._selectedUtxos.find(txin.txHashBuf, txin.txOutNum);
     };
     Wallet.prototype.getTxFund = function (tx) {
+        var fundingTotal = 0;
         if (tx.txIns.length > 0 && tx.txOuts.length > 0) {
-            var txIn = tx.txIns[0];
-            var txout = tx.txOuts[0];
-            var txInputOut = this.getInputOutput(txIn);
-            //console.log(txInputOut)
-            //console.log(txout)
-            var fund = (txInputOut ? txInputOut.satoshis : 0) - txout.valueBn.toNumber();
-            return fund;
+            for (var index = 0; index < tx.txIns.length; index++) {
+                var txin = tx.txIns[index];
+                var txout = tx.txOuts[index];
+                var txInputOut = this.getInputOutput(txin);
+                //console.log(txInputOut)
+                //console.log(txout)
+                fundingTotal += (txInputOut ? txInputOut.satoshis : 0) - txout.valueBn.toNumber();
+            }
         }
-        return 0;
+        return fundingTotal;
     };
     Wallet.prototype.logDetailsLastTx = function () {
         this.logDetails(this.lastTx);
@@ -149,8 +151,7 @@ var Wallet = /** @class */ (function () {
             //TODO: add back to bsv2
             //details += `\nFullySigned?${tx.isFullySigned()}`
         }
-        if (details)
-            console.log(details);
+        console.log(details);
     };
     Wallet.prototype.toJSON = function () {
         var walletjson = {
@@ -312,8 +313,16 @@ var Wallet = /** @class */ (function () {
                             inputCount = txb.addInput(element, this._keypair.pubKey, this.SIGN_MY_INPUT);
                             if (inputCount !== index + 1)
                                 throw Error("Input did not get added!");
-                            outSatoshis = index === 0 ? Math.max(changeSatoshis - dustTotal, 0)
-                                : this._dustLimit;
+                            outSatoshis = this._dustLimit;
+                            if (index === 0) {
+                                if (filteredUtxos.count() < 2) {
+                                    // only one output, put all change there
+                                    outSatoshis = Math.max(changeSatoshis, 0);
+                                }
+                                else {
+                                    outSatoshis = Math.max(changeSatoshis - dustTotal, 0);
+                                }
+                            }
                             if (outSatoshis >= 0) {
                                 //console.log(`[${index}] adding output ${outSatoshis}`)
                                 txb.addOutput(outSatoshis, this._keypair.toAddress());

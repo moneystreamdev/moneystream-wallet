@@ -82,7 +82,7 @@ describe('Wallet tests', function () {
                     w = new Wallet_1.Wallet();
                     w.loadWallet();
                     w._selectedUtxos = dummyUtxosOne;
-                    return [4 /*yield*/, w.makeSimpleSpend(Long.fromNumber(1000))];
+                    return [4 /*yield*/, w.makeSimpleSpend(Long.fromNumber(600))];
                 case 1:
                     txhex = _a.sent();
                     expect(txhex.length).toBeGreaterThan(20);
@@ -162,9 +162,29 @@ describe('Wallet tests', function () {
                 case 1:
                     txhex = _a.sent();
                     expect(txhex.length).toBeGreaterThan(20);
-                    //console.log(w.lastTx)
+                    w.logDetailsLastTx();
                     expect(w.lastTx.txIns.length).toBe(2);
                     expect(w.lastTx.txOuts.length).toBe(2);
+                    expect(w.lastTx.txOuts[0].valueBn.toNumber()).toBe(0);
+                    expect(w.lastTx.txOuts[1].valueBn.toNumber()).toBe(500);
+                    expect(w.getTxFund(w.lastTx)).toBe(2500);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    it('funds tx with one input', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var w, txhex;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    w = new Wallet_1.Wallet();
+                    w.loadWallet();
+                    w._selectedUtxos = dummyUtxosOne;
+                    return [4 /*yield*/, w.makeAnyoneCanSpendTx(Long.fromNumber(100))];
+                case 1:
+                    txhex = _a.sent();
+                    expect(w.lastTx).toBeDefined();
+                    expect(w.getTxFund(w.lastTx)).toBe(100);
                     return [2 /*return*/];
             }
         });

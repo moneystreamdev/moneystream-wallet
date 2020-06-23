@@ -192,7 +192,7 @@
         "affectsGlobalScope": false
       },
       "../src/Wallet.ts": {
-        "version": "eff9987c59cc3b5d57ec4219236edb9136576948ec9c6346a83e84b06549e8f6",
+        "version": "2c9e8dd870b553b03d47f49d7cf8a4c2d158d5a2c418e239d31eb33f6a751cbd",
         "signature": "b43ea932447b8125211fca0bdf7c0b04fe3f8e734569091e413f87410f6f6d6b",
         "affectsGlobalScope": false
       },
@@ -222,7 +222,7 @@
         "affectsGlobalScope": false
       },
       "../test/unit/wallet.test.ts": {
-        "version": "faf4777f666cd0f8e8a361c441a13c8649f51b595c986763606d06afa2f8883c",
+        "version": "6d7478a5dadeaaa3dd6e7a385a56a2b18609cc29a25ef870bcb61ce42d0bea26",
         "signature": "a747a591cf4e8c55cb44f079d82b31556e902fcea79ce8c49ded66ee039eaa11",
         "affectsGlobalScope": false
       },
@@ -1661,7 +1661,6 @@
         "../node_modules/@types/node/ts3.2/fs.d.ts",
         "../node_modules/@types/node/ts3.2/util.d.ts",
         "../node_modules/@types/node/util.d.ts",
-        "../node_modules/bsv/index.d.ts",
         "../src/KeyPair.ts",
         "../src/OutputCollection.ts",
         "../src/UnspentOutput.ts",
