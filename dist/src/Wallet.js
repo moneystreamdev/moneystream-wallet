@@ -145,8 +145,8 @@ var Wallet = /** @class */ (function () {
             details += "\nFunding:" + fund;
             platformTotal = fund - this._dustLimit;
             details += "\nPlatform:" + platformTotal;
-            var fees = inputTotal - outputTotal - platformTotal;
-            details += "\nMiner Fees:" + fees;
+            var minerFee = inputTotal - outputTotal - platformTotal;
+            details += "\nMiner Fee:" + minerFee;
             //TODO: add back to bsv2
             //details += `\nFullySigned?${tx.isFullySigned()}`
         }
