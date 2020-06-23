@@ -241,7 +241,11 @@ var Wallet = /** @class */ (function () {
             var utxos, utxoSatoshis, changeSatoshis, txb;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.getAnUnspentOutput()];
+                    case 0:
+                        if (!this._keypair) {
+                            throw new Error('Load wallet before spending');
+                        }
+                        return [4 /*yield*/, this.getAnUnspentOutput()];
                     case 1:
                         utxos = _a.sent();
                         if (!utxos || utxos.length < 0) {

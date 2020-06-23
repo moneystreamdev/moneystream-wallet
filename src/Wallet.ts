@@ -211,6 +211,7 @@ export class Wallet {
 
     // legacy p2pkh spend
     async makeSimpleSpend(satoshis: Long): Promise<string> {
+        if (!this._keypair) { throw new Error('Load wallet before spending') }
         const utxos = await this.getAnUnspentOutput()
         if (!utxos || utxos.length < 0) {
             throw Error(`insufficient wallet funds.`)

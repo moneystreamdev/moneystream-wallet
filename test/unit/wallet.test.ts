@@ -29,6 +29,14 @@ describe('Wallet tests', () => {
     const w = new Wallet()
     expect(w).toBeInstanceOf(Wallet)
   })
+  it('should error if wallet not loaded', async () => {
+    const w = new Wallet()
+    w._selectedUtxos = dummyUtxosOne
+    await expect(
+      w.makeSimpleSpend(Long.fromNumber(600))
+    ).rejects.toThrow(Error)
+    
+  })
   it('should create simple tx with no lock time', async () => {
     const w = new Wallet()
     w.loadWallet()

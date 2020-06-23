@@ -74,6 +74,20 @@ describe('Wallet tests', function () {
         var w = new Wallet_1.Wallet();
         expect(w).toBeInstanceOf(Wallet_1.Wallet);
     });
+    it('should error if wallet not loaded', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var w;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    w = new Wallet_1.Wallet();
+                    w._selectedUtxos = dummyUtxosOne;
+                    return [4 /*yield*/, expect(w.makeSimpleSpend(Long.fromNumber(600))).rejects.toThrow(Error)];
+                case 1:
+                    _a.sent();
+                    return [2 /*return*/];
+            }
+        });
+    }); });
     it('should create simple tx with no lock time', function () { return __awaiter(void 0, void 0, void 0, function () {
         var w, txhex;
         return __generator(this, function (_a) {
