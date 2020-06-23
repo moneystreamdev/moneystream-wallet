@@ -176,7 +176,7 @@ describe('Wallet tests', function () {
                 case 1:
                     txhex = _a.sent();
                     expect(txhex.length).toBeGreaterThan(20);
-                    w.logDetailsLastTx();
+                    //w.logDetailsLastTx()
                     expect(w.lastTx.txIns.length).toBe(2);
                     expect(w.lastTx.txOuts.length).toBe(2);
                     expect(w.lastTx.txOuts[0].valueBn.toNumber()).toBe(0);
@@ -203,5 +203,10 @@ describe('Wallet tests', function () {
             }
         });
     }); });
+    it('should log utxos', function () {
+        var w = new Wallet_1.Wallet();
+        w._selectedUtxos = dummyUtxosTwo;
+        w.logUtxos(w._selectedUtxos.items);
+    });
 });
 //# sourceMappingURL=wallet.test.js.map

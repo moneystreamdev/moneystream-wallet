@@ -93,7 +93,7 @@ describe('Wallet tests', () => {
     //wallet will sort utxo by sats, user biggest first
     const txhex = await w.makeAnyoneCanSpendTx(Long.fromNumber(2500))
     expect (txhex.length).toBeGreaterThan(20)
-    w.logDetailsLastTx()
+    //w.logDetailsLastTx()
     expect (w.lastTx.txIns.length).toBe(2)
     expect (w.lastTx.txOuts.length).toBe(2)
     expect(w.lastTx.txOuts[0].valueBn.toNumber()).toBe(0)
@@ -107,6 +107,11 @@ describe('Wallet tests', () => {
     const txhex = await w.makeAnyoneCanSpendTx(Long.fromNumber(100))
     expect(w.lastTx).toBeDefined()
     expect(w.getTxFund(w.lastTx)).toBe(100)
+  })
+  it ('should log utxos', () => {
+    const w = new Wallet()
+    w._selectedUtxos = dummyUtxosTwo
+    w.logUtxos(w._selectedUtxos.items)
   })
 
 })
