@@ -54,6 +54,7 @@ var UnspentOutput_1 = require("./UnspentOutput");
 // TODO: extract debugging formatting into separate class
 var Wallet = /** @class */ (function () {
     function Wallet() {
+        this.FINAL = 0xffffffff;
         //true if user can combine inputs to extend session
         this._allowMultipleInputs = true;
         //outputs that this wallet needs to deal with
@@ -76,13 +77,13 @@ var Wallet = /** @class */ (function () {
     Wallet.prototype.txInDescription = function (txIn, index) {
         var _a;
         var inputValue = (_a = this.getInputOutput(txIn)) === null || _a === void 0 ? void 0 : _a.satoshis;
-        var inputSeq = txIn.nSequence || 0xffffff;
+        var inputSeq = txIn.nSequence || this.FINAL;
         var inputPrevHash = txIn.txHashBuf.toString('hex');
         var inputPrevIndex = txIn.txOutNum;
         var inputPrevHashCondensed = inputPrevHash.slice(0, 4) + "..." + inputPrevHash.slice(-4) + ":" + inputPrevIndex;
         var signingText = (txIn.constructor.name === 'Input' ? "CANNOT SIGN ABSTRACT! " : '')
             + txIn.constructor.name;
-        return { value: inputValue, desc: "[" + index + "]" + inputValue + ":" + (inputSeq === 0xffffffff ? 'Final' : inputSeq.toString()) + " spends " + inputPrevHashCondensed + " Type:" + signingText };
+        return { value: inputValue, desc: "[" + index + "]" + inputValue + ":" + (inputSeq === this.FINAL ? 'Final' : inputSeq.toString()) + " spends " + inputPrevHashCondensed + " Type:" + signingText };
     };
     //get the txout that the txin is spending
     Wallet.prototype.getInputOutput = function (txin) {
@@ -92,12 +93,11 @@ var Wallet = /** @class */ (function () {
     Wallet.prototype.getTxFund = function (tx) {
         var fundingTotal = 0;
         if (tx.txIns.length > 0 && tx.txOuts.length > 0) {
-            for (var index = 0; index < tx.txIns.length; index++) {
+            var len = this._fundingInputCount || tx.txIns.length;
+            for (var index = 0; index < len; index++) {
                 var txin = tx.txIns[index];
                 var txout = tx.txOuts[index];
                 var txInputOut = this.getInputOutput(txin);
-                //console.log(txInputOut)
-                //console.log(txout)
                 fundingTotal += (txInputOut ? txInputOut.satoshis : 0) - txout.valueBn.toNumber();
             }
         }
@@ -133,7 +133,6 @@ var Wallet = /** @class */ (function () {
             var outputTotal = 0;
             for (var i = 0; i < tx.txOuts.length; i++) {
                 var txout = tx.txOuts[i];
-                //console.log(txout)
                 var satoshis = txout.valueBn.toNumber();
                 details += "\n   [" + i + "]" + satoshis;
                 outputTotal += satoshis;
@@ -210,7 +209,7 @@ var Wallet = /** @class */ (function () {
     //todo cache utxos
     Wallet.prototype.getAnUnspentOutput = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var utxos, utxoFiltered, i, utxo0, newutxo;
+            var utxos, i, utxo0, newutxo;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -218,14 +217,11 @@ var Wallet = /** @class */ (function () {
                         return [4 /*yield*/, this.getUtxosAPI(this._keypair.toAddress())];
                     case 1:
                         utxos = _a.sent();
-                        if (utxos.length > 0) {
-                            utxoFiltered = utxos;
-                            if (utxoFiltered && utxoFiltered.length > 0) {
-                                for (i = 0; i < utxoFiltered.length; i++) {
-                                    utxo0 = utxoFiltered[i];
-                                    newutxo = new UnspentOutput_1.UnspentOutput(utxo0.value, this._keypair.toScript(), utxo0.tx_hash, utxo0.tx_pos);
-                                    this._selectedUtxos.add(newutxo);
-                                }
+                        if (utxos && utxos.length > 0) {
+                            for (i = 0; i < utxos.length; i++) {
+                                utxo0 = utxos[i];
+                                newutxo = new UnspentOutput_1.UnspentOutput(utxo0.value, this._keypair.toScript(), utxo0.tx_hash, utxo0.tx_pos);
+                                this._selectedUtxos.add(newutxo);
                             }
                         }
                         _a.label = 2;
@@ -301,6 +297,7 @@ var Wallet = /** @class */ (function () {
                     case 1:
                         _a.sent();
                         filteredUtxos = this._selectedUtxos.filter(satoshis);
+                        this._fundingInputCount = filteredUtxos.count();
                         utxoSatoshis = filteredUtxos.satoshis();
                         changeSatoshis = utxoSatoshis - satoshis.toNumber();
                         if (changeSatoshis < 0) {
@@ -327,11 +324,7 @@ var Wallet = /** @class */ (function () {
                                 }
                             }
                             if (outSatoshis >= 0) {
-                                //console.log(`[${index}] adding output ${outSatoshis}`)
                                 txb.addOutput(outSatoshis, this._keypair.toAddress());
-                            }
-                            else {
-                                console.log("[" + index + "] skipped adding output " + outSatoshis);
                             }
                         }
                         //balance goes to payto address

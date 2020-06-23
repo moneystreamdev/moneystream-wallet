@@ -1,6 +1,6 @@
 'use strict'
 import fs from 'fs'
-import { Tx, TxOut, Address, Sig } from 'bsv'
+import { Address, Sig } from 'bsv'
 import { portableFetch } from './utils/portableFetch'
 import { KeyPair } from './KeyPair'
 import { TransactionBuilder } from './TransactionBuilder'
@@ -13,11 +13,13 @@ import { UnspentOutput } from './UnspentOutput'
 // TODO: extract external API calls into separate class
 // TODO: extract debugging formatting into separate class
 export class Wallet {
+    protected readonly FINAL:number = 0xffffffff
     public _isDebug: boolean
     protected _walletFileName: string
     protected _dustLimit: number
     //true if user can combine inputs to extend session
     protected _allowMultipleInputs: boolean = true
+    protected _fundingInputCount?: number
     //outputs that this wallet needs to deal with
     //could be outputs for our wallet
     //or others, if we import tx from others
@@ -45,13 +47,13 @@ export class Wallet {
 
     txInDescription(txIn:any, index:number) {
         const inputValue = this.getInputOutput(txIn)?.satoshis
-        const inputSeq = txIn.nSequence || 0xffffff
+        const inputSeq = txIn.nSequence || this.FINAL
         const inputPrevHash = txIn.txHashBuf.toString('hex')
         const inputPrevIndex = txIn.txOutNum
         const inputPrevHashCondensed = `${inputPrevHash.slice(0,4)}...${inputPrevHash.slice(-4)}:${inputPrevIndex}`
         const signingText = (txIn.constructor.name === 'Input' ? `CANNOT SIGN ABSTRACT! `:'')
             + txIn.constructor.name
-        return {value:inputValue, desc:`[${index}]${inputValue}:${inputSeq === 0xffffffff?'Final':inputSeq.toString()} spends ${inputPrevHashCondensed} Type:${signingText}`}
+        return {value:inputValue, desc:`[${index}]${inputValue}:${inputSeq === this.FINAL?'Final':inputSeq.toString()} spends ${inputPrevHashCondensed} Type:${signingText}`}
     }
 
     //get the txout that the txin is spending
@@ -63,12 +65,11 @@ export class Wallet {
     getTxFund(tx:any):number {
         let fundingTotal = 0
         if (tx.txIns.length > 0 && tx.txOuts.length > 0) {
-            for (let index = 0; index < tx.txIns.length; index++) {
+            const len = this._fundingInputCount || tx.txIns.length
+            for (let index = 0; index < len; index++) {
                 const txin = tx.txIns[index]
                 const txout = tx.txOuts[index]
                 const txInputOut = this.getInputOutput(txin)
-                //console.log(txInputOut)
-                //console.log(txout)
                 fundingTotal += (txInputOut ? txInputOut.satoshis:0) - txout.valueBn.toNumber()
             }
         }
@@ -104,7 +105,6 @@ export class Wallet {
             let outputTotal = 0
             for (let i = 0; i < tx.txOuts.length; i++) {
                 const txout = tx.txOuts[i]
-                //console.log(txout)
                 const satoshis = txout.valueBn.toNumber()
                 details += `\n   [${i}]${satoshis}`
                 outputTotal += satoshis
@@ -187,21 +187,17 @@ export class Wallet {
     async getAnUnspentOutput(): Promise<any> {
         if (!this._selectedUtxos.hasAny()) {
             const utxos = await this.getUtxosAPI(this._keypair.toAddress())
-            if (utxos.length > 0) {
-                const utxoFiltered = utxos
-                if (utxoFiltered && utxoFiltered.length > 0) 
+            if (utxos && utxos.length > 0) {
+                for(let i=0; i<utxos.length; i++)
                 {
-                    for(let i=0; i<utxoFiltered.length; i++)
-                    {
-                        const utxo0 = utxoFiltered[i]
-                        const newutxo = new UnspentOutput(
-                            utxo0.value, 
-                            this._keypair.toScript(),
-                            utxo0.tx_hash,
-                            utxo0.tx_pos
-                          )
-                        this._selectedUtxos.add(newutxo)
-                    }
+                    const utxo0 = utxos[i]
+                    const newutxo = new UnspentOutput(
+                        utxo0.value, 
+                        this._keypair.toScript(),
+                        utxo0.tx_hash,
+                        utxo0.tx_pos
+                        )
+                    this._selectedUtxos.add(newutxo)
                 }
             }
         }
@@ -244,7 +240,7 @@ export class Wallet {
         await this.tryLoadWalletUtxos()
         //from all possible utxos, select enough to pay amount
         const filteredUtxos = this._selectedUtxos.filter(satoshis)
-        //console.log(filteredUtxos)
+        this._fundingInputCount = filteredUtxos.count()
         const utxoSatoshis = filteredUtxos.satoshis()
         const changeSatoshis = utxoSatoshis - satoshis.toNumber()
         if (changeSatoshis < 0) {
@@ -258,7 +254,6 @@ export class Wallet {
         //TODO: could spread them out?
         for (let index = 0; index < filteredUtxos.count(); index++) {
             const element = filteredUtxos.items[index]
-            //console.log(`[${index}] adding input ${element.satoshis}`)
             const inputCount = txb.addInput(element, this._keypair.pubKey, this.SIGN_MY_INPUT)
             if (inputCount !== index + 1) throw Error(`Input did not get added!`)
             //TODO: need many more unit tests
@@ -272,13 +267,10 @@ export class Wallet {
                 }
             }
             if (outSatoshis >= 0) {
-                //console.log(`[${index}] adding output ${outSatoshis}`)
                 txb.addOutput(
                     outSatoshis, 
                     this._keypair.toAddress()
                 )
-            } else {
-                console.log(`[${index}] skipped adding output ${outSatoshis}`)
             }
         }
         //balance goes to payto address

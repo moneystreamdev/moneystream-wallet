@@ -2,10 +2,12 @@
 import { KeyPair } from './KeyPair';
 import { OutputCollection } from './OutputCollection';
 export declare class Wallet {
+    protected readonly FINAL: number;
     _isDebug: boolean;
     protected _walletFileName: string;
     protected _dustLimit: number;
     protected _allowMultipleInputs: boolean;
+    protected _fundingInputCount?: number;
     _selectedUtxos: OutputCollection;
     _keypair: KeyPair;
     lastTx: any;
