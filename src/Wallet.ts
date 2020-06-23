@@ -113,9 +113,9 @@ export class Wallet {
             if (outputTotal) details += `\nTotal Out:${outputTotal}`
             const fund = this.getTxFund(tx)
             details += `\nFunding:${fund}`
-            platformTotal = fund - this._dustLimit
+            platformTotal = fund
             details += `\nPlatform:${platformTotal}`
-            const minerFee = inputTotal - outputTotal -platformTotal
+            const minerFee = inputTotal - outputTotal - platformTotal
             details += `\nMiner Fee:${minerFee}`
             //TODO: add back to bsv2
             //details += `\nFullySigned?${tx.isFullySigned()}`
