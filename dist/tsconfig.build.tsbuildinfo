@@ -192,7 +192,7 @@
         "affectsGlobalScope": false
       },
       "../src/Wallet.ts": {
-        "version": "b02ff2ea1a43ffc3d8a72939ac6b6dd1717366cf4304c59605e28b945b7a7f48",
+        "version": "31ea923c0244c78e20bd3d632c5b37ffb28349195cedcf9812019694bae282df",
         "signature": "095768019137ab760240ffed03b06f9be312dd129805f094176ad79d893f9f92",
         "affectsGlobalScope": false
       },

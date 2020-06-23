@@ -115,7 +115,7 @@ export class Wallet {
             details += `\nFunding:${fund}`
             platformTotal = fund - this._dustLimit
             details += `\nPlatform:${platformTotal}`
-            const fees = inputTotal - outputTotal
+            const fees = inputTotal - outputTotal -platformTotal
             details += `\nMiner Fees:${fees}`
             //TODO: add back to bsv2
             //details += `\nFullySigned?${tx.isFullySigned()}`
