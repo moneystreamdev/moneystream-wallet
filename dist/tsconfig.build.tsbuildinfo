@@ -197,8 +197,8 @@
         "affectsGlobalScope": false
       },
       "../src/index.ts": {
-        "version": "24fa8ca65c31f2e536402c5d17b25cbf3ae3dbae146b3358c10950ed6dd99299",
-        "signature": "73c0398e1995c7d0eade1b4cc942d1ee6589dab3d17198387595b9cd9c911ad8",
+        "version": "2d5b5447141265ad361f47e6b72c13f314e5a6b302f39cab6e6ec785a3d44cc3",
+        "signature": "454c522c94f8a4be16f2bdba4e1c8d0a771ebd5a93b9ba4b577bc795134ee97b",
         "affectsGlobalScope": false
       },
       "../node_modules/@types/long/index.d.ts": {
@@ -1615,6 +1615,7 @@
         "../node_modules/@types/node/ts3.2/util.d.ts",
         "../node_modules/@types/node/util.d.ts",
         "../src/KeyPair.ts",
+        "../src/OutputCollection.ts",
         "../src/TransactionBuilder.ts",
         "../src/UnspentOutput.ts",
         "../src/Wallet.ts"
@@ -2600,6 +2601,7 @@
       ],
       "../src/index.ts": [
         "../src/KeyPair.ts",
+        "../src/OutputCollection.ts",
         "../src/TransactionBuilder.ts",
         "../src/UnspentOutput.ts",
         "../src/Wallet.ts"
