@@ -138,7 +138,6 @@ export class Wallet {
         }
         if (!this._keypair) {
             this.generateKey()
-            return this.store(this.toJSON())
         }
     }
 

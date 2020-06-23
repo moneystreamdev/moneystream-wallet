@@ -167,7 +167,6 @@ var Wallet = /** @class */ (function () {
         }
         if (!this._keypair) {
             this.generateKey();
-            return this.store(this.toJSON());
         }
     };
     Wallet.prototype.generateKey = function () {

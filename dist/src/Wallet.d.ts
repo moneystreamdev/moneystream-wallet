@@ -24,7 +24,7 @@ export declare class Wallet {
         xpub: string;
         address: any;
     };
-    loadWallet(wif?: string): any;
+    loadWallet(wif?: string): void;
     generateKey(): any;
     store(wallet: any): any;
     backup(): void;
