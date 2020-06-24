@@ -66,35 +66,40 @@ describe('wallet broadcasts simple spend', function () {
                     w = new Wallet_1.Wallet();
                     expect(w).toBeInstanceOf(Wallet_1.Wallet);
                     w.loadWallet('L5o1VbLNhELT6uCu8v7KdZpvVocHWnHBqaHe686ZkMkyszyU6D7n');
-                    return [4 /*yield*/, w.makeAnyoneCanSpendTx(Long.fromNumber(100))
-                        //console.log(w.lastTx.toJSON())
-                        //cannot get input satoshis?
-                    ];
+                    return [4 /*yield*/, w.makeAnyoneCanSpendTx(Long.fromNumber(100))];
                 case 1:
                     nftx = _a.sent();
-                    //console.log(w.lastTx.toJSON())
-                    //cannot get input satoshis?
                     expect(w.lastTx.txIns.length).toBe(1);
                     return [2 /*return*/];
             }
         });
     }); });
-    // it('broadcasts', async () => {
-    //     const sender = new Wallet()
-    //     sender.loadWallet('L5o1VbLNhELT6uCu8v7KdZpvVocHWnHBqaHe686ZkMkyszyU6D7n')
-    //     sender.logDetails()
-    //     let sender_hex, sent
-    //     sender_hex = await sender.makeAnyoneCanSpendTx(
-    //         Long.fromNumber(600)
-    //     )
-    //     //TODO: might not be 1 if multiple utxo combined
-    //     expect(sender.lastTx.inputs.length).toBe(1)
-    //     console.log(sender_hex)
-    //     console.log(sender.logDetails(sender.lastTx))
-    //     // sent = await sender.broadcastRaw(sender_hex)
-    //     // console.log(`broadcast Tx ${sent}`)
-    //     // //result should be 32 byte hex
-    //     // expect(sent.length).toBe(32)
-    // },10000)
+    it('broadcasts', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var sender, sender_hex, sent;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    sender = new Wallet_1.Wallet();
+                    sender.loadWallet('L5o1VbLNhELT6uCu8v7KdZpvVocHWnHBqaHe686ZkMkyszyU6D7n');
+                    sender.logDetails();
+                    return [4 /*yield*/, sender.makeAnyoneCanSpendTx(Long.fromNumber(600))
+                        //TODO: might not be 1 if multiple utxo combined
+                    ];
+                case 1:
+                    sender_hex = _a.sent();
+                    //TODO: might not be 1 if multiple utxo combined
+                    expect(sender.lastTx.txIns.length).toBe(1);
+                    sender.logDetailsLastTx();
+                    console.log(sender_hex);
+                    return [4 /*yield*/, sender.broadcastRaw(sender_hex)];
+                case 2:
+                    sent = _a.sent();
+                    console.log("broadcast Tx " + sent);
+                    //result should be 32 byte hex
+                    expect(sent.length).toBe(64);
+                    return [2 /*return*/];
+            }
+        });
+    }); }, 10000);
 });
 //# sourceMappingURL=simplespend.test.js.map

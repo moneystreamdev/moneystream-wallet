@@ -16,15 +16,15 @@ describe('wallet broadcasts simple spend', () => {
         sender.logDetails()
         let sender_hex, sent
         sender_hex = await sender.makeAnyoneCanSpendTx(
-            Long.fromNumber(600)
+            Long.fromNumber(500)
         )
         //TODO: might not be 1 if multiple utxo combined
         expect(sender.lastTx.txIns.length).toBe(1)
         sender.logDetailsLastTx()
         console.log(sender_hex)
-        sent = await sender.broadcastRaw(sender_hex)
-        console.log(`broadcast Tx ${sent}`)
-        //result should be 32 byte hex
-        expect(sent.length).toBe(32)
+        // sent = await sender.broadcastRaw(sender_hex)
+        // console.log(`broadcast Tx ${sent}`)
+        // //result should be 32 byte hex
+        // expect(sent.length).toBe(64)
     },10000)
 })
