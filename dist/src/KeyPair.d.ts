@@ -3,7 +3,7 @@ export declare class KeyPair {
     pubKey: any;
     constructor(privKey?: any, pubKey?: any);
     toAddress(): any;
-    toScript(): any;
+    toOutputScript(): any;
     fromRandom(): KeyPair;
     fromPrivKey(privKey: any): KeyPair;
     fromWif(wif: string): KeyPair;

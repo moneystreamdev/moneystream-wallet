@@ -22,5 +22,9 @@ describe('Instantiate KeyPair', () => {
     const k2 = new KeyPair().fromWif(wif)
     expect (k2.toWif()).toBe(wif)
   })
+  it('should make address script', () => {
+    const k = new KeyPair().fromRandom()
+    expect (k.toOutputScript().isPubKeyHashOut()).toBe(true)
+  })
   
 })

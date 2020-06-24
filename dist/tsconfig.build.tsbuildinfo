@@ -167,8 +167,8 @@
         "affectsGlobalScope": false
       },
       "../src/KeyPair.ts": {
-        "version": "acb97f4843d79c7e1da7857594254b06dc29dc1951f7ac8e16379f315ec8f4ee",
-        "signature": "a1d28706d8fe5b08aeb86074fd330767cf413ac04ecc360d59ee7ca29a863ba9",
+        "version": "b7cd63138c5a93b5cc29855e23e13eeb8d62a03ae5ca1a0c5d1cf718f22d68df",
+        "signature": "f298c9b4f5dfadb6b75e89b8ff61cc1972b9e058fc605590acacdfeb9a420da7",
         "affectsGlobalScope": false
       },
       "../src/UnspentOutput.ts": {
@@ -192,7 +192,7 @@
         "affectsGlobalScope": false
       },
       "../src/Wallet.ts": {
-        "version": "eff79d778d852f9f8414e4a40a6bb294b719aa5f4a954e7f447ff903976e86f3",
+        "version": "f38c7363a4e76c6c268bf28e0f5a23693cfe0f87b6525979631ff64d05426f1e",
         "signature": "095768019137ab760240ffed03b06f9be312dd129805f094176ad79d893f9f92",
         "affectsGlobalScope": false
       },
@@ -207,12 +207,12 @@
         "affectsGlobalScope": false
       },
       "../test/functional/simplespend.test.ts": {
-        "version": "44eb38283175ff1181119d81942123444c3379b8445cc8b162e26dc8cd5f6087",
+        "version": "dab720b0d46743b23aba43789d76d9ec871af021a4703e25f2e9680a8a15063c",
         "signature": "e3080866f5da32f06e18e06d704f5760a9916d2bb09de5c9594731fdbac8bd98",
         "affectsGlobalScope": false
       },
       "../test/unit/keypair.test.ts": {
-        "version": "33e86a3f9345dfd4191727204278bf6f241f7a563b6e5e3c559eeb172066627c",
+        "version": "3a26532240dd65eb414132fad3eebf387864e915c5409d020c5607745ccee2fa",
         "signature": "754d96912ed89fcbac9ecf3af75675715c5125c64859fca41a04310d7901465b",
         "affectsGlobalScope": false
       },
@@ -222,7 +222,7 @@
         "affectsGlobalScope": false
       },
       "../test/unit/wallet.test.ts": {
-        "version": "259c2e22befba4a642d5ec2d45897e90057acd0af54eff86c9acb3d675c763aa",
+        "version": "e91919e5cc8cf420e9545f0d8020a37e4e5e344e0e21af89915ee270275994c0",
         "signature": "a747a591cf4e8c55cb44f079d82b31556e902fcea79ce8c49ded66ee039eaa11",
         "affectsGlobalScope": false
       },

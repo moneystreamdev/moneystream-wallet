@@ -21,5 +21,9 @@ describe('Instantiate KeyPair', function () {
         var k2 = new KeyPair_1.KeyPair().fromWif(wif);
         expect(k2.toWif()).toBe(wif);
     });
+    it('should make address script', function () {
+        var k = new KeyPair_1.KeyPair().fromRandom();
+        expect(k.toOutputScript().isPubKeyHashOut()).toBe(true);
+    });
 });
 //# sourceMappingURL=keypair.test.js.map

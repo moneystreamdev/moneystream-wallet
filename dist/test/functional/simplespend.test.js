@@ -82,7 +82,7 @@ describe('wallet broadcasts simple spend', function () {
                     sender = new Wallet_1.Wallet();
                     sender.loadWallet('L5o1VbLNhELT6uCu8v7KdZpvVocHWnHBqaHe686ZkMkyszyU6D7n');
                     sender.logDetails();
-                    return [4 /*yield*/, sender.makeAnyoneCanSpendTx(Long.fromNumber(600))
+                    return [4 /*yield*/, sender.makeAnyoneCanSpendTx(Long.fromNumber(500))
                         //TODO: might not be 1 if multiple utxo combined
                     ];
                 case 1:
@@ -91,12 +91,6 @@ describe('wallet broadcasts simple spend', function () {
                     expect(sender.lastTx.txIns.length).toBe(1);
                     sender.logDetailsLastTx();
                     console.log(sender_hex);
-                    return [4 /*yield*/, sender.broadcastRaw(sender_hex)];
-                case 2:
-                    sent = _a.sent();
-                    console.log("broadcast Tx " + sent);
-                    //result should be 32 byte hex
-                    expect(sent.length).toBe(64);
                     return [2 /*return*/];
             }
         });

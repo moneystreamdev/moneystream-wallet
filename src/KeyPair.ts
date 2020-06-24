@@ -17,9 +17,8 @@ export class KeyPair {
     }
 
     //pay to pub key hash of address
-    toScript():any {
+    toOutputScript():any {
         return this.toAddress().toTxOutScript()
-        //return Script.buildPublicKeyHashOut(this.toAddress())
     }
 
     fromRandom():KeyPair {

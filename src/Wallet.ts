@@ -193,7 +193,7 @@ export class Wallet {
                     const utxo0 = utxos[i]
                     const newutxo = new UnspentOutput(
                         utxo0.value, 
-                        this._keypair.toScript(),
+                        this._keypair.toOutputScript(),
                         utxo0.tx_hash,
                         utxo0.tx_pos
                         )

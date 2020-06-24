@@ -7,13 +7,13 @@ import { UnspentOutput } from '../../src/UnspentOutput'
 const dustLimit = 500
 const dummyOutput1 = new UnspentOutput(
     1000, 
-    new KeyPair().fromRandom().toScript(),
+    new KeyPair().fromRandom().toOutputScript(),
     '1aebb7d0776cec663cbbdd87f200bf15406adb0ef91916d102bcd7f86c86934e',
     0
   )
   const dummyOutput2 = new UnspentOutput(
     2000, 
-    new KeyPair().fromRandom().toScript(),
+    new KeyPair().fromRandom().toOutputScript(),
     '1aebb7d0776cec663cbbdd87f200bf15406adb0ef91916d102bcd7f86c86934e',
     1
   )

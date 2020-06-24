@@ -12,9 +12,8 @@ var KeyPair = /** @class */ (function () {
         return bsv_1.Address.fromPubKey(this.pubKey, 'livenet');
     };
     //pay to pub key hash of address
-    KeyPair.prototype.toScript = function () {
+    KeyPair.prototype.toOutputScript = function () {
         return this.toAddress().toTxOutScript();
-        //return Script.buildPublicKeyHashOut(this.toAddress())
     };
     KeyPair.prototype.fromRandom = function () {
         var privKey = bsv_1.PrivKey.fromRandom();
