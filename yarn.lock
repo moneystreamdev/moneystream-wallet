@@ -1525,7 +1525,7 @@ bser@2.1.1:
 
 "bsv@https://github.com/moneystreamdev/bsv#master":
   version "2.0.0-beta.37"
-  resolved "https://github.com/moneystreamdev/bsv#d1c37beecd6c530160b0e2b6e49367b9b9212b47"
+  resolved "https://github.com/moneystreamdev/bsv#4a27c219cad5875e8f05f4a6a67ea67884d69c58"
   dependencies:
     aes "0.1.0"
     bitcoin-elliptic "^7.0.1"
