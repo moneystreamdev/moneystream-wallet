@@ -70,10 +70,9 @@ export class TransactionBuilder {
              utxo.outputIndex, 
         //     //txOut
              utxo.toTxOut(),
-             pubKey
+             pubKey,
              //nSequence
-        //     0xffffffff,
-        //     Sig.SIGHASH_SINGLE 
+             sigHash
         )
 
         // const txin = new TxIn(
