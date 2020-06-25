@@ -172,7 +172,7 @@
         "affectsGlobalScope": false
       },
       "../src/UnspentOutput.ts": {
-        "version": "655b3035e04b2156426fd7ae6484577ae7bc7413a61cbd58f6566341fcea0c01",
+        "version": "444a0ebbe2dc6b0726aa2ecd048123ecf1c67d67ef6fc1eac8feb546be03892a",
         "signature": "4810ca4d51674ceaa67649314c9de8e61c2f521cdc9c6c78c596af364dcd703b",
         "affectsGlobalScope": false
       },
@@ -182,7 +182,7 @@
         "affectsGlobalScope": false
       },
       "../src/TransactionBuilder.ts": {
-        "version": "e891c4de41636489e07e27e363b91968048788e8990a1bdf6826142e7a8d24f2",
+        "version": "8e8a5543175a6a7ceceab90b32814a4b6e5945e782c066f55b0fe666591788bb",
         "signature": "1986b903898da65b9a8055e4240fe6daaee2ecaabdbce1ac2033eec37e51099b",
         "affectsGlobalScope": false
       },
@@ -207,7 +207,7 @@
         "affectsGlobalScope": false
       },
       "../test/functional/simplespend.test.ts": {
-        "version": "dab720b0d46743b23aba43789d76d9ec871af021a4703e25f2e9680a8a15063c",
+        "version": "91a3fec411751594685c833b9da235ae2617ec1113447db6a3faca968e29369e",
         "signature": "e3080866f5da32f06e18e06d704f5760a9916d2bb09de5c9594731fdbac8bd98",
         "affectsGlobalScope": false
       },

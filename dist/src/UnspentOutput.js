@@ -4,6 +4,7 @@ exports.UnspentOutput = void 0;
 var bsv_1 = require("bsv");
 var UnspentOutput = /** @class */ (function () {
     function UnspentOutput(satoshis, script, txid, txoutindex) {
+        // txid is string but should be buf?
         this.txId = "";
         this.outputIndex = 0;
         this.script = script;

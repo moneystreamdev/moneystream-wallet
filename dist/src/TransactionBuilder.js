@@ -64,11 +64,7 @@ var TransactionBuilder = /** @class */ (function () {
         //txOutNum
         utxo.outputIndex, 
         //     //txOut
-        utxo.toTxOut(), pubKey
-        //nSequence
-        //     0xffffffff,
-        //     Sig.SIGHASH_SINGLE 
-        );
+        utxo.toTxOut(), pubKey, this.FINAL, sigHash);
         // const txin = new TxIn(
         //     Buffer.from(utxo.txId,'hex'),
         //     utxo.outputIndex,
@@ -87,7 +83,6 @@ var TransactionBuilder = /** @class */ (function () {
     };
     TransactionBuilder.prototype.addOutput = function (satoshis, address) {
         this.txb.outputToAddress(new bsv_1.Bn().fromNumber(satoshis), address);
-        //this.txb.to(address, amount)
     };
     TransactionBuilder.prototype.buildAndSign = function (keypair, makeFuture) {
         // txb.build too restrictive!
