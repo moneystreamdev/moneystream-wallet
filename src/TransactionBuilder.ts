@@ -71,7 +71,7 @@ export class TransactionBuilder {
         //     //txOut
              utxo.toTxOut(),
              pubKey,
-             //nSequence
+             this.FINAL,
              sigHash
         )
 
@@ -95,7 +95,6 @@ export class TransactionBuilder {
 
     addOutput(satoshis:number, address:any) {
         this.txb.outputToAddress(new Bn().fromNumber(satoshis), address)
-        //this.txb.to(address, amount)
     }
 
     buildAndSign(keypair:KeyPair, makeFuture?:boolean): any { /* bsv2 */ 
