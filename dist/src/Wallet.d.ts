@@ -2,11 +2,12 @@
 import { KeyPair } from './KeyPair';
 import { OutputCollection } from './OutputCollection';
 export declare class Wallet {
+    protected readonly FINAL: number;
     _isDebug: boolean;
     protected _walletFileName: string;
     protected _dustLimit: number;
     protected _allowMultipleInputs: boolean;
-    private _txOutMap;
+    protected _fundingInputCount?: number;
     _selectedUtxos: OutputCollection;
     _keypair: KeyPair;
     lastTx: any;
@@ -16,15 +17,16 @@ export declare class Wallet {
         value: any;
         desc: string;
     };
+    getInputOutput(txin: any): any;
     getTxFund(tx: any): number;
     logDetailsLastTx(): void;
     logDetails(tx?: any): void;
     toJSON(): {
         wif: string;
         xpub: string;
-        address: string;
+        address: any;
     };
-    loadWallet(wif?: string): any;
+    loadWallet(wif?: string): void;
     generateKey(): any;
     store(wallet: any): any;
     backup(): void;

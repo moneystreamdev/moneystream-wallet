@@ -1,5 +1,6 @@
 import {
-    PrivateKey, PublicKey,
+    PrivKey as PrivateKey, 
+    PubKey as PublicKey,
     Address, Script} from 'bsv'
 
 // a public and private pair of keys
@@ -12,12 +13,12 @@ export class KeyPair {
     }
 
     toAddress() {
-        return Address.fromPublicKey(this.pubKey,'livenet')
+        return Address.fromPubKey(this.pubKey,'livenet')
     }
 
     //pay to pub key hash of address
-    toScript() {
-        return Script.buildPublicKeyHashOut(this.toAddress())
+    toOutputScript():any {
+        return this.toAddress().toTxOutScript()
     }
 
     fromRandom():KeyPair {
@@ -27,17 +28,17 @@ export class KeyPair {
 
     fromPrivKey(privKey:any):KeyPair {
         this.privKey = privKey
-        this.pubKey = PublicKey.fromPrivateKey(privKey)
+        this.pubKey = PublicKey.fromPrivKey(privKey)
         return this
     }
 
     fromWif(wif:string):KeyPair {
-        const privKey = PrivateKey.fromWIF(wif)
+        const privKey = PrivateKey.fromWif(wif)
         return this.fromPrivKey(privKey)
     }
 
     toWif():string {
-        return this.privKey.toWIF()
+        return this.privKey.toWif()
     }
 
     toXpub():string {

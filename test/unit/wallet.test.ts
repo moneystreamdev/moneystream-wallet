@@ -1,24 +1,22 @@
 import { Wallet } from '../../src/Wallet'
 import * as Long from 'long'
-import { Transaction } from 'bsv'
 import { KeyPair } from '../../src/KeyPair'
 import { OutputCollection } from '../../src/OutputCollection'
+import { UnspentOutput } from '../../src/UnspentOutput'
 
 const dustLimit = 500
-const dummyOutput1 = new Transaction.UnspentOutput(
-  {
-      txId:"1aebb7d0776cec663cbbdd87f200bf15406adb0ef91916d102bcd7f86c86934e",
-      vout:0,
-      scriptPubKey:new KeyPair().fromRandom().toScript(),
-      satoshis:1000
-  })
-  const dummyOutput2 = new Transaction.UnspentOutput(
-    {
-        txId:"1aebb7d0776cec663cbbdd87f200bf15406adb0ef91916d102bcd7f86c86934e",
-        vout:1,
-        scriptPubKey:new KeyPair().fromRandom().toScript(),
-        satoshis:2000
-    })
+const dummyOutput1 = new UnspentOutput(
+    1000, 
+    new KeyPair().fromRandom().toOutputScript(),
+    '1aebb7d0776cec663cbbdd87f200bf15406adb0ef91916d102bcd7f86c86934e',
+    0
+  )
+  const dummyOutput2 = new UnspentOutput(
+    2000, 
+    new KeyPair().fromRandom().toOutputScript(),
+    '1aebb7d0776cec663cbbdd87f200bf15406adb0ef91916d102bcd7f86c86934e',
+    1
+  )
   const dummyUtxosOne = new OutputCollection()
   dummyUtxosOne.add(dummyOutput1)
   const dummyUtxosTwo = new OutputCollection()
@@ -31,53 +29,89 @@ describe('Wallet tests', () => {
     const w = new Wallet()
     expect(w).toBeInstanceOf(Wallet)
   })
+  it('should error if wallet not loaded', async () => {
+    const w = new Wallet()
+    w._selectedUtxos = dummyUtxosOne
+    await expect(
+      w.makeSimpleSpend(Long.fromNumber(600))
+    ).rejects.toThrow(Error)
+    
+  })
   it('should create simple tx with no lock time', async () => {
     const w = new Wallet()
     w.loadWallet()
     w._selectedUtxos = dummyUtxosOne
 
-    await w.makeSimpleSpend(Long.fromNumber(1000))
+    const txhex = await w.makeSimpleSpend(Long.fromNumber(600))
+    expect (txhex.length).toBeGreaterThan(20)
     expect (w.lastTx.nLockTime).toBe(0)
+    expect (w.lastTx.txIns.length).toBeGreaterThan(0)
+    expect (w.lastTx.txOuts.length).toBeGreaterThan(0)
+    w.logDetailsLastTx()
   })
   it('should create streamable tx with lock time', async () => {
     const w = new Wallet()
     w.loadWallet()
     w._selectedUtxos = dummyUtxosOne
-    await w.makeAnyoneCanSpendTx(
+    const txhex = await w.makeAnyoneCanSpendTx(
       Long.fromNumber(1000)
     )
+    expect (txhex.length).toBeGreaterThan(20)
     expect (w.lastTx.nLockTime).toBeGreaterThan(0)
+    expect (w.lastTx.txIns.length).toBeGreaterThan(0)
+    expect (w.lastTx.txOuts.length).toBeGreaterThan(0)
   })
   it('should create streamable tx with one input', async () => {
     const w = new Wallet()
     w.loadWallet()
     w._selectedUtxos = dummyUtxosTwo
-    await w.makeAnyoneCanSpendTx(
+    const txhex = await w.makeAnyoneCanSpendTx(
       Long.fromNumber(dummyOutput1.satoshis-dustLimit-1)
     )
-    expect (w.lastTx.inputs.length).toBe(1)
-    expect (w.lastTx.outputs.length).toBe(1)
+    expect (txhex.length).toBeGreaterThan(20)
+    expect (w.lastTx.txIns.length).toBe(1)
+    expect (w.lastTx.txOuts.length).toBe(1)
   })
-  it('should create streamable tx with exactly input', async () => {
+  it('should create streamable tx with exact input', async () => {
     const w = new Wallet()
     w.loadWallet()
     w._selectedUtxos = dummyUtxosTwo
     const tokensLessDust = 1000 - 500
-    await w.makeAnyoneCanSpendTx(
+    const txhex = await w.makeAnyoneCanSpendTx(
       Long.fromNumber(tokensLessDust),
       '1KUrv2Ns8SwNkLgVKrVbSHJmdXLpsEvaDf'
     )
-    expect (w.lastTx.inputs.length).toBe(1)
-    expect (w.lastTx.outputs.length).toBe(2)
+    expect (txhex.length).toBeGreaterThan(20)
+    expect (w.lastTx.txIns.length).toBe(1)
+    expect (w.lastTx.txOuts.length).toBe(2)
   })
 
   it('should create streamable tx with multiple inputs', async () => {
     const w = new Wallet()
     w.loadWallet()
     w._selectedUtxos = dummyUtxosTwo
-    //wallet will sort utxo by sats
-    await w.makeAnyoneCanSpendTx(Long.fromNumber(2500))
-    expect (w.lastTx.inputs.length).toBe(2)
+    //wallet will sort utxo by sats, user biggest first
+    const txhex = await w.makeAnyoneCanSpendTx(Long.fromNumber(2500))
+    expect (txhex.length).toBeGreaterThan(20)
+    //w.logDetailsLastTx()
+    expect (w.lastTx.txIns.length).toBe(2)
+    expect (w.lastTx.txOuts.length).toBe(2)
+    expect(w.lastTx.txOuts[0].valueBn.toNumber()).toBe(0)
+    expect(w.lastTx.txOuts[1].valueBn.toNumber()).toBe(500)
+    expect(w.getTxFund(w.lastTx)).toBe(2500)
+  })
+  it('funds tx with one input', async () => {
+    const w = new Wallet()
+    w.loadWallet()
+    w._selectedUtxos = dummyUtxosOne
+    const txhex = await w.makeAnyoneCanSpendTx(Long.fromNumber(100))
+    expect(w.lastTx).toBeDefined()
+    expect(w.getTxFund(w.lastTx)).toBe(100)
+  })
+  it ('should log utxos', () => {
+    const w = new Wallet()
+    w._selectedUtxos = dummyUtxosTwo
+    w.logUtxos(w._selectedUtxos.items)
   })
 
 })

@@ -12,14 +12,18 @@ describe('Instantiate KeyPair', function () {
     it('should generate random keypair', function () {
         var k = new KeyPair_1.KeyPair().fromRandom();
         expect(k).toBeInstanceOf(KeyPair_1.KeyPair);
-        expect(k.privKey).toBeInstanceOf(bsv_1.PrivateKey);
-        expect(k.pubKey).toBeInstanceOf(bsv_1.PublicKey);
+        expect(k.privKey).toBeInstanceOf(bsv_1.PrivKey);
+        expect(k.pubKey).toBeInstanceOf(bsv_1.PubKey);
     });
     it('should generate keypair from wif', function () {
         var k = new KeyPair_1.KeyPair().fromRandom();
         var wif = k.toWif();
         var k2 = new KeyPair_1.KeyPair().fromWif(wif);
         expect(k2.toWif()).toBe(wif);
+    });
+    it('should make address script', function () {
+        var k = new KeyPair_1.KeyPair().fromRandom();
+        expect(k.toOutputScript().isPubKeyHashOut()).toBe(true);
     });
 });
 //# sourceMappingURL=keypair.test.js.map

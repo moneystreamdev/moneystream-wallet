@@ -1,7 +1,9 @@
 //these can only be run when bsv2
 // is installed in node_modules
 import { KeyPair } from '../../src/KeyPair'
-import { PrivateKey,PublicKey } from 'bsv'
+import { PrivKey as PrivateKey,
+  PubKey as PublicKey
+} from 'bsv'
 
 describe('Instantiate KeyPair', () => {
   it('should instantiate a keypair object', () => {
@@ -19,6 +21,10 @@ describe('Instantiate KeyPair', () => {
     const wif = k.toWif()
     const k2 = new KeyPair().fromWif(wif)
     expect (k2.toWif()).toBe(wif)
+  })
+  it('should make address script', () => {
+    const k = new KeyPair().fromRandom()
+    expect (k.toOutputScript().isPubKeyHashOut()).toBe(true)
   })
   
 })
