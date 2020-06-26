@@ -10,6 +10,9 @@ export class TransactionBuilder {
     futureSeconds:number = 60
     private FINAL = 0xffffffff
     constructor() {
+        //allow any dust output
+        // let web site manage dust policy
+        this.txb.setDust(0)
     }
 
     get tx (): any { return this.txb.tx}

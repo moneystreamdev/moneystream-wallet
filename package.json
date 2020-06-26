@@ -42,6 +42,7 @@
   "dependencies": {
     "@types/node-fetch": "^2.5.7",
     "babel-polyfill": "^6.26.0",
+    "bsv": "https://github.com/moneystreamdev/bsv",
     "long": "^4.0.0",
     "node-fetch": "^2.6.0",
     "typescript": "^3.9.5"
