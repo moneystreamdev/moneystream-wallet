@@ -5,16 +5,17 @@ import { OutputCollection } from '../../src/OutputCollection'
 import { UnspentOutput } from '../../src/UnspentOutput'
 
 const dustLimit = 500
+const someHashBufString = '1aebb7d0776cec663cbbdd87f200bf15406adb0ef91916d102bcd7f86c86934e'
 const dummyOutput1 = new UnspentOutput(
     1000, 
     new KeyPair().fromRandom().toOutputScript(),
-    '1aebb7d0776cec663cbbdd87f200bf15406adb0ef91916d102bcd7f86c86934e',
+    someHashBufString,
     0
   )
   const dummyOutput2 = new UnspentOutput(
     2000, 
     new KeyPair().fromRandom().toOutputScript(),
-    '1aebb7d0776cec663cbbdd87f200bf15406adb0ef91916d102bcd7f86c86934e',
+    someHashBufString,
     1
   )
   const dummyUtxosOne = new OutputCollection()
@@ -31,7 +32,7 @@ describe('Wallet tests', () => {
   })
   it('should error if wallet not loaded', async () => {
     const w = new Wallet()
-    w._selectedUtxos = dummyUtxosOne
+    w.selectedUtxos = dummyUtxosOne
     await expect(
       w.makeSimpleSpend(Long.fromNumber(600))
     ).rejects.toThrow(Error)
@@ -40,7 +41,7 @@ describe('Wallet tests', () => {
   it('should create simple tx with no lock time', async () => {
     const w = new Wallet()
     w.loadWallet()
-    w._selectedUtxos = dummyUtxosOne
+    w.selectedUtxos = dummyUtxosOne
 
     const txhex = await w.makeSimpleSpend(Long.fromNumber(600))
     expect (txhex.length).toBeGreaterThan(20)
@@ -52,7 +53,7 @@ describe('Wallet tests', () => {
   it('should create streamable tx with lock time', async () => {
     const w = new Wallet()
     w.loadWallet()
-    w._selectedUtxos = dummyUtxosOne
+    w.selectedUtxos = dummyUtxosOne
     const txhex = await w.makeAnyoneCanSpendTx(
       Long.fromNumber(1000)
     )
@@ -64,7 +65,7 @@ describe('Wallet tests', () => {
   it('should create streamable tx with one input', async () => {
     const w = new Wallet()
     w.loadWallet()
-    w._selectedUtxos = dummyUtxosTwo
+    w.selectedUtxos = dummyUtxosTwo
     const txhex = await w.makeAnyoneCanSpendTx(
       Long.fromNumber(dummyOutput1.satoshis-dustLimit-1)
     )
@@ -75,7 +76,7 @@ describe('Wallet tests', () => {
   it('should create streamable tx with exact input', async () => {
     const w = new Wallet()
     w.loadWallet()
-    w._selectedUtxos = dummyUtxosTwo
+    w.selectedUtxos = dummyUtxosTwo
     const tokensLessDust = 1000 - 500
     const txhex = await w.makeAnyoneCanSpendTx(
       Long.fromNumber(tokensLessDust),
@@ -89,11 +90,10 @@ describe('Wallet tests', () => {
   it('should create streamable tx with multiple inputs', async () => {
     const w = new Wallet()
     w.loadWallet()
-    w._selectedUtxos = dummyUtxosTwo
-    //wallet will sort utxo by sats, user biggest first
+    w.selectedUtxos = dummyUtxosTwo
+    //wallet will sort utxo by sats, use biggest first
     const txhex = await w.makeAnyoneCanSpendTx(Long.fromNumber(2500))
     expect (txhex.length).toBeGreaterThan(20)
-    //w.logDetailsLastTx()
     expect (w.lastTx.txIns.length).toBe(2)
     expect (w.lastTx.txOuts.length).toBe(2)
     expect(w.lastTx.txOuts[0].valueBn.toNumber()).toBe(0)
@@ -103,15 +103,28 @@ describe('Wallet tests', () => {
   it('funds tx with one input', async () => {
     const w = new Wallet()
     w.loadWallet()
-    w._selectedUtxos = dummyUtxosOne
+    w.selectedUtxos = dummyUtxosOne
     const txhex = await w.makeAnyoneCanSpendTx(Long.fromNumber(100))
     expect(w.lastTx).toBeDefined()
     expect(w.getTxFund(w.lastTx)).toBe(100)
   })
   it ('should log utxos', () => {
     const w = new Wallet()
-    w._selectedUtxos = dummyUtxosTwo
-    w.logUtxos(w._selectedUtxos.items)
+    w.selectedUtxos = dummyUtxosTwo
+    w.logUtxos(w.selectedUtxos.items)
+  })
+  it('should create tx to split a utxo', async () => {
+    const w = new Wallet()
+    w.loadWallet()
+    const utxos = new OutputCollection()
+    utxos.add(new UnspentOutput(10000,w.keyPair.toOutputScript(),someHashBufString,0))
+    w.selectedUtxos = utxos
+    const txsplit = await w.split(10,1000)
+    expect(w.lastTx.txIns.length).toBe(1)
+    expect(w.lastTx.txOuts.length).toBe(10)
+    expect(w.lastTx.txOuts[0].valueBn.toNumber()).toBe(1000)
+    expect(w.lastTx.txOuts[9].valueBn.toNumber()).toBe(500)
+    console.log(txsplit)
   })
 
 })

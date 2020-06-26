@@ -87,8 +87,6 @@ describe('wallet broadcasts simple spend', function () {
                     sender_hex = _a.sent();
                     expect(sender.lastTx.txIns.length).toBe(1);
                     sender.logDetailsLastTx();
-                    console.log(sender.lastTx.toJSON());
-                    console.log(sender_hex);
                     return [2 /*return*/];
             }
         });

@@ -177,8 +177,8 @@
         "affectsGlobalScope": false
       },
       "../src/OutputCollection.ts": {
-        "version": "9470c6c45aa8f16ad9bf1c09ef44cca53eb8fe49ec2bc69801349846831305c8",
-        "signature": "d4afeb6ac2ed63283dfa9de1dc176be899ba88957f3f2017bcaf46baac46d899",
+        "version": "84f77f9938fd97e4320947beadf9f12e49d6507fd3eb44f041278196933eb4b0",
+        "signature": "9358d8cc5f8d0a50a6bb0a58bf6db7beb07f03011c1c3e0f660f6e052341d8f7",
         "affectsGlobalScope": false
       },
       "../src/TransactionBuilder.ts": {
@@ -192,8 +192,8 @@
         "affectsGlobalScope": false
       },
       "../src/Wallet.ts": {
-        "version": "d25412a14c6699fbf80b2d1b63a6a24612c74c00cf81a83245626cff759bb63d",
-        "signature": "095768019137ab760240ffed03b06f9be312dd129805f094176ad79d893f9f92",
+        "version": "b3c53883aa06838cc716c69187a0684fd073b86cd00371ca7155d03b37b9fe8a",
+        "signature": "5057862fd67b405a8d84d7ba3e934a43d51e88d7638209808a92fe7fd1cd3cc6",
         "affectsGlobalScope": false
       },
       "../src/index.ts": {
@@ -207,7 +207,7 @@
         "affectsGlobalScope": false
       },
       "../test/functional/simplespend.test.ts": {
-        "version": "91a3fec411751594685c833b9da235ae2617ec1113447db6a3faca968e29369e",
+        "version": "e22582c001001f6fca501dbb32bea13cd4e205fc95a3912d330ac75a73b24cee",
         "signature": "e3080866f5da32f06e18e06d704f5760a9916d2bb09de5c9594731fdbac8bd98",
         "affectsGlobalScope": false
       },
@@ -216,13 +216,18 @@
         "signature": "754d96912ed89fcbac9ecf3af75675715c5125c64859fca41a04310d7901465b",
         "affectsGlobalScope": false
       },
+      "../test/unit/outputcollection.test.ts": {
+        "version": "054de487ad4870062adc147ad7b24b96ff1442e8a1d3e8d73670083b85371223",
+        "signature": "574938e762a716357d423e9ad8036f980b2f1a25d174a841e4744dde28b83601",
+        "affectsGlobalScope": false
+      },
       "../test/unit/unspentoutput.test.ts": {
         "version": "d1c210bc8b0859e600ce7600feed439f5481f8852f75aea71d084ff60a3c6fc7",
         "signature": "ef32c940e94ab204652dd2ffc7ebb216ffc763d8ad7237f5a4db343dd40d6c2e",
         "affectsGlobalScope": false
       },
       "../test/unit/wallet.test.ts": {
-        "version": "e91919e5cc8cf420e9545f0d8020a37e4e5e344e0e21af89915ee270275994c0",
+        "version": "cc3dfa9887c6033bf49508fadb4a3c62f8b24d590548a90c0c9a9778431a60cf",
         "signature": "a747a591cf4e8c55cb44f079d82b31556e902fcea79ce8c49ded66ee039eaa11",
         "affectsGlobalScope": false
       },
@@ -1645,6 +1650,15 @@
         "../node_modules/bsv/index.d.ts",
         "../src/KeyPair.ts"
       ],
+      "../test/unit/outputcollection.test.ts": [
+        "../node_modules/@types/graceful-fs/index.d.ts",
+        "../node_modules/@types/node/fs.d.ts",
+        "../node_modules/@types/node/ts3.2/fs.d.ts",
+        "../node_modules/@types/node/ts3.2/util.d.ts",
+        "../node_modules/@types/node/util.d.ts",
+        "../src/OutputCollection.ts",
+        "../src/index.ts"
+      ],
       "../test/unit/unspentoutput.test.ts": [
         "../node_modules/@types/graceful-fs/index.d.ts",
         "../node_modules/@types/node/fs.d.ts",
@@ -2729,6 +2743,7 @@
       "../src/utils/portableFetch.ts",
       "../test/functional/simplespend.test.ts",
       "../test/unit/keypair.test.ts",
+      "../test/unit/outputcollection.test.ts",
       "../test/unit/unspentoutput.test.ts",
       "../test/unit/wallet.test.ts"
     ]

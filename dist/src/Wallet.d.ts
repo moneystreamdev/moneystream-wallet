@@ -13,6 +13,9 @@ export declare class Wallet {
     lastTx: any;
     protected SIGN_MY_INPUT: number;
     constructor();
+    get keyPair(): KeyPair;
+    get selectedUtxos(): OutputCollection;
+    set selectedUtxos(val: OutputCollection);
     txInDescription(txIn: any, index: number): {
         value: any;
         desc: string;
@@ -38,5 +41,6 @@ export declare class Wallet {
     getApiTxJSON(txhash: string): Promise<any>;
     getUtxosAPI(address: any): Promise<any>;
     broadcastRaw(txhex: string): Promise<any>;
+    split(targetCount: number, satoshis: number): Promise<any>;
 }
 //# sourceMappingURL=Wallet.d.ts.map
