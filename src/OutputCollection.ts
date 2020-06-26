@@ -18,6 +18,8 @@ export class OutputCollection {
 
     count(): number { return this._outs.length }
 
+    get lastItem():UnspentOutput { return this._outs[this.count()-1]}    
+
     satoshis():number {
         if (this._outs.length === 0) return 0
         let sum = 0
@@ -29,12 +31,8 @@ export class OutputCollection {
     }
 
     find(txHashBuf:any, txOutNum:number):UnspentOutput|null {
-        // console.log(txHashBuf.toString('hex'))
-        // console.log(txOutNum)
         for (let i=0; i<this._outs.length; i++ ) {
             const thisOut = this._outs[i]
-            // console.log(thisOut.outputIndex)
-            // console.log(thisOut.txId)
             if (thisOut.outputIndex === txOutNum
                 && thisOut.txId === txHashBuf.toString('hex')) {
                     return thisOut
@@ -45,9 +43,8 @@ export class OutputCollection {
 
     filter(satoshis:Long) : OutputCollection {
         //sort by satoshis descending
-        //TODO: put non-confirmed at bottom!
+        //TODO: put non-confirmed at bottom, else track encumbered
         this._outs.sort((a:any,b:any) => b.satoshis - a.satoshis)
-        //console.log(this._outs)
         let amountremaining = satoshis.toNumber()
         //keep adding outputs until we can cover the amount
         const result = new OutputCollection()
@@ -58,6 +55,39 @@ export class OutputCollection {
             if (amountremaining < 0) break
         }
         return result
+    }
 
+    // return a OutputCollection for wallet to
+    // operate upon
+    split (targetCount:number, satoshis:number) {
+        this._outs.sort((a:any,b:any) => b.satoshis - a.satoshis)
+        const result = 
+            {
+                utxo: new UnspentOutput(0,''),
+                breakdown: new OutputCollection()
+            }
+        //find largest one
+        if (this.count() > 0) {
+            const largest:UnspentOutput = this._outs[0]
+            let actualBreak = satoshis
+            if (largest.satoshis > satoshis) {
+                const desiredBreak = largest.satoshis / targetCount
+                if (desiredBreak > satoshis) {
+                    actualBreak = desiredBreak
+                }
+            }
+            result.utxo = largest
+            let remaining = actualBreak * targetCount
+            while (remaining > 0) {
+                result.breakdown.add(
+                    new UnspentOutput(actualBreak,largest.script)
+                )
+                remaining -= actualBreak
+            }
+            if (result.breakdown.count() > 0) {
+                result.breakdown.lastItem.satoshis += remaining
+            }
+        }
+        return result
     }
 }

@@ -20,8 +20,8 @@ describe('wallet broadcasts simple spend', () => {
         )
         expect(sender.lastTx.txIns.length).toBe(1)
         sender.logDetailsLastTx()
-        console.log(sender.lastTx.toJSON())
-        console.log(sender_hex)
+        //console.log(sender.lastTx.toJSON())
+        //console.log(sender_hex)
         // sent = await sender.broadcastRaw(sender_hex)
         // console.log(`broadcast Tx ${sent}`)
         // //result should be 32 byte hex

@@ -45,6 +45,10 @@ export class Wallet {
         this._dustLimit = 500
     }
 
+    get keyPair() { return this._keypair }
+    get selectedUtxos() { return this._selectedUtxos }
+    set selectedUtxos(val) { this._selectedUtxos = val }
+
     txInDescription(txIn:any, index:number) {
         const inputValue = this.getInputOutput(txIn)?.satoshis
         const inputSeq = txIn.nSequence || this.FINAL
@@ -236,7 +240,7 @@ export class Wallet {
     }
 
     // standard method for a streaming wallet
-    async makeAnyoneCanSpendTx(satoshis:Long, payTo?:string) {
+    async makeAnyoneCanSpendTx(satoshis:Long, payTo?:string, makeFuture:boolean = true) {
         await this.tryLoadWalletUtxos()
         //from all possible utxos, select enough to pay amount
         const filteredUtxos = this._selectedUtxos.filter(satoshis)
@@ -281,9 +285,8 @@ export class Wallet {
                 Address.fromString(payTo)
             )
         }
-        const tx = txb.buildAndSign(this._keypair, true)
-        this.lastTx = tx
-        return tx.toHex()
+        this.lastTx = txb.buildAndSign(this._keypair, makeFuture)
+        return this.lastTx.toHex()
         // at this point, tx is spendable by anyone!
         // only pass it through secure channel to recipient
         // tx needs further processing before broadcast
@@ -316,6 +319,32 @@ export class Wallet {
             }
         )
         return broadcast.json()
+    }
+
+    // attempt to split utxos, trying to create
+    // the targeted number of outputs with at least
+    // the minimum number of satoshis in each one
+    // on a best effort basis
+    async split(targetCount:number, satoshis:number) {
+        const minSatoshis = Math.max(satoshis,this._dustLimit)
+        //get utxos not emcumbered
+        await this.tryLoadWalletUtxos()
+        //from all possible utxos, 
+        const splits = this._selectedUtxos.split(targetCount, minSatoshis)
+        //only ones greater than min or dust
+        if (splits.utxo.satoshis > 0) {
+            splits.breakdown.lastItem.satoshis -= this._dustLimit
+            const txb = new TransactionBuilder()
+            txb.addInput(splits.utxo, this._keypair.pubKey)
+            for (let index = 0; index < splits.breakdown.items.length; index++) {
+                const split = splits.breakdown.items[index]
+                txb.addOutput(split.satoshis, this._keypair.toAddress())
+            }
+            this.lastTx = txb.buildAndSign(this._keypair)
+            console.log(this.lastTx)
+            return this.lastTx.toHex()
+        }
+
     }
 
 }

@@ -61,8 +61,9 @@ var KeyPair_1 = require("../../src/KeyPair");
 var OutputCollection_1 = require("../../src/OutputCollection");
 var UnspentOutput_1 = require("../../src/UnspentOutput");
 var dustLimit = 500;
-var dummyOutput1 = new UnspentOutput_1.UnspentOutput(1000, new KeyPair_1.KeyPair().fromRandom().toOutputScript(), '1aebb7d0776cec663cbbdd87f200bf15406adb0ef91916d102bcd7f86c86934e', 0);
-var dummyOutput2 = new UnspentOutput_1.UnspentOutput(2000, new KeyPair_1.KeyPair().fromRandom().toOutputScript(), '1aebb7d0776cec663cbbdd87f200bf15406adb0ef91916d102bcd7f86c86934e', 1);
+var someHashBufString = '1aebb7d0776cec663cbbdd87f200bf15406adb0ef91916d102bcd7f86c86934e';
+var dummyOutput1 = new UnspentOutput_1.UnspentOutput(1000, new KeyPair_1.KeyPair().fromRandom().toOutputScript(), someHashBufString, 0);
+var dummyOutput2 = new UnspentOutput_1.UnspentOutput(2000, new KeyPair_1.KeyPair().fromRandom().toOutputScript(), someHashBufString, 1);
 var dummyUtxosOne = new OutputCollection_1.OutputCollection();
 dummyUtxosOne.add(dummyOutput1);
 var dummyUtxosTwo = new OutputCollection_1.OutputCollection();
@@ -80,7 +81,7 @@ describe('Wallet tests', function () {
             switch (_a.label) {
                 case 0:
                     w = new Wallet_1.Wallet();
-                    w._selectedUtxos = dummyUtxosOne;
+                    w.selectedUtxos = dummyUtxosOne;
                     return [4 /*yield*/, expect(w.makeSimpleSpend(Long.fromNumber(600))).rejects.toThrow(Error)];
                 case 1:
                     _a.sent();
@@ -95,7 +96,7 @@ describe('Wallet tests', function () {
                 case 0:
                     w = new Wallet_1.Wallet();
                     w.loadWallet();
-                    w._selectedUtxos = dummyUtxosOne;
+                    w.selectedUtxos = dummyUtxosOne;
                     return [4 /*yield*/, w.makeSimpleSpend(Long.fromNumber(600))];
                 case 1:
                     txhex = _a.sent();
@@ -115,12 +116,31 @@ describe('Wallet tests', function () {
                 case 0:
                     w = new Wallet_1.Wallet();
                     w.loadWallet();
-                    w._selectedUtxos = dummyUtxosOne;
+                    w.selectedUtxos = dummyUtxosOne;
                     return [4 /*yield*/, w.makeAnyoneCanSpendTx(Long.fromNumber(1000))];
                 case 1:
                     txhex = _a.sent();
                     expect(txhex.length).toBeGreaterThan(20);
                     expect(w.lastTx.nLockTime).toBeGreaterThan(0);
+                    expect(w.lastTx.txIns.length).toBeGreaterThan(0);
+                    expect(w.lastTx.txOuts.length).toBeGreaterThan(0);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    it('should create streamable tx with no lock time', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var w, txhex;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    w = new Wallet_1.Wallet();
+                    w.loadWallet();
+                    w.selectedUtxos = dummyUtxosOne;
+                    return [4 /*yield*/, w.makeAnyoneCanSpendTx(Long.fromNumber(1000), undefined, false)];
+                case 1:
+                    txhex = _a.sent();
+                    expect(txhex.length).toBeGreaterThan(20);
+                    expect(w.lastTx.nLockTime).toBe(0);
                     expect(w.lastTx.txIns.length).toBeGreaterThan(0);
                     expect(w.lastTx.txOuts.length).toBeGreaterThan(0);
                     return [2 /*return*/];
@@ -134,7 +154,7 @@ describe('Wallet tests', function () {
                 case 0:
                     w = new Wallet_1.Wallet();
                     w.loadWallet();
-                    w._selectedUtxos = dummyUtxosTwo;
+                    w.selectedUtxos = dummyUtxosTwo;
                     return [4 /*yield*/, w.makeAnyoneCanSpendTx(Long.fromNumber(dummyOutput1.satoshis - dustLimit - 1))];
                 case 1:
                     txhex = _a.sent();
@@ -152,7 +172,7 @@ describe('Wallet tests', function () {
                 case 0:
                     w = new Wallet_1.Wallet();
                     w.loadWallet();
-                    w._selectedUtxos = dummyUtxosTwo;
+                    w.selectedUtxos = dummyUtxosTwo;
                     tokensLessDust = 1000 - 500;
                     return [4 /*yield*/, w.makeAnyoneCanSpendTx(Long.fromNumber(tokensLessDust), '1KUrv2Ns8SwNkLgVKrVbSHJmdXLpsEvaDf')];
                 case 1:
@@ -171,12 +191,11 @@ describe('Wallet tests', function () {
                 case 0:
                     w = new Wallet_1.Wallet();
                     w.loadWallet();
-                    w._selectedUtxos = dummyUtxosTwo;
+                    w.selectedUtxos = dummyUtxosTwo;
                     return [4 /*yield*/, w.makeAnyoneCanSpendTx(Long.fromNumber(2500))];
                 case 1:
                     txhex = _a.sent();
                     expect(txhex.length).toBeGreaterThan(20);
-                    //w.logDetailsLastTx()
                     expect(w.lastTx.txIns.length).toBe(2);
                     expect(w.lastTx.txOuts.length).toBe(2);
                     expect(w.lastTx.txOuts[0].valueBn.toNumber()).toBe(0);
@@ -193,7 +212,7 @@ describe('Wallet tests', function () {
                 case 0:
                     w = new Wallet_1.Wallet();
                     w.loadWallet();
-                    w._selectedUtxos = dummyUtxosOne;
+                    w.selectedUtxos = dummyUtxosOne;
                     return [4 /*yield*/, w.makeAnyoneCanSpendTx(Long.fromNumber(100))];
                 case 1:
                     txhex = _a.sent();
@@ -205,8 +224,30 @@ describe('Wallet tests', function () {
     }); });
     it('should log utxos', function () {
         var w = new Wallet_1.Wallet();
-        w._selectedUtxos = dummyUtxosTwo;
-        w.logUtxos(w._selectedUtxos.items);
+        w.selectedUtxos = dummyUtxosTwo;
+        w.logUtxos(w.selectedUtxos.items);
     });
+    it('should create tx to split a utxo', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var w, utxos, txsplit;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    w = new Wallet_1.Wallet();
+                    w.loadWallet();
+                    utxos = new OutputCollection_1.OutputCollection();
+                    utxos.add(new UnspentOutput_1.UnspentOutput(10000, w.keyPair.toOutputScript(), someHashBufString, 0));
+                    w.selectedUtxos = utxos;
+                    return [4 /*yield*/, w.split(10, 1000)];
+                case 1:
+                    txsplit = _a.sent();
+                    expect(w.lastTx.txIns.length).toBe(1);
+                    expect(w.lastTx.txOuts.length).toBe(10);
+                    expect(w.lastTx.txOuts[0].valueBn.toNumber()).toBe(1000);
+                    expect(w.lastTx.txOuts[9].valueBn.toNumber()).toBe(500);
+                    console.log(txsplit);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
 });
 //# sourceMappingURL=wallet.test.js.map

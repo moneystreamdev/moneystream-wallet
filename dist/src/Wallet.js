@@ -74,6 +74,17 @@ var Wallet = /** @class */ (function () {
         this._walletFileName = 'wallet.json';
         this._dustLimit = 500;
     }
+    Object.defineProperty(Wallet.prototype, "keyPair", {
+        get: function () { return this._keypair; },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Wallet.prototype, "selectedUtxos", {
+        get: function () { return this._selectedUtxos; },
+        set: function (val) { this._selectedUtxos = val; },
+        enumerable: false,
+        configurable: true
+    });
     Wallet.prototype.txInDescription = function (txIn, index) {
         var _a;
         var inputValue = (_a = this.getInputOutput(txIn)) === null || _a === void 0 ? void 0 : _a.satoshis;
@@ -286,9 +297,10 @@ var Wallet = /** @class */ (function () {
         });
     };
     // standard method for a streaming wallet
-    Wallet.prototype.makeAnyoneCanSpendTx = function (satoshis, payTo) {
+    Wallet.prototype.makeAnyoneCanSpendTx = function (satoshis, payTo, makeFuture) {
+        if (makeFuture === void 0) { makeFuture = true; }
         return __awaiter(this, void 0, void 0, function () {
-            var filteredUtxos, utxoSatoshis, changeSatoshis, txb, dustTotal, index, element, inputCount, outSatoshis, tx;
+            var filteredUtxos, utxoSatoshis, changeSatoshis, txb, dustTotal, index, element, inputCount, outSatoshis;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.tryLoadWalletUtxos()
@@ -332,9 +344,8 @@ var Wallet = /** @class */ (function () {
                         if (payTo) {
                             txb.addOutput(satoshis.toNumber(), bsv_1.Address.fromString(payTo));
                         }
-                        tx = txb.buildAndSign(this._keypair, true);
-                        this.lastTx = tx;
-                        return [2 /*return*/, tx.toHex()
+                        this.lastTx = txb.buildAndSign(this._keypair, makeFuture);
+                        return [2 /*return*/, this.lastTx.toHex()
                             // at this point, tx is spendable by anyone!
                             // only pass it through secure channel to recipient
                             // tx needs further processing before broadcast
@@ -393,6 +404,43 @@ var Wallet = /** @class */ (function () {
                     case 1:
                         broadcast = _a.sent();
                         return [2 /*return*/, broadcast.json()];
+                }
+            });
+        });
+    };
+    // attempt to split utxos, trying to create
+    // the targeted number of outputs with at least
+    // the minimum number of satoshis in each one
+    // on a best effort basis
+    Wallet.prototype.split = function (targetCount, satoshis) {
+        return __awaiter(this, void 0, void 0, function () {
+            var minSatoshis, splits, txb, index, split;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        minSatoshis = Math.max(satoshis, this._dustLimit);
+                        //get utxos not emcumbered
+                        return [4 /*yield*/, this.tryLoadWalletUtxos()
+                            //from all possible utxos, 
+                        ];
+                    case 1:
+                        //get utxos not emcumbered
+                        _a.sent();
+                        splits = this._selectedUtxos.split(targetCount, minSatoshis);
+                        //only ones greater than min or dust
+                        if (splits.utxo.satoshis > 0) {
+                            splits.breakdown.lastItem.satoshis -= this._dustLimit;
+                            txb = new TransactionBuilder_1.TransactionBuilder();
+                            txb.addInput(splits.utxo, this._keypair.pubKey);
+                            for (index = 0; index < splits.breakdown.items.length; index++) {
+                                split = splits.breakdown.items[index];
+                                txb.addOutput(split.satoshis, this._keypair.toAddress());
+                            }
+                            this.lastTx = txb.buildAndSign(this._keypair);
+                            console.log(this.lastTx);
+                            return [2 /*return*/, this.lastTx.toHex()];
+                        }
+                        return [2 /*return*/];
                 }
             });
         });
