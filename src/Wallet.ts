@@ -194,7 +194,7 @@ export class Wallet {
                     const newutxo = new UnspentOutput(
                         utxo0.value, 
                         this._keypair.toOutputScript(),
-                        utxo0.tx_hash,
+                        Buffer.from(utxo0.tx_hash,'hex').reverse().toString('hex'),
                         utxo0.tx_pos
                         )
                     this._selectedUtxos.add(newutxo)

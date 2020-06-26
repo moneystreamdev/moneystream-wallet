@@ -49,55 +49,33 @@ var TransactionBuilder = /** @class */ (function () {
         this.txb.setChangeAddress(address);
         return this;
     };
-    //sighash not used until bsv2
+    // spend a utxo
+    // pubkey is the address it was spent from
+    // sighash is the signing method for the input
     TransactionBuilder.prototype.addInput = function (utxo, pubKey, sigHash) {
         //spend utxo as input, first 3 param required
-        //inputFromPubKeyHash (txHashBuf, txOutNum, txOut, pubKey, nSequence, nHashType)
-        // txhashbuf is tx hash/id as 32 byte buffer (tx_hash)
-        // txoutnum is index of output (tx_pos)
-        // txout is TxOut created from amount and script 
-        // i.e. const txOut1 = TxOut.fromProperties(new Bn(1e8), scriptout1)
-        // i.e. value + output script
-        // for now, output script is our address
-        // later have to do in more sophisticated way
-        // pubKeyHash out
         this.txb.inputFromPubKeyHash(
         //txHashBuf
         Buffer.from(utxo.txId, 'hex'), 
         //txOutNum
         utxo.outputIndex, 
-        //     //txOut
+        //txOut
         utxo.toTxOut(), pubKey, this.FINAL, sigHash);
-        // const txin = new TxIn(
-        //     Buffer.from(utxo.txId,'hex'),
-        //     utxo.outputIndex,
-        //     utxo.script,
-        //     this.FINAL
-        // )
-        //     {
-        //     prevTxId:Buffer.from(utxo.txId,'hex'),
-        //     output:utxo,
-        //     outputIndex: utxo.outputIndex,
-        //     sequenceNumber: 0xffffffff,
-        //     script: utxo.script
-        // })
-        //this.tx.addInput(txin)
+        //return the new length of inputs
         return this.txb.txIns.length;
     };
     TransactionBuilder.prototype.addOutput = function (satoshis, address) {
         this.txb.outputToAddress(new bsv_1.Bn().fromNumber(satoshis), address);
     };
+    //TODO: might be able to use txbuilder?
     TransactionBuilder.prototype.buildAndSign = function (keypair, makeFuture) {
-        // txb.build too restrictive!
-        // i.e. "cannot create output lesser than dust"
-        //this.txb.build()
         this.txb.tx = new bsv_1.Tx();
         var outAmountBn = this.txb.buildOutputs();
         var inAmountBn = this.txb.buildInputs(outAmountBn, 1);
         this.sign(keypair, makeFuture);
         return this.txb.tx;
     };
-    //sigtype should be passed in to each input
+    //sigtype was passed in to each input
     TransactionBuilder.prototype.sign = function (keyPair, makeFuture) {
         if (makeFuture) {
             //make the tx in the future
