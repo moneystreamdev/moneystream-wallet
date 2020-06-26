@@ -240,7 +240,7 @@ export class Wallet {
     }
 
     // standard method for a streaming wallet
-    async makeAnyoneCanSpendTx(satoshis:Long, payTo?:string) {
+    async makeAnyoneCanSpendTx(satoshis:Long, payTo?:string, makeFuture:boolean = true) {
         await this.tryLoadWalletUtxos()
         //from all possible utxos, select enough to pay amount
         const filteredUtxos = this._selectedUtxos.filter(satoshis)
@@ -285,7 +285,7 @@ export class Wallet {
                 Address.fromString(payTo)
             )
         }
-        this.lastTx = txb.buildAndSign(this._keypair, true)
+        this.lastTx = txb.buildAndSign(this._keypair, makeFuture)
         return this.lastTx.toHex()
         // at this point, tx is spendable by anyone!
         // only pass it through secure channel to recipient

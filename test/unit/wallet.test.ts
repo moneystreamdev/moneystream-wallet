@@ -62,6 +62,18 @@ describe('Wallet tests', () => {
     expect (w.lastTx.txIns.length).toBeGreaterThan(0)
     expect (w.lastTx.txOuts.length).toBeGreaterThan(0)
   })
+  it('should create streamable tx with no lock time', async () => {
+    const w = new Wallet()
+    w.loadWallet()
+    w.selectedUtxos = dummyUtxosOne
+    const txhex = await w.makeAnyoneCanSpendTx(
+      Long.fromNumber(1000), undefined, false
+    )
+    expect (txhex.length).toBeGreaterThan(20)
+    expect (w.lastTx.nLockTime).toBe(0)
+    expect (w.lastTx.txIns.length).toBeGreaterThan(0)
+    expect (w.lastTx.txOuts.length).toBeGreaterThan(0)
+  })
   it('should create streamable tx with one input', async () => {
     const w = new Wallet()
     w.loadWallet()

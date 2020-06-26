@@ -297,7 +297,8 @@ var Wallet = /** @class */ (function () {
         });
     };
     // standard method for a streaming wallet
-    Wallet.prototype.makeAnyoneCanSpendTx = function (satoshis, payTo) {
+    Wallet.prototype.makeAnyoneCanSpendTx = function (satoshis, payTo, makeFuture) {
+        if (makeFuture === void 0) { makeFuture = true; }
         return __awaiter(this, void 0, void 0, function () {
             var filteredUtxos, utxoSatoshis, changeSatoshis, txb, dustTotal, index, element, inputCount, outSatoshis;
             return __generator(this, function (_a) {
@@ -343,7 +344,7 @@ var Wallet = /** @class */ (function () {
                         if (payTo) {
                             txb.addOutput(satoshis.toNumber(), bsv_1.Address.fromString(payTo));
                         }
-                        this.lastTx = txb.buildAndSign(this._keypair, true);
+                        this.lastTx = txb.buildAndSign(this._keypair, makeFuture);
                         return [2 /*return*/, this.lastTx.toHex()
                             // at this point, tx is spendable by anyone!
                             // only pass it through secure channel to recipient

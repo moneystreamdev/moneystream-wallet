@@ -37,7 +37,7 @@ export declare class Wallet {
     getAnUnspentOutput(): Promise<any>;
     makeSimpleSpend(satoshis: Long): Promise<string>;
     tryLoadWalletUtxos(): Promise<void>;
-    makeAnyoneCanSpendTx(satoshis: Long, payTo?: string): Promise<any>;
+    makeAnyoneCanSpendTx(satoshis: Long, payTo?: string, makeFuture?: boolean): Promise<any>;
     getApiTxJSON(txhash: string): Promise<any>;
     getUtxosAPI(address: any): Promise<any>;
     broadcastRaw(txhex: string): Promise<any>;

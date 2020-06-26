@@ -128,6 +128,25 @@ describe('Wallet tests', function () {
             }
         });
     }); });
+    it('should create streamable tx with no lock time', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var w, txhex;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    w = new Wallet_1.Wallet();
+                    w.loadWallet();
+                    w.selectedUtxos = dummyUtxosOne;
+                    return [4 /*yield*/, w.makeAnyoneCanSpendTx(Long.fromNumber(1000), undefined, false)];
+                case 1:
+                    txhex = _a.sent();
+                    expect(txhex.length).toBeGreaterThan(20);
+                    expect(w.lastTx.nLockTime).toBe(0);
+                    expect(w.lastTx.txIns.length).toBeGreaterThan(0);
+                    expect(w.lastTx.txOuts.length).toBeGreaterThan(0);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
     it('should create streamable tx with one input', function () { return __awaiter(void 0, void 0, void 0, function () {
         var w, txhex;
         return __generator(this, function (_a) {
