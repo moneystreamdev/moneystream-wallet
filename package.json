@@ -19,7 +19,7 @@
     "test:cov": "jest --coverage",
     "debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "bsv2": "yarn remove bsv && yarn add https://github.com/moneystreamdev/bsv#master",
+    "bsv2": "yarn remove bsv && yarn add https://github.com/moneystreamdev/bsv",
     "bsvlegacy": "yarn remove bsv && yarn add https://github.com/moneystreamdev/bsv#bsv-legacy"
   },
   "repository": {
