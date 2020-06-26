@@ -10,6 +10,9 @@ var TransactionBuilder = /** @class */ (function () {
         // build future transactions with locktime
         this.futureSeconds = 60;
         this.FINAL = 0xffffffff;
+        //allow any dust output
+        // let web site manage dust policy
+        this.txb.setDust(0);
     }
     Object.defineProperty(TransactionBuilder.prototype, "tx", {
         get: function () { return this.txb.tx; },
