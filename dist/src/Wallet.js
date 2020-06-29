@@ -40,9 +40,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Wallet = void 0;
-var fs_1 = __importDefault(require("fs"));
+var FileSystemStorage_1 = __importDefault(require("./FileSystemStorage"));
+var IndexingService_1 = __importDefault(require("./IndexingService"));
 var bsv_1 = require("bsv");
-var portableFetch_1 = require("./utils/portableFetch");
 var KeyPair_1 = require("./KeyPair");
 var TransactionBuilder_1 = require("./TransactionBuilder");
 var OutputCollection_1 = require("./OutputCollection");
@@ -50,10 +50,9 @@ var UnspentOutput_1 = require("./UnspentOutput");
 // base class for streaming wallet
 // A wallet generates transactions
 // TODO: extract wallet storage into separate class
-// TODO: extract external API calls into separate class
 // TODO: extract debugging formatting into separate class
 var Wallet = /** @class */ (function () {
-    function Wallet() {
+    function Wallet(storage, index) {
         this.FINAL = 0xffffffff;
         //true if user can combine inputs to extend session
         this._allowMultipleInputs = true;
@@ -73,6 +72,8 @@ var Wallet = /** @class */ (function () {
         this._isDebug = true;
         this._walletFileName = 'wallet.json';
         this._dustLimit = 500;
+        this._storage = storage || new FileSystemStorage_1.default(this._walletFileName);
+        this._index = index || new IndexingService_1.default();
     }
     Object.defineProperty(Wallet.prototype, "keyPair", {
         get: function () { return this._keypair; },
@@ -184,36 +185,33 @@ var Wallet = /** @class */ (function () {
         if (wif) {
             this._keypair = new KeyPair_1.KeyPair().fromWif(wif);
         }
+        else {
+            // try to load wallet from storage?
+        }
         if (!this._keypair) {
             this.generateKey();
         }
     };
     Wallet.prototype.generateKey = function () {
-        //generate keys, store and return xpub
         this._keypair = new KeyPair_1.KeyPair().fromRandom();
         return this._keypair.pubKey.toString();
     };
     Wallet.prototype.store = function (wallet) {
         var sWallet = JSON.stringify(wallet, null, 2);
-        //make a backup so we dont lose keys
-        this.backup();
-        try {
-            fs_1.default.writeFileSync(this._walletFileName, sWallet, 'utf8');
-        }
-        catch (err) {
-            if (err) {
-                console.log(err);
-                return;
-            }
-        }
+        this._storage.put(sWallet);
         return wallet;
     };
-    Wallet.prototype.backup = function () {
-        if (fs_1.default.existsSync(this._walletFileName)) {
-            var timestamp = (new Date()).toISOString()
-                .replace(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}).(\d{3})Z$/, '$1$2$3.$4$5$6.$7000000');
-            fs_1.default.renameSync(this._walletFileName, this._walletFileName + "." + timestamp);
-        }
+    Wallet.prototype.loadUnspent = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.getAnUnspentOutput(true)];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     Wallet.prototype.logUtxos = function (utxos) {
         var logit = "In " + this.constructor.name + " " + utxos.length + " Unspent outputs";
@@ -227,14 +225,14 @@ var Wallet = /** @class */ (function () {
         console.log(logit);
     };
     //todo cache utxos
-    Wallet.prototype.getAnUnspentOutput = function () {
+    Wallet.prototype.getAnUnspentOutput = function (force) {
         return __awaiter(this, void 0, void 0, function () {
             var utxos, i, utxo0, newutxo;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        if (!!this._selectedUtxos.hasAny()) return [3 /*break*/, 2];
-                        return [4 /*yield*/, this.getUtxosAPI(this._keypair.toAddress())];
+                        if (!(force || !this._selectedUtxos.hasAny())) return [3 /*break*/, 2];
+                        return [4 /*yield*/, this._index.getUtxosAPI(this._keypair.toAddress())];
                     case 1:
                         utxos = _a.sent();
                         if (utxos && utxos.length > 0) {
@@ -360,60 +358,6 @@ var Wallet = /** @class */ (function () {
                             // only pass it through secure channel to recipient
                             // tx needs further processing before broadcast
                         ];
-                }
-            });
-        });
-    };
-    Wallet.prototype.getApiTxJSON = function (txhash) {
-        return __awaiter(this, void 0, void 0, function () {
-            var url, response;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        url = "https://api.whatsonchain.com/v1/bsv/main/tx/hash/" + txhash;
-                        return [4 /*yield*/, portableFetch_1.portableFetch(url)];
-                    case 1:
-                        response = _a.sent();
-                        return [2 /*return*/, response.json()];
-                }
-            });
-        });
-    };
-    //address object
-    Wallet.prototype.getUtxosAPI = function (address) {
-        return __awaiter(this, void 0, void 0, function () {
-            var url, response;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        url = "https://api.whatsonchain.com/v1/bsv/main/address/" + address.toString() + "/unspent";
-                        return [4 /*yield*/, portableFetch_1.portableFetch(url)];
-                    case 1:
-                        response = _a.sent();
-                        return [2 /*return*/, response.json()];
-                }
-            });
-        });
-    };
-    Wallet.prototype.broadcastRaw = function (txhex) {
-        return __awaiter(this, void 0, void 0, function () {
-            var url, data, body, broadcast;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        url = 'https://api.whatsonchain.com/v1/bsv/main/tx/raw';
-                        data = {
-                            "txhex": txhex
-                        };
-                        body = JSON.stringify(data);
-                        return [4 /*yield*/, portableFetch_1.portableFetch(url, {
-                                method: "POST",
-                                headers: { 'Content-Type': 'application/json' },
-                                body: body
-                            })];
-                    case 1:
-                        broadcast = _a.sent();
-                        return [2 /*return*/, broadcast.json()];
                 }
             });
         });

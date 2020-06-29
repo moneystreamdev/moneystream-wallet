@@ -1,4 +1,6 @@
 /// <reference types="long" />
+import { IStorage } from './FileSystemStorage';
+import { IIndexingService } from './IndexingService';
 import { KeyPair } from './KeyPair';
 import { OutputCollection } from './OutputCollection';
 export declare class Wallet {
@@ -12,7 +14,9 @@ export declare class Wallet {
     _keypair: KeyPair;
     lastTx: any;
     protected SIGN_MY_INPUT: number;
-    constructor();
+    protected _storage: IStorage;
+    protected _index: IIndexingService;
+    constructor(storage?: IStorage, index?: IIndexingService);
     get keyPair(): KeyPair;
     get selectedUtxos(): OutputCollection;
     set selectedUtxos(val: OutputCollection);
@@ -33,15 +37,12 @@ export declare class Wallet {
     loadWallet(wif?: string): void;
     generateKey(): any;
     store(wallet: any): any;
-    backup(): void;
+    loadUnspent(): Promise<void>;
     logUtxos(utxos: any): void;
-    getAnUnspentOutput(): Promise<any>;
+    getAnUnspentOutput(force?: boolean): Promise<any>;
     makeSimpleSpend(satoshis: Long): Promise<string>;
     tryLoadWalletUtxos(): Promise<void>;
     makeAnyoneCanSpendTx(satoshis: Long, payTo?: string, makeFuture?: boolean): Promise<any>;
-    getApiTxJSON(txhash: string): Promise<any>;
-    getUtxosAPI(address: any): Promise<any>;
-    broadcastRaw(txhex: string): Promise<any>;
     split(targetCount: number, satoshis: number): Promise<any>;
 }
 //# sourceMappingURL=Wallet.d.ts.map

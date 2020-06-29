@@ -41,12 +41,12 @@ export class Wallet {
     protected _storage: IStorage
     protected _index: IIndexingService
 
-    constructor() {
+    constructor(storage?:IStorage, index?:IIndexingService) {
         this._isDebug = true
         this._walletFileName = 'wallet.json'
         this._dustLimit = 500
-        this._storage = new FileSystemStorage(this._walletFileName)
-        this._index = new IndexingService()
+        this._storage = storage || new FileSystemStorage(this._walletFileName)
+        this._index = index || new IndexingService()
     }
 
     get keyPair() { return this._keypair }
@@ -167,6 +167,10 @@ export class Wallet {
         return wallet
     }
 
+    async loadUnspent() {
+        await this.getAnUnspentOutput(true)
+    }
+
     logUtxos(utxos:any) {
         let logit = `In ${this.constructor.name} ${utxos.length} Unspent outputs`
         let tot = 0
@@ -180,8 +184,8 @@ export class Wallet {
     }
 
     //todo cache utxos
-    async getAnUnspentOutput(): Promise<any> {
-        if (!this._selectedUtxos.hasAny()) {
+    async getAnUnspentOutput(force?: boolean): Promise<any> {
+        if ( force || !this._selectedUtxos.hasAny()) {
             const utxos = await this._index.getUtxosAPI(this._keypair.toAddress())
             if (utxos && utxos.length > 0) {
                 for(let i=0; i<utxos.length; i++)
