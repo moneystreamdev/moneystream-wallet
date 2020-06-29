@@ -1,7 +1,7 @@
 'use strict'
-import fs from 'fs'
+import FileSystemStorage, { IStorage } from './FileSystemStorage'
+import IndexingService, {IIndexingService} from './IndexingService'
 import { Address, Sig } from 'bsv'
-import { portableFetch } from './utils/portableFetch'
 import { KeyPair } from './KeyPair'
 import { TransactionBuilder } from './TransactionBuilder'
 import { OutputCollection } from './OutputCollection'
@@ -10,7 +10,6 @@ import { UnspentOutput } from './UnspentOutput'
 // base class for streaming wallet
 // A wallet generates transactions
 // TODO: extract wallet storage into separate class
-// TODO: extract external API calls into separate class
 // TODO: extract debugging formatting into separate class
 export class Wallet {
     protected readonly FINAL:number = 0xffffffff
@@ -38,11 +37,16 @@ export class Wallet {
         Sig.SIGHASH_SINGLE 
         | Sig.SIGHASH_ANYONECANPAY
         | Sig.SIGHASH_FORKID
+    // storage for keys
+    protected _storage: IStorage
+    protected _index: IIndexingService
 
     constructor() {
         this._isDebug = true
         this._walletFileName = 'wallet.json'
         this._dustLimit = 500
+        this._storage = new FileSystemStorage(this._walletFileName)
+        this._index = new IndexingService()
     }
 
     get keyPair() { return this._keypair }
@@ -144,6 +148,8 @@ export class Wallet {
     loadWallet(wif?:string) {
         if (wif) {
             this._keypair = new KeyPair().fromWif(wif)
+        } else {
+            // try to load wallet from storage?
         }
         if (!this._keypair) {
             this.generateKey()
@@ -151,33 +157,14 @@ export class Wallet {
     }
 
     generateKey() {
-        //generate keys, store and return xpub
         this._keypair = new KeyPair().fromRandom()
         return this._keypair.pubKey.toString()
     }
 
     store(wallet:any) {
         const sWallet = JSON.stringify(wallet, null, 2)
-        //make a backup so we dont lose keys
-        this.backup()
-        try {
-            fs.writeFileSync(this._walletFileName, sWallet, 'utf8')
-        }
-        catch (err) {
-            if(err) {
-                console.log(err)
-                return
-            }
-        }
+        this._storage.put(sWallet)
         return wallet
-    }
-
-    backup() {
-        if (fs.existsSync(this._walletFileName)) {
-            let timestamp = (new Date()).toISOString()
-            .replace(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}).(\d{3})Z$/, '$1$2$3.$4$5$6.$7000000');
-            fs.renameSync(this._walletFileName, `${this._walletFileName}.${timestamp}`)
-        }
     }
 
     logUtxos(utxos:any) {
@@ -195,7 +182,7 @@ export class Wallet {
     //todo cache utxos
     async getAnUnspentOutput(): Promise<any> {
         if (!this._selectedUtxos.hasAny()) {
-            const utxos = await this.getUtxosAPI(this._keypair.toAddress())
+            const utxos = await this._index.getUtxosAPI(this._keypair.toAddress())
             if (utxos && utxos.length > 0) {
                 for(let i=0; i<utxos.length; i++)
                 {
@@ -297,35 +284,6 @@ export class Wallet {
         // at this point, tx is spendable by anyone!
         // only pass it through secure channel to recipient
         // tx needs further processing before broadcast
-    }
-
-    async getApiTxJSON(txhash:string) {
-        const url = `https://api.whatsonchain.com/v1/bsv/main/tx/hash/${txhash}`
-        const response = await portableFetch(url)
-        return response.json()
-    }
-
-    //address object
-    async getUtxosAPI(address:any) {
-        const url = `https://api.whatsonchain.com/v1/bsv/main/address/${address.toString()}/unspent`
-        const response = await portableFetch(url)
-        return response.json()
-    }
-
-    async broadcastRaw(txhex: string) {
-        const url = 'https://api.whatsonchain.com/v1/bsv/main/tx/raw'
-        const data = {
-            "txhex": txhex
-        }
-        const body = JSON.stringify(data);
-        const broadcast = await portableFetch(url, 
-            {
-                method: "POST", 
-                headers: { 'Content-Type': 'application/json' },
-                body:body
-            }
-        )
-        return broadcast.json()
     }
 
     // attempt to split utxos, trying to create
