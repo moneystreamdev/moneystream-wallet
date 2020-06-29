@@ -16,6 +16,7 @@ export declare class Wallet {
     get keyPair(): KeyPair;
     get selectedUtxos(): OutputCollection;
     set selectedUtxos(val: OutputCollection);
+    get balance(): number;
     txInDescription(txIn: any, index: number): {
         value: any;
         desc: string;

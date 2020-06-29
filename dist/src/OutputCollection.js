@@ -55,10 +55,14 @@ var OutputCollection = /** @class */ (function () {
         var result = new OutputCollection();
         for (var i = 0; i < this._outs.length; i++) {
             var utxo = this._outs[i];
-            result.add(utxo);
-            amountremaining -= utxo.satoshis;
             if (amountremaining < 0)
                 break;
+            amountremaining -= utxo.satoshis;
+            if (amountremaining === 0) {
+                result.add(utxo);
+                break;
+            }
+            result.add(utxo);
         }
         return result;
     };

@@ -70,6 +70,14 @@ var dummyUtxosTwo = new OutputCollection_1.OutputCollection();
 dummyUtxosTwo.add(dummyOutput1);
 //.filter will sort by sats and use #2 before #1
 dummyUtxosTwo.add(dummyOutput2);
+function createUtxos(count, satoshis) {
+    var lotsOfUtxos = new OutputCollection_1.OutputCollection();
+    for (var index = 0; index < count; index++) {
+        var testUtxo = new UnspentOutput_1.UnspentOutput(satoshis, new KeyPair_1.KeyPair().fromRandom().toOutputScript(), someHashBufString, index);
+        lotsOfUtxos.add(testUtxo);
+    }
+    return lotsOfUtxos;
+}
 describe('Wallet tests', function () {
     it('should instantiate a wallet object', function () {
         var w = new Wallet_1.Wallet();
@@ -244,7 +252,39 @@ describe('Wallet tests', function () {
                     expect(w.lastTx.txOuts.length).toBe(10);
                     expect(w.lastTx.txOuts[0].valueBn.toNumber()).toBe(1000);
                     expect(w.lastTx.txOuts[9].valueBn.toNumber()).toBe(500);
-                    console.log(txsplit);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    it('should get wallet balance', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var w, lotsOfUtxos;
+        return __generator(this, function (_a) {
+            w = new Wallet_1.Wallet();
+            w.loadWallet();
+            lotsOfUtxos = createUtxos(9, 1);
+            expect(lotsOfUtxos.count()).toBe(9);
+            w.selectedUtxos = lotsOfUtxos;
+            expect(w.balance).toBe(9);
+            return [2 /*return*/];
+        });
+    }); });
+    it('should create streamable tx with more than 256 inputs', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var w, lotsOfUtxos, txhex;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    w = new Wallet_1.Wallet();
+                    w.loadWallet();
+                    lotsOfUtxos = createUtxos(258, 1000);
+                    expect(lotsOfUtxos.count()).toBe(258);
+                    w.selectedUtxos = lotsOfUtxos;
+                    return [4 /*yield*/, w.makeAnyoneCanSpendTx(Long.fromNumber(257 * 1000))];
+                case 1:
+                    txhex = _a.sent();
+                    expect(txhex.length).toBeGreaterThan(20);
+                    expect(w.lastTx.nLockTime).toBeGreaterThan(0);
+                    expect(w.lastTx.txIns.length).toBe(257);
+                    expect(w.lastTx.txOuts.length).toBeGreaterThan(0);
                     return [2 /*return*/];
             }
         });

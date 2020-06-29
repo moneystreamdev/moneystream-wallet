@@ -49,6 +49,11 @@ export class Wallet {
     get selectedUtxos() { return this._selectedUtxos }
     set selectedUtxos(val) { this._selectedUtxos = val }
 
+    get balance():number {
+        if (!this._selectedUtxos) return 0
+        return this.selectedUtxos.satoshis()
+    }
+
     txInDescription(txIn:any, index:number) {
         const inputValue = this.getInputOutput(txIn)?.satoshis
         const inputSeq = txIn.nSequence || this.FINAL
@@ -245,6 +250,7 @@ export class Wallet {
         //from all possible utxos, select enough to pay amount
         const filteredUtxos = this._selectedUtxos.filter(satoshis)
         this._fundingInputCount = filteredUtxos.count()
+        //console.log(this._fundingInputCount)
         const utxoSatoshis = filteredUtxos.satoshis()
         const changeSatoshis = utxoSatoshis - satoshis.toNumber()
         if (changeSatoshis < 0) {
@@ -256,7 +262,7 @@ export class Wallet {
         const dustTotal = filteredUtxos.count() * this._dustLimit
         //add range of utxos, change in first, others are dust
         //TODO: could spread them out?
-        for (let index = 0; index < filteredUtxos.count(); index++) {
+        for (let index = 0; index < this._fundingInputCount; index++) {
             const element = filteredUtxos.items[index]
             const inputCount = txb.addInput(element, this._keypair.pubKey, this.SIGN_MY_INPUT)
             if (inputCount !== index + 1) throw Error(`Input did not get added!`)
@@ -271,6 +277,7 @@ export class Wallet {
                 }
             }
             if (outSatoshis >= 0) {
+                //console.log(outSatoshis)
                 txb.addOutput(
                     outSatoshis, 
                     this._keypair.toAddress()
@@ -341,10 +348,7 @@ export class Wallet {
                 txb.addOutput(split.satoshis, this._keypair.toAddress())
             }
             this.lastTx = txb.buildAndSign(this._keypair)
-            console.log(this.lastTx)
             return this.lastTx.toHex()
         }
-
     }
-
 }

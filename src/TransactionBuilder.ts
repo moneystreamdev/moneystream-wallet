@@ -79,10 +79,12 @@ export class TransactionBuilder {
     }
 
     //TODO: might be able to use txbuilder?
-    buildAndSign(keypair:KeyPair, makeFuture?:boolean): any { /* bsv2 */ 
+    buildAndSign(keypair:KeyPair, makeFuture?:boolean): any {
         this.txb.tx = new Tx()
         const outAmountBn = this.txb.buildOutputs()
-        const inAmountBn = this.txb.buildInputs(outAmountBn, 1)
+        //use all inputs so that user can spend dust if they want
+        let extraInputsNum = this.txb.txIns.length - 1
+        const inAmountBn = this.txb.buildInputs(outAmountBn, extraInputsNum)
         this.sign(keypair, makeFuture)
         return this.txb.tx
     }

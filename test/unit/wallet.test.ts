@@ -25,6 +25,20 @@ const dummyOutput1 = new UnspentOutput(
   //.filter will sort by sats and use #2 before #1
   dummyUtxosTwo.add(dummyOutput2)
 
+  function createUtxos(count:number, satoshis:number):OutputCollection {
+    const lotsOfUtxos = new OutputCollection()
+    for (let index = 0; index < count; index++) {
+      const testUtxo = new UnspentOutput(
+        satoshis,
+        new KeyPair().fromRandom().toOutputScript(),
+        someHashBufString,
+        index
+      )
+      lotsOfUtxos.add(testUtxo)
+    }
+    return lotsOfUtxos
+  }
+
 describe('Wallet tests', () => {
   it('should instantiate a wallet object', () => {
     const w = new Wallet()
@@ -136,7 +150,28 @@ describe('Wallet tests', () => {
     expect(w.lastTx.txOuts.length).toBe(10)
     expect(w.lastTx.txOuts[0].valueBn.toNumber()).toBe(1000)
     expect(w.lastTx.txOuts[9].valueBn.toNumber()).toBe(500)
-    console.log(txsplit)
+  })
+  it('should get wallet balance', async () => {
+    const w = new Wallet()
+    w.loadWallet()
+    const lotsOfUtxos = createUtxos(9,1)
+    expect(lotsOfUtxos.count()).toBe(9)
+    w.selectedUtxos = lotsOfUtxos
+    expect(w.balance).toBe(9)
+  })
+  it('should create streamable tx with more than 256 inputs', async () => {
+    const w = new Wallet()
+    w.loadWallet()
+    const lotsOfUtxos = createUtxos(258,1000)
+    expect(lotsOfUtxos.count()).toBe(258)
+    w.selectedUtxos = lotsOfUtxos
+    const txhex = await w.makeAnyoneCanSpendTx(
+      Long.fromNumber(257*1000)
+    )
+    expect (txhex.length).toBeGreaterThan(20)
+    expect (w.lastTx.nLockTime).toBeGreaterThan(0)
+    expect (w.lastTx.txIns.length).toBe(257)
+    expect (w.lastTx.txOuts.length).toBeGreaterThan(0)
   })
 
 })

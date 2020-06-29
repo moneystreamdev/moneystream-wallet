@@ -85,6 +85,15 @@ var Wallet = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
+    Object.defineProperty(Wallet.prototype, "balance", {
+        get: function () {
+            if (!this._selectedUtxos)
+                return 0;
+            return this.selectedUtxos.satoshis();
+        },
+        enumerable: false,
+        configurable: true
+    });
     Wallet.prototype.txInDescription = function (txIn, index) {
         var _a;
         var inputValue = (_a = this.getInputOutput(txIn)) === null || _a === void 0 ? void 0 : _a.satoshis;
@@ -320,7 +329,7 @@ var Wallet = /** @class */ (function () {
                         dustTotal = filteredUtxos.count() * this._dustLimit;
                         //add range of utxos, change in first, others are dust
                         //TODO: could spread them out?
-                        for (index = 0; index < filteredUtxos.count(); index++) {
+                        for (index = 0; index < this._fundingInputCount; index++) {
                             element = filteredUtxos.items[index];
                             inputCount = txb.addInput(element, this._keypair.pubKey, this.SIGN_MY_INPUT);
                             if (inputCount !== index + 1)
@@ -336,6 +345,7 @@ var Wallet = /** @class */ (function () {
                                 }
                             }
                             if (outSatoshis >= 0) {
+                                //console.log(outSatoshis)
                                 txb.addOutput(outSatoshis, this._keypair.toAddress());
                             }
                         }
@@ -437,7 +447,6 @@ var Wallet = /** @class */ (function () {
                                 txb.addOutput(split.satoshis, this._keypair.toAddress());
                             }
                             this.lastTx = txb.buildAndSign(this._keypair);
-                            console.log(this.lastTx);
                             return [2 /*return*/, this.lastTx.toHex()];
                         }
                         return [2 /*return*/];

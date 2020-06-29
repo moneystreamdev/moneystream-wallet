@@ -177,12 +177,12 @@
         "affectsGlobalScope": false
       },
       "../src/OutputCollection.ts": {
-        "version": "84f77f9938fd97e4320947beadf9f12e49d6507fd3eb44f041278196933eb4b0",
+        "version": "2041cdccadb0a4603f0177752e7c396f44d41b333fa27079765189cb9a26f26d",
         "signature": "9358d8cc5f8d0a50a6bb0a58bf6db7beb07f03011c1c3e0f660f6e052341d8f7",
         "affectsGlobalScope": false
       },
       "../src/TransactionBuilder.ts": {
-        "version": "345098810658d517756862cfc36bc860c654d395f30e173eaab41c5409b167fd",
+        "version": "4445abaf8f3cff86085511604803761d44fb997e821493aee9a638c6abdc6e6d",
         "signature": "1986b903898da65b9a8055e4240fe6daaee2ecaabdbce1ac2033eec37e51099b",
         "affectsGlobalScope": false
       },
@@ -192,8 +192,8 @@
         "affectsGlobalScope": false
       },
       "../src/Wallet.ts": {
-        "version": "f1a202bd0ac7f0c7174d4cb20b69329a327b3e1331f6c4dee1e8e3202bf4d30a",
-        "signature": "734c80816b308cbb2445e0295bfb9b940ad074f915373d39628ff7cc7246e19e",
+        "version": "a4e601352d966bed47732f8aa41dddbec8aa54926de6cd8e267366ca728b004c",
+        "signature": "207b92a408d7fc0194315486f4dbb75ad23966e9e71f609d7640d903251406be",
         "affectsGlobalScope": false
       },
       "../src/index.ts": {
@@ -217,7 +217,7 @@
         "affectsGlobalScope": false
       },
       "../test/unit/outputcollection.test.ts": {
-        "version": "054de487ad4870062adc147ad7b24b96ff1442e8a1d3e8d73670083b85371223",
+        "version": "cfc5cb8ad925989bb508dceb92de6fbb74a00e7b2f57952f47d57cc9758c0433",
         "signature": "574938e762a716357d423e9ad8036f980b2f1a25d174a841e4744dde28b83601",
         "affectsGlobalScope": false
       },
@@ -227,7 +227,7 @@
         "affectsGlobalScope": false
       },
       "../test/unit/wallet.test.ts": {
-        "version": "102a0195bff1d4b58fef58949561ce54300b09a902daab0dc6810500e8ba581b",
+        "version": "9f8d256cd605467f858ee3e2995a73682d2fa0c90929c9683eaf17ab72cadaec",
         "signature": "a747a591cf4e8c55cb44f079d82b31556e902fcea79ce8c49ded66ee039eaa11",
         "affectsGlobalScope": false
       },
@@ -267,8 +267,8 @@
         "affectsGlobalScope": false
       },
       "../node_modules/@types/node/globals.d.ts": {
-        "version": "2dd7dbacbd70cc156185235140b7b6682c002c1ea678dd87d7a20589d4555fc0",
-        "signature": "2dd7dbacbd70cc156185235140b7b6682c002c1ea678dd87d7a20589d4555fc0",
+        "version": "fae548bb4dd54b5562ba24f95ec6577da578f3d87b6c952bb9d6ebe29237abd0",
+        "signature": "fae548bb4dd54b5562ba24f95ec6577da578f3d87b6c952bb9d6ebe29237abd0",
         "affectsGlobalScope": true
       },
       "../node_modules/@types/node/async_hooks.d.ts": {
@@ -1652,6 +1652,7 @@
       ],
       "../test/unit/outputcollection.test.ts": [
         "../node_modules/@types/graceful-fs/index.d.ts",
+        "../node_modules/@types/long/index.d.ts",
         "../node_modules/@types/node/fs.d.ts",
         "../node_modules/@types/node/ts3.2/fs.d.ts",
         "../node_modules/@types/node/ts3.2/util.d.ts",

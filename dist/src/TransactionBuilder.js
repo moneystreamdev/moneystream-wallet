@@ -71,7 +71,9 @@ var TransactionBuilder = /** @class */ (function () {
     TransactionBuilder.prototype.buildAndSign = function (keypair, makeFuture) {
         this.txb.tx = new bsv_1.Tx();
         var outAmountBn = this.txb.buildOutputs();
-        var inAmountBn = this.txb.buildInputs(outAmountBn, 1);
+        //use all inputs so that user can spend dust if they want
+        var extraInputsNum = this.txb.txIns.length - 1;
+        var inAmountBn = this.txb.buildInputs(outAmountBn, extraInputsNum);
         this.sign(keypair, makeFuture);
         return this.txb.tx;
     };

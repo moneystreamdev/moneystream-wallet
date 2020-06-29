@@ -48,11 +48,15 @@ export class OutputCollection {
         let amountremaining = satoshis.toNumber()
         //keep adding outputs until we can cover the amount
         const result = new OutputCollection()
-        for (let i:number = 0; i<this._outs.length; i++) {
+        for (let i = 0; i<this._outs.length; i++) {
             const utxo = this._outs[i]
-            result.add(utxo)
-            amountremaining -= utxo.satoshis
             if (amountremaining < 0) break
+            amountremaining -= utxo.satoshis
+            if (amountremaining === 0) {
+                result.add(utxo)
+                break
+            }
+            result.add(utxo)
         }
         return result
     }
