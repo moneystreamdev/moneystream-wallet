@@ -10,4 +10,6 @@ var UnspentOutput_1 = require("./UnspentOutput");
 Object.defineProperty(exports, "UnspentOutput", { enumerable: true, get: function () { return UnspentOutput_1.UnspentOutput; } });
 var OutputCollection_1 = require("./OutputCollection");
 Object.defineProperty(exports, "OutputCollection", { enumerable: true, get: function () { return OutputCollection_1.OutputCollection; } });
+var IndexingService_1 = require("./IndexingService");
+Object.defineProperty(exports, "IndexingService", { enumerable: true, get: function () { return IndexingService_1.default; } });
 //# sourceMappingURL=index.js.map
