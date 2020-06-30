@@ -161,10 +161,10 @@ export class Wallet {
         return this._keypair.pubKey.toString()
     }
 
-    store(wallet:any) {
+    async store(wallet:any) {
         const sWallet = JSON.stringify(wallet, null, 2)
-        this._storage.put(sWallet)
-        return wallet
+        const stored = await this._storage.put(sWallet)
+        return stored
     }
 
     async loadUnspent() {

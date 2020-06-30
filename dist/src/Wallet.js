@@ -197,9 +197,19 @@ var Wallet = /** @class */ (function () {
         return this._keypair.pubKey.toString();
     };
     Wallet.prototype.store = function (wallet) {
-        var sWallet = JSON.stringify(wallet, null, 2);
-        this._storage.put(sWallet);
-        return wallet;
+        return __awaiter(this, void 0, void 0, function () {
+            var sWallet, stored;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        sWallet = JSON.stringify(wallet, null, 2);
+                        return [4 /*yield*/, this._storage.put(sWallet)];
+                    case 1:
+                        stored = _a.sent();
+                        return [2 /*return*/, stored];
+                }
+            });
+        });
     };
     Wallet.prototype.loadUnspent = function () {
         return __awaiter(this, void 0, void 0, function () {

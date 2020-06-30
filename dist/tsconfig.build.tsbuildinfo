@@ -157,8 +157,8 @@
         "affectsGlobalScope": true
       },
       "../src/FileSystemStorage.ts": {
-        "version": "c444bfd3622720ee55714ee4ad88c3161e227cfb560a25969eba8f8bd2fc5c3a",
-        "signature": "8a02532167f3876d2ddfcf2c860c5e5b63eaa33e0ce758f8f9a2f8e71babe4d2",
+        "version": "59a7bbc2f53cf6f9db949a245ca2c5bebc2f85c03ae921536d6dd5f2d96c796b",
+        "signature": "1dd664e062560a18cfff65b92743108ea8a7e157c59d2c696b06ca9e21406c1a",
         "affectsGlobalScope": false
       },
       "../src/utils/portableFetch.ts": {
@@ -202,8 +202,8 @@
         "affectsGlobalScope": false
       },
       "../src/Wallet.ts": {
-        "version": "b13c3ac0c3ac5a9e45adac800a33e2cee94ecd55aae9d97535304c1927c2f8e9",
-        "signature": "2f093390553e486484f0df4d3391c42ae83c3bf0ab645902fc35fc83948b107e",
+        "version": "16ec74159736ab03289fe11e53e08cf8f4e0fa47b69bcddb0487d788293c4d7e",
+        "signature": "16e9371ef7736aaa9d9c625d21ec7095581341bea3c22858c541ec21d27ea1f5",
         "affectsGlobalScope": false
       },
       "../src/index.ts": {

@@ -36,7 +36,7 @@ export declare class Wallet {
     };
     loadWallet(wif?: string): void;
     generateKey(): any;
-    store(wallet: any): any;
+    store(wallet: any): Promise<void>;
     loadUnspent(): Promise<void>;
     logUtxos(utxos: any): void;
     getAnUnspentOutput(force?: boolean): Promise<any>;

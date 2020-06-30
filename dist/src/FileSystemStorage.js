@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var fs_1 = __importDefault(require("fs"));
+//currently sync but should be async
 var FileSystemStorage = /** @class */ (function () {
     function FileSystemStorage(fileName) {
         this._fileName = fileName;
@@ -20,6 +21,10 @@ var FileSystemStorage = /** @class */ (function () {
                 return;
             }
         }
+    };
+    FileSystemStorage.prototype.get = function () {
+        var contents = fs_1.default.readFileSync(this._fileName);
+        return contents.toString();
     };
     FileSystemStorage.prototype.backup = function () {
         if (fs_1.default.existsSync(this._fileName)) {

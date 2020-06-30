@@ -2,9 +2,11 @@ import fs from 'fs'
 
 export interface IStorage {
     put(item: string):void
+    get():string
     backup(): void
 }
 
+//currently sync but should be async
 export default class FileSystemStorage implements IStorage {
     protected _fileName:string
     constructor(fileName:string) {
@@ -23,7 +25,11 @@ export default class FileSystemStorage implements IStorage {
                 return
             }
         }
+    }
 
+    get() {
+        const contents = fs.readFileSync(this._fileName)
+        return contents.toString()
     }
 
     backup() {
