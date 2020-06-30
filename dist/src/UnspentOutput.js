@@ -4,6 +4,7 @@ exports.UnspentOutput = void 0;
 var bsv_1 = require("bsv");
 var UnspentOutput = /** @class */ (function () {
     function UnspentOutput(satoshis, script, txid, txoutindex) {
+        this._status = "available";
         // txid is string but should be buf?
         this.txId = "";
         this.outputIndex = 0;
@@ -12,8 +13,24 @@ var UnspentOutput = /** @class */ (function () {
         this.txId = txid || "";
         this.outputIndex = txoutindex;
     }
+    Object.defineProperty(UnspentOutput.prototype, "status", {
+        get: function () { return this._status; },
+        enumerable: false,
+        configurable: true
+    });
     UnspentOutput.prototype.toTxOut = function () {
         return bsv_1.TxOut.fromProperties(new bsv_1.Bn(this.satoshis), this.script);
+    };
+    // encumber this utxo in a session
+    // utxo can only be encumbered in one session
+    // at a time
+    UnspentOutput.prototype.encumber = function () {
+        this._status = "hold";
+    };
+    // mark this utxo when it is finally spent
+    // at end of session
+    UnspentOutput.prototype.spend = function () {
+        this._status = "spent";
     };
     return UnspentOutput;
 }());

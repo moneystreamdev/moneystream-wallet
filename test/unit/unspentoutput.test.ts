@@ -16,5 +16,16 @@ describe('unspentoutput tests', () => {
         )
         expect(utxo.toTxOut()).toBeInstanceOf(TxOut)
     })
+    it('it should respond to session events', () => {
+        const utxo = new UnspentOutput(
+            1111,
+            Script.fromString('')
+        )
+        expect(utxo.status).toBe('available')
+        utxo.encumber()
+        expect(utxo.status).toBe('hold')
+        utxo.spend()
+        expect(utxo.status).toBe('spent')
+    })
 
 })

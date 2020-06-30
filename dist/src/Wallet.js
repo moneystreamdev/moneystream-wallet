@@ -90,7 +90,7 @@ var Wallet = /** @class */ (function () {
         get: function () {
             if (!this._selectedUtxos)
                 return 0;
-            return this.selectedUtxos.satoshis();
+            return this.selectedUtxos.spendable().satoshis;
         },
         enumerable: false,
         configurable: true
@@ -274,7 +274,7 @@ var Wallet = /** @class */ (function () {
                         if (!utxos || utxos.length < 0) {
                             throw Error("insufficient wallet funds.");
                         }
-                        utxoSatoshis = utxos.satoshis();
+                        utxoSatoshis = utxos.spendable().satoshis;
                         changeSatoshis = utxoSatoshis - satoshis.toNumber();
                         if (changeSatoshis < 0) {
                             throw Error("the utxo ran out of money " + changeSatoshis);
@@ -326,15 +326,15 @@ var Wallet = /** @class */ (function () {
                     case 1:
                         _a.sent();
                         filteredUtxos = this._selectedUtxos.filter(satoshis);
-                        this._fundingInputCount = filteredUtxos.count();
-                        utxoSatoshis = filteredUtxos.satoshis();
+                        this._fundingInputCount = filteredUtxos.count;
+                        utxoSatoshis = filteredUtxos.satoshis;
                         changeSatoshis = utxoSatoshis - satoshis.toNumber();
                         if (changeSatoshis < 0) {
                             throw Error("the utxo ran out of money " + changeSatoshis);
                         }
                         txb = new TransactionBuilder_1.TransactionBuilder();
                         txb.setChangeAddress(this._keypair.toAddress());
-                        dustTotal = filteredUtxos.count() * this._dustLimit;
+                        dustTotal = filteredUtxos.count * this._dustLimit;
                         //add range of utxos, change in first, others are dust
                         //TODO: could spread them out?
                         for (index = 0; index < this._fundingInputCount; index++) {
@@ -344,7 +344,7 @@ var Wallet = /** @class */ (function () {
                                 throw Error("Input did not get added!");
                             outSatoshis = this._dustLimit;
                             if (index === 0) {
-                                if (filteredUtxos.count() < 2) {
+                                if (filteredUtxos.count < 2) {
                                     // only one output, put all change there
                                     outSatoshis = Math.max(changeSatoshis, 0);
                                 }

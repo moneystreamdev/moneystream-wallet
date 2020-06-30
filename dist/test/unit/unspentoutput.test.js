@@ -11,5 +11,13 @@ describe('unspentoutput tests', function () {
         var utxo = new src_1.UnspentOutput(1111, bsv_1.Script.fromString(''));
         expect(utxo.toTxOut()).toBeInstanceOf(bsv_1.TxOut);
     });
+    it('it should respond to session events', function () {
+        var utxo = new src_1.UnspentOutput(1111, bsv_1.Script.fromString(''));
+        expect(utxo.status).toBe('available');
+        utxo.encumber();
+        expect(utxo.status).toBe('hold');
+        utxo.spend();
+        expect(utxo.status).toBe('spent');
+    });
 });
 //# sourceMappingURL=unspentoutput.test.js.map

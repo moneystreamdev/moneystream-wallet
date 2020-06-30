@@ -55,7 +55,7 @@ export class Wallet {
 
     get balance():number {
         if (!this._selectedUtxos) return 0
-        return this.selectedUtxos.satoshis()
+        return this.selectedUtxos.spendable().satoshis
     }
 
     txInDescription(txIn:any, index:number) {
@@ -211,7 +211,7 @@ export class Wallet {
         if (!utxos || utxos.length < 0) {
             throw Error(`insufficient wallet funds.`)
         }
-        const utxoSatoshis: number = utxos.satoshis()
+        const utxoSatoshis: number = utxos.spendable().satoshis
         const changeSatoshis = utxoSatoshis - satoshis.toNumber()
         if (changeSatoshis < 0) {
             throw Error(`the utxo ran out of money ${changeSatoshis}`)
@@ -240,9 +240,9 @@ export class Wallet {
         await this.tryLoadWalletUtxos()
         //from all possible utxos, select enough to pay amount
         const filteredUtxos = this._selectedUtxos.filter(satoshis)
-        this._fundingInputCount = filteredUtxos.count()
+        this._fundingInputCount = filteredUtxos.count
         //console.log(this._fundingInputCount)
-        const utxoSatoshis = filteredUtxos.satoshis()
+        const utxoSatoshis = filteredUtxos.satoshis
         const changeSatoshis = utxoSatoshis - satoshis.toNumber()
         if (changeSatoshis < 0) {
             throw Error(`the utxo ran out of money ${changeSatoshis}`)
@@ -250,7 +250,7 @@ export class Wallet {
         const txb = new TransactionBuilder()
         txb.setChangeAddress(this._keypair.toAddress())
         //TODO: for now, inputs have to be more than dust limit!
-        const dustTotal = filteredUtxos.count() * this._dustLimit
+        const dustTotal = filteredUtxos.count * this._dustLimit
         //add range of utxos, change in first, others are dust
         //TODO: could spread them out?
         for (let index = 0; index < this._fundingInputCount; index++) {
@@ -260,7 +260,7 @@ export class Wallet {
             //TODO: need many more unit tests
             let outSatoshis = this._dustLimit
             if (index === 0) {
-                if (filteredUtxos.count() < 2) {
+                if (filteredUtxos.count < 2) {
                     // only one output, put all change there
                     outSatoshis = Math.max(changeSatoshis,0)
                 } else {

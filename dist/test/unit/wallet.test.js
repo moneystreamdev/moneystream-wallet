@@ -64,8 +64,6 @@ var dustLimit = 500;
 var someHashBufString = '1aebb7d0776cec663cbbdd87f200bf15406adb0ef91916d102bcd7f86c86934e';
 var dummyOutput1 = new UnspentOutput_1.UnspentOutput(1000, new KeyPair_1.KeyPair().fromRandom().toOutputScript(), someHashBufString, 0);
 var dummyOutput2 = new UnspentOutput_1.UnspentOutput(2000, new KeyPair_1.KeyPair().fromRandom().toOutputScript(), someHashBufString, 1);
-var dummyUtxosOne = new OutputCollection_1.OutputCollection();
-dummyUtxosOne.add(dummyOutput1);
 var dummyUtxosTwo = new OutputCollection_1.OutputCollection();
 dummyUtxosTwo.add(dummyOutput1);
 //.filter will sort by sats and use #2 before #1
@@ -89,7 +87,7 @@ describe('Wallet tests', function () {
             switch (_a.label) {
                 case 0:
                     w = new Wallet_1.Wallet();
-                    w.selectedUtxos = dummyUtxosOne;
+                    w.selectedUtxos = createUtxos(1, 1000);
                     return [4 /*yield*/, expect(w.makeSimpleSpend(Long.fromNumber(600))).rejects.toThrow(Error)];
                 case 1:
                     _a.sent();
@@ -104,7 +102,7 @@ describe('Wallet tests', function () {
                 case 0:
                     w = new Wallet_1.Wallet();
                     w.loadWallet();
-                    w.selectedUtxos = dummyUtxosOne;
+                    w.selectedUtxos = createUtxos(1, 1000);
                     return [4 /*yield*/, w.makeSimpleSpend(Long.fromNumber(600))];
                 case 1:
                     txhex = _a.sent();
@@ -124,7 +122,7 @@ describe('Wallet tests', function () {
                 case 0:
                     w = new Wallet_1.Wallet();
                     w.loadWallet();
-                    w.selectedUtxos = dummyUtxosOne;
+                    w.selectedUtxos = createUtxos(1, 1000);
                     return [4 /*yield*/, w.makeAnyoneCanSpendTx(Long.fromNumber(1000))];
                 case 1:
                     txhex = _a.sent();
@@ -143,7 +141,7 @@ describe('Wallet tests', function () {
                 case 0:
                     w = new Wallet_1.Wallet();
                     w.loadWallet();
-                    w.selectedUtxos = dummyUtxosOne;
+                    w.selectedUtxos = createUtxos(1, 1000);
                     return [4 /*yield*/, w.makeAnyoneCanSpendTx(Long.fromNumber(1000), undefined, false)];
                 case 1:
                     txhex = _a.sent();
@@ -220,7 +218,7 @@ describe('Wallet tests', function () {
                 case 0:
                     w = new Wallet_1.Wallet();
                     w.loadWallet();
-                    w.selectedUtxos = dummyUtxosOne;
+                    w.selectedUtxos = createUtxos(1, 1000);
                     return [4 /*yield*/, w.makeAnyoneCanSpendTx(Long.fromNumber(100))];
                 case 1:
                     txhex = _a.sent();
@@ -262,7 +260,7 @@ describe('Wallet tests', function () {
             w = new Wallet_1.Wallet();
             w.loadWallet();
             lotsOfUtxos = createUtxos(9, 1);
-            expect(lotsOfUtxos.count()).toBe(9);
+            expect(lotsOfUtxos.count).toBe(9);
             w.selectedUtxos = lotsOfUtxos;
             expect(w.balance).toBe(9);
             return [2 /*return*/];
@@ -276,7 +274,7 @@ describe('Wallet tests', function () {
                     w = new Wallet_1.Wallet();
                     w.loadWallet();
                     lotsOfUtxos = createUtxos(258, 1000);
-                    expect(lotsOfUtxos.count()).toBe(258);
+                    expect(lotsOfUtxos.count).toBe(258);
                     w.selectedUtxos = lotsOfUtxos;
                     return [4 /*yield*/, w.makeAnyoneCanSpendTx(Long.fromNumber(257 * 1000))];
                 case 1:

@@ -16,11 +16,22 @@ export class OutputCollection {
         this._outs.push(output)
     }
 
-    count(): number { return this._outs.length }
+    get count(): number { return this._outs.length }
 
-    get lastItem():UnspentOutput { return this._outs[this.count()-1]}    
+    get firstItem(): UnspentOutput { return this._outs[0]}    
+    get lastItem(): UnspentOutput { return this._outs[this.count-1]}    
 
-    satoshis():number {
+    spendable(): OutputCollection {
+        return new OutputCollection(this._outs.filter( o => o.status === 'available'))
+    }
+    encumbered(): OutputCollection {
+        return new OutputCollection(this._outs.filter( o => o.status === 'hold'))
+    }
+    spent(): OutputCollection {
+        return new OutputCollection(this._outs.filter( o => o.status === 'spent'))
+    }
+
+    get satoshis(): number {
         if (this._outs.length === 0) return 0
         let sum = 0
         //return this._outs.reduce( (a:any,b:any) => a + b.satoshis )
@@ -71,7 +82,7 @@ export class OutputCollection {
                 breakdown: new OutputCollection()
             }
         //find largest one
-        if (this.count() > 0) {
+        if (this.count > 0) {
             const largest:UnspentOutput = this._outs[0]
             let actualBreak = satoshis
             if (largest.satoshis > satoshis) {
@@ -88,7 +99,7 @@ export class OutputCollection {
                 )
                 remaining -= actualBreak
             }
-            if (result.breakdown.count() > 0) {
+            if (result.breakdown.count > 0) {
                 result.breakdown.lastItem.satoshis += remaining
             }
         }

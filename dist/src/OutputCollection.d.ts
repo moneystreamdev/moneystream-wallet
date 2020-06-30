@@ -6,9 +6,13 @@ export declare class OutputCollection {
     get items(): UnspentOutput[];
     hasAny(): boolean;
     add(output: any): void;
-    count(): number;
+    get count(): number;
+    get firstItem(): UnspentOutput;
     get lastItem(): UnspentOutput;
-    satoshis(): number;
+    spendable(): OutputCollection;
+    encumbered(): OutputCollection;
+    spent(): OutputCollection;
+    get satoshis(): number;
     find(txHashBuf: any, txOutNum: number): UnspentOutput | null;
     filter(satoshis: Long): OutputCollection;
     split(targetCount: number, satoshis: number): {

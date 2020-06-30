@@ -18,8 +18,6 @@ const dummyOutput1 = new UnspentOutput(
     someHashBufString,
     1
   )
-  const dummyUtxosOne = new OutputCollection()
-  dummyUtxosOne.add(dummyOutput1)
   const dummyUtxosTwo = new OutputCollection()
   dummyUtxosTwo.add(dummyOutput1)
   //.filter will sort by sats and use #2 before #1
@@ -46,7 +44,7 @@ describe('Wallet tests', () => {
   })
   it('should error if wallet not loaded', async () => {
     const w = new Wallet()
-    w.selectedUtxos = dummyUtxosOne
+    w.selectedUtxos = createUtxos(1,1000)
     await expect(
       w.makeSimpleSpend(Long.fromNumber(600))
     ).rejects.toThrow(Error)
@@ -55,7 +53,7 @@ describe('Wallet tests', () => {
   it('should create simple tx with no lock time', async () => {
     const w = new Wallet()
     w.loadWallet()
-    w.selectedUtxos = dummyUtxosOne
+    w.selectedUtxos = createUtxos(1,1000)
 
     const txhex = await w.makeSimpleSpend(Long.fromNumber(600))
     expect (txhex.length).toBeGreaterThan(20)
@@ -67,7 +65,7 @@ describe('Wallet tests', () => {
   it('should create streamable tx with lock time', async () => {
     const w = new Wallet()
     w.loadWallet()
-    w.selectedUtxos = dummyUtxosOne
+    w.selectedUtxos = createUtxos(1,1000)
     const txhex = await w.makeAnyoneCanSpendTx(
       Long.fromNumber(1000)
     )
@@ -79,7 +77,7 @@ describe('Wallet tests', () => {
   it('should create streamable tx with no lock time', async () => {
     const w = new Wallet()
     w.loadWallet()
-    w.selectedUtxos = dummyUtxosOne
+    w.selectedUtxos = createUtxos(1,1000)
     const txhex = await w.makeAnyoneCanSpendTx(
       Long.fromNumber(1000), undefined, false
     )
@@ -129,7 +127,7 @@ describe('Wallet tests', () => {
   it('funds tx with one input', async () => {
     const w = new Wallet()
     w.loadWallet()
-    w.selectedUtxos = dummyUtxosOne
+    w.selectedUtxos = createUtxos(1,1000)
     const txhex = await w.makeAnyoneCanSpendTx(Long.fromNumber(100))
     expect(w.lastTx).toBeDefined()
     expect(w.getTxFund(w.lastTx)).toBe(100)
@@ -155,7 +153,7 @@ describe('Wallet tests', () => {
     const w = new Wallet()
     w.loadWallet()
     const lotsOfUtxos = createUtxos(9,1)
-    expect(lotsOfUtxos.count()).toBe(9)
+    expect(lotsOfUtxos.count).toBe(9)
     w.selectedUtxos = lotsOfUtxos
     expect(w.balance).toBe(9)
   })
@@ -163,7 +161,7 @@ describe('Wallet tests', () => {
     const w = new Wallet()
     w.loadWallet()
     const lotsOfUtxos = createUtxos(258,1000)
-    expect(lotsOfUtxos.count()).toBe(258)
+    expect(lotsOfUtxos.count).toBe(258)
     w.selectedUtxos = lotsOfUtxos
     const txhex = await w.makeAnyoneCanSpendTx(
       Long.fromNumber(257*1000)
