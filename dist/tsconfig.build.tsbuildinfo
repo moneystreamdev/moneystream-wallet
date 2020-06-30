@@ -207,8 +207,8 @@
         "affectsGlobalScope": false
       },
       "../src/index.ts": {
-        "version": "2d5b5447141265ad361f47e6b72c13f314e5a6b302f39cab6e6ec785a3d44cc3",
-        "signature": "454c522c94f8a4be16f2bdba4e1c8d0a771ebd5a93b9ba4b577bc795134ee97b",
+        "version": "3f4eb83d57328187a3f41d93569dedf9f3aaf3cd3df7fee98371439488eb2e63",
+        "signature": "ba575502968b7305fcbda6250e01767e777b9e45ceef2935b566663b7e137098",
         "affectsGlobalScope": false
       },
       "../node_modules/@types/long/index.d.ts": {
@@ -1650,6 +1650,8 @@
         "../node_modules/@types/node/ts3.2/fs.d.ts",
         "../node_modules/@types/node/ts3.2/util.d.ts",
         "../node_modules/@types/node/util.d.ts",
+        "../src/FileSystemStorage.ts",
+        "../src/IndexingService.ts",
         "../src/KeyPair.ts",
         "../src/OutputCollection.ts",
         "../src/TransactionBuilder.ts",
@@ -2656,6 +2658,8 @@
         "../src/OutputCollection.ts"
       ],
       "../src/index.ts": [
+        "../src/FileSystemStorage.ts",
+        "../src/IndexingService.ts",
         "../src/KeyPair.ts",
         "../src/OutputCollection.ts",
         "../src/TransactionBuilder.ts",
