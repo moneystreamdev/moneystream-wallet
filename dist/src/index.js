@@ -8,6 +8,8 @@ var KeyPair_1 = require("./KeyPair");
 Object.defineProperty(exports, "KeyPair", { enumerable: true, get: function () { return KeyPair_1.KeyPair; } });
 var UnspentOutput_1 = require("./UnspentOutput");
 Object.defineProperty(exports, "UnspentOutput", { enumerable: true, get: function () { return UnspentOutput_1.UnspentOutput; } });
+var TxPointer_1 = require("./TxPointer");
+Object.defineProperty(exports, "TxPointer", { enumerable: true, get: function () { return TxPointer_1.TxPointer; } });
 var OutputCollection_1 = require("./OutputCollection");
 Object.defineProperty(exports, "OutputCollection", { enumerable: true, get: function () { return OutputCollection_1.OutputCollection; } });
 var IndexingService_1 = require("./IndexingService");

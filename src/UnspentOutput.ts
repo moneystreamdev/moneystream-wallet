@@ -1,4 +1,5 @@
 import { Bn, TxOut, Script } from 'bsv'
+import { TxPointer } from './TxPointer'
 
 export class UnspentOutput {
     private _status:string = "available"
@@ -16,6 +17,7 @@ export class UnspentOutput {
     }
 
     get status() { return this._status}
+    get txPointer() { return new TxPointer(this.txId, this.outputIndex as number) }
 
     toTxOut() {
         return TxOut.fromProperties(

@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UnspentOutput = void 0;
 var bsv_1 = require("bsv");
+var TxPointer_1 = require("./TxPointer");
 var UnspentOutput = /** @class */ (function () {
     function UnspentOutput(satoshis, script, txid, txoutindex) {
         this._status = "available";
@@ -15,6 +16,11 @@ var UnspentOutput = /** @class */ (function () {
     }
     Object.defineProperty(UnspentOutput.prototype, "status", {
         get: function () { return this._status; },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(UnspentOutput.prototype, "txPointer", {
+        get: function () { return new TxPointer_1.TxPointer(this.txId, this.outputIndex); },
         enumerable: false,
         configurable: true
     });
