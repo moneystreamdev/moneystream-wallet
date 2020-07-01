@@ -58,6 +58,8 @@ export class TransactionBuilder {
     // pubkey is the address it was spent from
     // sighash is the signing method for the input
     addInput(utxo:UnspentOutput, pubKey:any, sigHash?:any): number {
+        // make sure this utxo will not get chosen in another session
+        utxo.encumber()
         //spend utxo as input, first 3 param required
         this.txb.inputFromPubKeyHash(
              //txHashBuf

@@ -184,7 +184,7 @@ export class Wallet {
     }
 
     //todo cache utxos
-    async getAnUnspentOutput(force?: boolean): Promise<any> {
+    async getAnUnspentOutput(force?: boolean): Promise<OutputCollection> {
         if ( force || !this._selectedUtxos.hasAny()) {
             const utxos = await this._index.getUtxosAPI(this._keypair.toAddress())
             if (utxos && utxos.length > 0) {
@@ -205,24 +205,27 @@ export class Wallet {
     }
 
     // legacy p2pkh spend
-    async makeSimpleSpend(satoshis: Long): Promise<string> {
+    async makeSimpleSpend(satoshis: Long, utxos?:OutputCollection): Promise<any> {
         if (!this._keypair) { throw new Error('Load wallet before spending') }
-        const utxos = await this.getAnUnspentOutput()
-        if (!utxos || utxos.length < 0) {
+        const filteredUtxos = utxos || await this.getAnUnspentOutput()
+        if (!filteredUtxos || filteredUtxos.count < 1) {
             throw Error(`insufficient wallet funds.`)
         }
-        const utxoSatoshis: number = utxos.spendable().satoshis
+        const utxoSatoshis: number = filteredUtxos.spendable().satoshis
         const changeSatoshis = utxoSatoshis - satoshis.toNumber()
         if (changeSatoshis < 0) {
             throw Error(`the utxo ran out of money ${changeSatoshis}`)
         }
         const txb = new TransactionBuilder()
-            .from(this._selectedUtxos.items, this._keypair.pubKey)
+            .from(filteredUtxos.items, this._keypair.pubKey)
             .toAddress(changeSatoshis, this._keypair.toAddress())
             .change(this._keypair.toAddress())
         //txb.sign(this._keypair)
         this.lastTx = txb.buildAndSign(this._keypair)
-        return this.lastTx.toHex()
+        return {
+            hex: this.lastTx.toHex(),
+            utxos: filteredUtxos
+        }
         // tx can be broadcast and put on chain
     }
 
@@ -236,12 +239,13 @@ export class Wallet {
     }
 
     // standard method for a streaming wallet
-    async makeAnyoneCanSpendTx(satoshis:Long, payTo?:string, makeFuture:boolean = true) {
-        await this.tryLoadWalletUtxos()
+    async makeAnyoneCanSpendTx(satoshis:Long, payTo?:string, 
+        makeFuture:boolean = true,
+        utxos?:OutputCollection) {
+        if (!utxos) await this.tryLoadWalletUtxos()
         //from all possible utxos, select enough to pay amount
-        const filteredUtxos = this._selectedUtxos.filter(satoshis)
+        const filteredUtxos = utxos || this._selectedUtxos.spendable().filter(satoshis)
         this._fundingInputCount = filteredUtxos.count
-        //console.log(this._fundingInputCount)
         const utxoSatoshis = filteredUtxos.satoshis
         const changeSatoshis = utxoSatoshis - satoshis.toNumber()
         if (changeSatoshis < 0) {
@@ -284,7 +288,10 @@ export class Wallet {
             )
         }
         this.lastTx = txb.buildAndSign(this._keypair, makeFuture)
-        return this.lastTx.toHex()
+        return {
+            hex: this.lastTx.toHex(),
+            utxos: filteredUtxos
+        }
         // at this point, tx is spendable by anyone!
         // only pass it through secure channel to recipient
         // tx needs further processing before broadcast
@@ -299,7 +306,7 @@ export class Wallet {
         //get utxos not emcumbered
         await this.tryLoadWalletUtxos()
         //from all possible utxos, 
-        const splits = this._selectedUtxos.split(targetCount, minSatoshis)
+        const splits = this._selectedUtxos.spendable().split(targetCount, minSatoshis)
         //only ones greater than min or dust
         if (splits.utxo.satoshis > 0) {
             splits.breakdown.lastItem.satoshis -= this._dustLimit

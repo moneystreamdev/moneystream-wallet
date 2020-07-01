@@ -39,10 +39,13 @@ export declare class Wallet {
     store(wallet: any): Promise<void>;
     loadUnspent(): Promise<void>;
     logUtxos(utxos: any): void;
-    getAnUnspentOutput(force?: boolean): Promise<any>;
-    makeSimpleSpend(satoshis: Long): Promise<string>;
+    getAnUnspentOutput(force?: boolean): Promise<OutputCollection>;
+    makeSimpleSpend(satoshis: Long, utxos?: OutputCollection): Promise<any>;
     tryLoadWalletUtxos(): Promise<void>;
-    makeAnyoneCanSpendTx(satoshis: Long, payTo?: string, makeFuture?: boolean): Promise<any>;
+    makeAnyoneCanSpendTx(satoshis: Long, payTo?: string, makeFuture?: boolean, utxos?: OutputCollection): Promise<{
+        hex: any;
+        utxos: OutputCollection;
+    }>;
     split(targetCount: number, satoshis: number): Promise<any>;
 }
 //# sourceMappingURL=Wallet.d.ts.map

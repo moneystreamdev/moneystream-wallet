@@ -259,33 +259,41 @@ var Wallet = /** @class */ (function () {
         });
     };
     // legacy p2pkh spend
-    Wallet.prototype.makeSimpleSpend = function (satoshis) {
+    Wallet.prototype.makeSimpleSpend = function (satoshis, utxos) {
         return __awaiter(this, void 0, void 0, function () {
-            var utxos, utxoSatoshis, changeSatoshis, txb;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+            var filteredUtxos, _a, utxoSatoshis, changeSatoshis, txb;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
                     case 0:
                         if (!this._keypair) {
                             throw new Error('Load wallet before spending');
                         }
+                        _a = utxos;
+                        if (_a) return [3 /*break*/, 2];
                         return [4 /*yield*/, this.getAnUnspentOutput()];
                     case 1:
-                        utxos = _a.sent();
-                        if (!utxos || utxos.length < 0) {
+                        _a = (_b.sent());
+                        _b.label = 2;
+                    case 2:
+                        filteredUtxos = _a;
+                        if (!filteredUtxos || filteredUtxos.count < 1) {
                             throw Error("insufficient wallet funds.");
                         }
-                        utxoSatoshis = utxos.spendable().satoshis;
+                        utxoSatoshis = filteredUtxos.spendable().satoshis;
                         changeSatoshis = utxoSatoshis - satoshis.toNumber();
                         if (changeSatoshis < 0) {
                             throw Error("the utxo ran out of money " + changeSatoshis);
                         }
                         txb = new TransactionBuilder_1.TransactionBuilder()
-                            .from(this._selectedUtxos.items, this._keypair.pubKey)
+                            .from(filteredUtxos.items, this._keypair.pubKey)
                             .toAddress(changeSatoshis, this._keypair.toAddress())
                             .change(this._keypair.toAddress());
                         //txb.sign(this._keypair)
                         this.lastTx = txb.buildAndSign(this._keypair);
-                        return [2 /*return*/, this.lastTx.toHex()
+                        return [2 /*return*/, {
+                                hex: this.lastTx.toHex(),
+                                utxos: filteredUtxos
+                            }
                             // tx can be broadcast and put on chain
                         ];
                 }
@@ -314,18 +322,22 @@ var Wallet = /** @class */ (function () {
         });
     };
     // standard method for a streaming wallet
-    Wallet.prototype.makeAnyoneCanSpendTx = function (satoshis, payTo, makeFuture) {
+    Wallet.prototype.makeAnyoneCanSpendTx = function (satoshis, payTo, makeFuture, utxos) {
         if (makeFuture === void 0) { makeFuture = true; }
         return __awaiter(this, void 0, void 0, function () {
             var filteredUtxos, utxoSatoshis, changeSatoshis, txb, dustTotal, index, element, inputCount, outSatoshis;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.tryLoadWalletUtxos()
-                        //from all possible utxos, select enough to pay amount
-                    ];
+                    case 0:
+                        if (!!utxos) return [3 /*break*/, 2];
+                        return [4 /*yield*/, this.tryLoadWalletUtxos()
+                            //from all possible utxos, select enough to pay amount
+                        ];
                     case 1:
                         _a.sent();
-                        filteredUtxos = this._selectedUtxos.filter(satoshis);
+                        _a.label = 2;
+                    case 2:
+                        filteredUtxos = utxos || this._selectedUtxos.spendable().filter(satoshis);
                         this._fundingInputCount = filteredUtxos.count;
                         utxoSatoshis = filteredUtxos.satoshis;
                         changeSatoshis = utxoSatoshis - satoshis.toNumber();
@@ -363,7 +375,10 @@ var Wallet = /** @class */ (function () {
                             txb.addOutput(satoshis.toNumber(), bsv_1.Address.fromString(payTo));
                         }
                         this.lastTx = txb.buildAndSign(this._keypair, makeFuture);
-                        return [2 /*return*/, this.lastTx.toHex()
+                        return [2 /*return*/, {
+                                hex: this.lastTx.toHex(),
+                                utxos: filteredUtxos
+                            }
                             // at this point, tx is spendable by anyone!
                             // only pass it through secure channel to recipient
                             // tx needs further processing before broadcast
@@ -390,7 +405,7 @@ var Wallet = /** @class */ (function () {
                     case 1:
                         //get utxos not emcumbered
                         _a.sent();
-                        splits = this._selectedUtxos.split(targetCount, minSatoshis);
+                        splits = this._selectedUtxos.spendable().split(targetCount, minSatoshis);
                         //only ones greater than min or dust
                         if (splits.utxo.satoshis > 0) {
                             splits.breakdown.lastItem.satoshis -= this._dustLimit;
