@@ -209,7 +209,7 @@ export class Wallet {
         if (!this._keypair) { throw new Error('Load wallet before spending') }
         const filteredUtxos = utxos || await this.getAnUnspentOutput()
         if (!filteredUtxos || filteredUtxos.count < 1) {
-            throw Error(`insufficient wallet funds.`)
+            throw Error(`Insufficient wallet funds. Send funds to ${this.keyPair.toAddress().toString()}`)
         }
         const utxoSatoshis: number = filteredUtxos.spendable().satoshis
         const changeSatoshis = utxoSatoshis - satoshis.toNumber()
