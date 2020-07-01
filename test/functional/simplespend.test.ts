@@ -6,7 +6,7 @@ describe('wallet broadcasts simple spend', () => {
         const w = new Wallet()
         expect(w).toBeInstanceOf(Wallet)
         w.loadWallet('L5o1VbLNhELT6uCu8v7KdZpvVocHWnHBqaHe686ZkMkyszyU6D7n')
-        const nftx = await w.makeAnyoneCanSpendTx(Long.fromNumber(100))
+        const nftx = await w.makeStreamableCashTx(Long.fromNumber(100))
         expect(w.lastTx.txIns.length).toBe(1)
     })
 
@@ -15,7 +15,7 @@ describe('wallet broadcasts simple spend', () => {
         sender.loadWallet('L5o1VbLNhELT6uCu8v7KdZpvVocHWnHBqaHe686ZkMkyszyU6D7n')
         sender.logDetails()
         let sender_hex, sent
-        sender_hex = await sender.makeAnyoneCanSpendTx(
+        sender_hex = await sender.makeStreamableCashTx(
             Long.fromNumber(500)
         )
         expect(sender.lastTx.txIns.length).toBe(1)

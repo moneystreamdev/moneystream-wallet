@@ -16,7 +16,7 @@ export declare class OutputCollection {
     find(txHashBuf: any, txOutNum: number): UnspentOutput | null;
     filter(satoshis: Long): OutputCollection;
     split(targetCount: number, satoshis: number): {
-        utxo: UnspentOutput;
+        utxo: OutputCollection;
         breakdown: OutputCollection;
     };
 }

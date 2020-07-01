@@ -71,58 +71,58 @@ describe('Wallet tests', () => {
 
     const buildResult = await w.makeSimpleSpend(Long.fromNumber(600))
     expect (buildResult.hex.length).toBeGreaterThan(20)
-    expect (w.lastTx.nLockTime).toBe(0)
-    expect (w.lastTx.txIns.length).toBeGreaterThan(0)
-    expect (w.lastTx.txOuts.length).toBeGreaterThan(0)
+    expect (buildResult.tx.nLockTime).toBe(0)
+    expect (buildResult.tx.txIns.length).toBeGreaterThan(0)
+    expect (buildResult.tx.txOuts.length).toBeGreaterThan(0)
     w.logDetailsLastTx()
   })
   it('should create streamable tx with lock time', async () => {
     const w = new Wallet()
     w.loadWallet()
     w.selectedUtxos = createUtxos(1,1000)
-    const buildResult = await w.makeAnyoneCanSpendTx(
+    const buildResult = await w.makeStreamableCashTx(
       Long.fromNumber(1000)
     )
     expect (buildResult.hex.length).toBeGreaterThan(20)
-    expect (w.lastTx.nLockTime).toBeGreaterThan(0)
-    expect (w.lastTx.txIns.length).toBeGreaterThan(0)
-    expect (w.lastTx.txOuts.length).toBeGreaterThan(0)
+    expect (buildResult.tx.nLockTime).toBeGreaterThan(0)
+    expect (buildResult.tx.txIns.length).toBeGreaterThan(0)
+    expect (buildResult.tx.txOuts.length).toBeGreaterThan(0)
   })
   it('should create streamable tx with no lock time', async () => {
     const w = new Wallet()
     w.loadWallet()
     w.selectedUtxos = createUtxos(1,1000)
-    const buildResult = await w.makeAnyoneCanSpendTx(
+    const buildResult = await w.makeStreamableCashTx(
       Long.fromNumber(1000), undefined, false
     )
     expect (buildResult.hex.length).toBeGreaterThan(20)
-    expect (w.lastTx.nLockTime).toBe(0)
-    expect (w.lastTx.txIns.length).toBeGreaterThan(0)
-    expect (w.lastTx.txOuts.length).toBeGreaterThan(0)
+    expect (buildResult.tx.nLockTime).toBe(0)
+    expect (buildResult.tx.txIns.length).toBeGreaterThan(0)
+    expect (buildResult.tx.txOuts.length).toBeGreaterThan(0)
   })
   it('should create streamable tx with one input', async () => {
     const w = new Wallet()
     w.loadWallet()
     w.selectedUtxos = makeDummyTwo()
-    const buildResult = await w.makeAnyoneCanSpendTx(
+    const buildResult = await w.makeStreamableCashTx(
       Long.fromNumber(dummyOutput1.satoshis-dustLimit-1)
     )
     expect (buildResult.hex.length).toBeGreaterThan(20)
-    expect (w.lastTx.txIns.length).toBe(1)
-    expect (w.lastTx.txOuts.length).toBe(1)
+    expect (buildResult.tx.txIns.length).toBe(1)
+    expect (buildResult.tx.txOuts.length).toBe(1)
   })
   it('should create streamable tx with exact input', async () => {
     const w = new Wallet()
     w.loadWallet()
     w.selectedUtxos = makeDummyTwo()
     const tokensLessDust = 1000 - 500
-    const buildResult = await w.makeAnyoneCanSpendTx(
+    const buildResult = await w.makeStreamableCashTx(
       Long.fromNumber(tokensLessDust),
       '1KUrv2Ns8SwNkLgVKrVbSHJmdXLpsEvaDf'
     )
     expect (buildResult.hex.length).toBeGreaterThan(20)
-    expect (w.lastTx.txIns.length).toBe(1)
-    expect (w.lastTx.txOuts.length).toBe(2)
+    expect (buildResult.tx.txIns.length).toBe(1)
+    expect (buildResult.tx.txOuts.length).toBe(2)
   })
 
   it('should create streamable tx with multiple inputs', async () => {
@@ -130,20 +130,20 @@ describe('Wallet tests', () => {
     w.loadWallet()
     w.selectedUtxos = makeDummyTwo()
     //wallet will sort utxo by sats, use biggest first
-    const buildResult = await w.makeAnyoneCanSpendTx(Long.fromNumber(2500))
-    expect (buildResult.hex.length).toBeGreaterThan(20)
-    expect (w.lastTx.txIns.length).toBe(2)
-    expect (w.lastTx.txOuts.length).toBe(2)
-    expect(w.lastTx.txOuts[0].valueBn.toNumber()).toBe(0)
-    expect(w.lastTx.txOuts[1].valueBn.toNumber()).toBe(500)
+    const buildResult = await w.makeStreamableCashTx(Long.fromNumber(2500))
+    expect(buildResult.hex.length).toBeGreaterThan(20)
+    expect(buildResult.tx.txIns.length).toBe(2)
+    expect(buildResult.tx.txOuts.length).toBe(2)
+    expect(buildResult.tx.txOuts[0].valueBn.toNumber()).toBe(0)
+    expect(buildResult.tx.txOuts[1].valueBn.toNumber()).toBe(500)
     expect(w.getTxFund(w.lastTx)).toBe(2500)
   })
   it('funds tx with one input', async () => {
     const w = new Wallet()
     w.loadWallet()
     w.selectedUtxos = createUtxos(1,1000)
-    const txhex = await w.makeAnyoneCanSpendTx(Long.fromNumber(100))
-    expect(w.lastTx).toBeDefined()
+    const buildResult = await w.makeStreamableCashTx(Long.fromNumber(100))
+    expect(buildResult.tx).toBeDefined()
     expect(w.getTxFund(w.lastTx)).toBe(100)
   })
   it ('should log utxos', () => {
@@ -157,11 +157,11 @@ describe('Wallet tests', () => {
     const utxos = new OutputCollection()
     utxos.add(new UnspentOutput(10000,w.keyPair.toOutputScript(),someHashBufString,0))
     w.selectedUtxos = utxos
-    const txsplit = await w.split(10,1000)
-    expect(w.lastTx.txIns.length).toBe(1)
-    expect(w.lastTx.txOuts.length).toBe(10)
-    expect(w.lastTx.txOuts[0].valueBn.toNumber()).toBe(1000)
-    expect(w.lastTx.txOuts[9].valueBn.toNumber()).toBe(500)
+    const buildResult = await w.split(10,1000)
+    expect(buildResult?.tx.txIns.length).toBe(1)
+    expect(buildResult?.tx.txOuts.length).toBe(10)
+    expect(buildResult?.tx.txOuts[0].valueBn.toNumber()).toBe(1000)
+    expect(buildResult?.tx.txOuts[9].valueBn.toNumber()).toBe(500)
   })
   it('should get wallet balance', async () => {
     const w = new Wallet()
@@ -177,20 +177,20 @@ describe('Wallet tests', () => {
     const lotsOfUtxos = createUtxos(258,1000)
     expect(lotsOfUtxos.count).toBe(258)
     w.selectedUtxos = lotsOfUtxos
-    const buildResult = await w.makeAnyoneCanSpendTx(
+    const buildResult = await w.makeStreamableCashTx(
       Long.fromNumber(257*1000)
     )
     expect (buildResult.hex.length).toBeGreaterThan(20)
-    expect (w.lastTx.nLockTime).toBeGreaterThan(0)
-    expect (w.lastTx.txIns.length).toBe(257)
-    expect (w.lastTx.txOuts.length).toBeGreaterThan(0)
+    expect (buildResult?.tx.nLockTime).toBeGreaterThan(0)
+    expect (buildResult?.tx.txIns.length).toBe(257)
+    expect (buildResult?.tx.txOuts.length).toBeGreaterThan(0)
   })
   it('encumbers utxo', async () => {
     const w = new Wallet()
     w.loadWallet()
     w.selectedUtxos = createUtxos(1,1000)
-    const txhex = await w.makeAnyoneCanSpendTx(Long.fromNumber(100))
-    expect(w.lastTx).toBeDefined()
+    const buildResult = await w.makeStreamableCashTx(Long.fromNumber(100))
+    expect(buildResult?.tx).toBeDefined()
     expect(w.getTxFund(w.lastTx)).toBe(100)
     expect(w.selectedUtxos.firstItem.status).toBe('hold')
   })
@@ -198,13 +198,13 @@ describe('Wallet tests', () => {
     const w = new Wallet()
     w.loadWallet()
     w.selectedUtxos = createUtxos(1,1000)
-    const stream1 = await w.makeAnyoneCanSpendTx(Long.fromNumber(100))
-    expect(w.lastTx).toBeDefined()
+    const stream1 = await w.makeStreamableCashTx(Long.fromNumber(100))
+    expect(stream1.tx).toBeDefined()
     expect(w.getTxFund(w.lastTx)).toBe(100)
     expect(w.selectedUtxos.firstItem.status).toBe('hold')
     //this should error
     expect(
-      w.makeAnyoneCanSpendTx(Long.fromNumber(100))
+      w.makeStreamableCashTx(Long.fromNumber(100))
     ).rejects.toThrow(Error)
   })
 

@@ -224,6 +224,7 @@ export class Wallet {
         this.lastTx = txb.buildAndSign(this._keypair)
         return {
             hex: this.lastTx.toHex(),
+            tx: this.lastTx,
             utxos: filteredUtxos
         }
         // tx can be broadcast and put on chain
@@ -239,7 +240,7 @@ export class Wallet {
     }
 
     // standard method for a streaming wallet
-    async makeAnyoneCanSpendTx(satoshis:Long, payTo?:string, 
+    async makeStreamableCashTx(satoshis:Long, payTo?:string, 
         makeFuture:boolean = true,
         utxos?:OutputCollection) {
         if (!utxos) await this.tryLoadWalletUtxos()
@@ -290,6 +291,7 @@ export class Wallet {
         this.lastTx = txb.buildAndSign(this._keypair, makeFuture)
         return {
             hex: this.lastTx.toHex(),
+            tx: this.lastTx,
             utxos: filteredUtxos
         }
         // at this point, tx is spendable by anyone!
@@ -311,13 +313,17 @@ export class Wallet {
         if (splits.utxo.satoshis > 0) {
             splits.breakdown.lastItem.satoshis -= this._dustLimit
             const txb = new TransactionBuilder()
-            txb.addInput(splits.utxo, this._keypair.pubKey)
+            txb.addInput(splits.utxo.firstItem, this._keypair.pubKey)
             for (let index = 0; index < splits.breakdown.items.length; index++) {
                 const split = splits.breakdown.items[index]
                 txb.addOutput(split.satoshis, this._keypair.toAddress())
             }
             this.lastTx = txb.buildAndSign(this._keypair)
-            return this.lastTx.toHex()
+            return {
+                hex: this.lastTx.toHex(),
+                tx: this.lastTx,
+                utxos: splits.utxo
+            }
         }
     }
 }

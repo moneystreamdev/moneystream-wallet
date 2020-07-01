@@ -93,7 +93,7 @@ var OutputCollection = /** @class */ (function () {
     OutputCollection.prototype.split = function (targetCount, satoshis) {
         this._outs.sort(function (a, b) { return b.satoshis - a.satoshis; });
         var result = {
-            utxo: new UnspentOutput_1.UnspentOutput(0, ''),
+            utxo: new OutputCollection(),
             breakdown: new OutputCollection()
         };
         //find largest one
@@ -106,7 +106,7 @@ var OutputCollection = /** @class */ (function () {
                     actualBreak = desiredBreak;
                 }
             }
-            result.utxo = largest;
+            result.utxo.add(largest);
             var remaining = actualBreak * targetCount;
             while (remaining > 0) {
                 result.breakdown.add(new UnspentOutput_1.UnspentOutput(actualBreak, largest.script));

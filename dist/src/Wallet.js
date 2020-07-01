@@ -277,7 +277,7 @@ var Wallet = /** @class */ (function () {
                     case 2:
                         filteredUtxos = _a;
                         if (!filteredUtxos || filteredUtxos.count < 1) {
-                            throw Error("insufficient wallet funds.");
+                            throw Error("Insufficient wallet funds. Send funds to " + this.keyPair.toAddress().toString());
                         }
                         utxoSatoshis = filteredUtxos.spendable().satoshis;
                         changeSatoshis = utxoSatoshis - satoshis.toNumber();
@@ -292,6 +292,7 @@ var Wallet = /** @class */ (function () {
                         this.lastTx = txb.buildAndSign(this._keypair);
                         return [2 /*return*/, {
                                 hex: this.lastTx.toHex(),
+                                tx: this.lastTx,
                                 utxos: filteredUtxos
                             }
                             // tx can be broadcast and put on chain
@@ -322,7 +323,7 @@ var Wallet = /** @class */ (function () {
         });
     };
     // standard method for a streaming wallet
-    Wallet.prototype.makeAnyoneCanSpendTx = function (satoshis, payTo, makeFuture, utxos) {
+    Wallet.prototype.makeStreamableCashTx = function (satoshis, payTo, makeFuture, utxos) {
         if (makeFuture === void 0) { makeFuture = true; }
         return __awaiter(this, void 0, void 0, function () {
             var filteredUtxos, utxoSatoshis, changeSatoshis, txb, dustTotal, index, element, inputCount, outSatoshis;
@@ -377,6 +378,7 @@ var Wallet = /** @class */ (function () {
                         this.lastTx = txb.buildAndSign(this._keypair, makeFuture);
                         return [2 /*return*/, {
                                 hex: this.lastTx.toHex(),
+                                tx: this.lastTx,
                                 utxos: filteredUtxos
                             }
                             // at this point, tx is spendable by anyone!
@@ -410,13 +412,17 @@ var Wallet = /** @class */ (function () {
                         if (splits.utxo.satoshis > 0) {
                             splits.breakdown.lastItem.satoshis -= this._dustLimit;
                             txb = new TransactionBuilder_1.TransactionBuilder();
-                            txb.addInput(splits.utxo, this._keypair.pubKey);
+                            txb.addInput(splits.utxo.firstItem, this._keypair.pubKey);
                             for (index = 0; index < splits.breakdown.items.length; index++) {
                                 split = splits.breakdown.items[index];
                                 txb.addOutput(split.satoshis, this._keypair.toAddress());
                             }
                             this.lastTx = txb.buildAndSign(this._keypair);
-                            return [2 /*return*/, this.lastTx.toHex()];
+                            return [2 /*return*/, {
+                                    hex: this.lastTx.toHex(),
+                                    tx: this.lastTx,
+                                    utxos: splits.utxo
+                                }];
                         }
                         return [2 /*return*/];
                 }

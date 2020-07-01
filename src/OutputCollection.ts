@@ -78,7 +78,7 @@ export class OutputCollection {
         this._outs.sort((a:any,b:any) => b.satoshis - a.satoshis)
         const result = 
             {
-                utxo: new UnspentOutput(0,''),
+                utxo: new OutputCollection(),
                 breakdown: new OutputCollection()
             }
         //find largest one
@@ -91,7 +91,7 @@ export class OutputCollection {
                     actualBreak = desiredBreak
                 }
             }
-            result.utxo = largest
+            result.utxo.add(largest)
             let remaining = actualBreak * targetCount
             while (remaining > 0) {
                 result.breakdown.add(

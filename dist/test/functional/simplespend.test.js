@@ -66,7 +66,7 @@ describe('wallet broadcasts simple spend', function () {
                     w = new Wallet_1.Wallet();
                     expect(w).toBeInstanceOf(Wallet_1.Wallet);
                     w.loadWallet('L5o1VbLNhELT6uCu8v7KdZpvVocHWnHBqaHe686ZkMkyszyU6D7n');
-                    return [4 /*yield*/, w.makeAnyoneCanSpendTx(Long.fromNumber(100))];
+                    return [4 /*yield*/, w.makeStreamableCashTx(Long.fromNumber(100))];
                 case 1:
                     nftx = _a.sent();
                     expect(w.lastTx.txIns.length).toBe(1);
@@ -82,7 +82,7 @@ describe('wallet broadcasts simple spend', function () {
                     sender = new Wallet_1.Wallet();
                     sender.loadWallet('L5o1VbLNhELT6uCu8v7KdZpvVocHWnHBqaHe686ZkMkyszyU6D7n');
                     sender.logDetails();
-                    return [4 /*yield*/, sender.makeAnyoneCanSpendTx(Long.fromNumber(500))];
+                    return [4 /*yield*/, sender.makeStreamableCashTx(Long.fromNumber(500))];
                 case 1:
                     sender_hex = _a.sent();
                     expect(sender.lastTx.txIns.length).toBe(1);
