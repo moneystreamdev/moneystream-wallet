@@ -1,4 +1,4 @@
-import { Bn, TxBuilder, Tx, TxIn } from 'bsv'
+import { Bn, TxBuilder, Tx, Script } from 'bsv'
 import { KeyPair } from './KeyPair'
 import { UnspentOutput } from './UnspentOutput'
 
@@ -45,7 +45,7 @@ export class TransactionBuilder {
     }
 
     toAddress(satoshis:number,address:string):TransactionBuilder {
-        this.addOutput(satoshis,address)
+        this.addOutputAddress(satoshis,address)
         return this
     }
 
@@ -76,7 +76,14 @@ export class TransactionBuilder {
         return this.txb.txIns.length
     }
 
-    addOutput(satoshis:number, address:any) {
+    addOutputScript(satoshis:number, script:any) {
+        if (typeof script === "string") {
+            script = new Script().fromString(script)
+        }
+        this.txb.outputToScript(new Bn().fromNumber(satoshis), script)
+    }
+
+    addOutputAddress(satoshis:number, address:any) {
         this.txb.outputToAddress(new Bn().fromNumber(satoshis), address)
     }
 

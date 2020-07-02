@@ -183,7 +183,7 @@ describe('Wallet tests', function () {
                     w.loadWallet();
                     w.selectedUtxos = makeDummyTwo();
                     tokensLessDust = 1000 - 500;
-                    return [4 /*yield*/, w.makeStreamableCashTx(Long.fromNumber(tokensLessDust), '1KUrv2Ns8SwNkLgVKrVbSHJmdXLpsEvaDf')];
+                    return [4 /*yield*/, w.makeStreamableCashTx(Long.fromNumber(tokensLessDust), new KeyPair_1.KeyPair().fromRandom().toOutputScript())];
                 case 1:
                     buildResult = _a.sent();
                     expect(buildResult.hex.length).toBeGreaterThan(20);

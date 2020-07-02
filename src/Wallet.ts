@@ -1,7 +1,7 @@
 'use strict'
 import FileSystemStorage, { IStorage } from './FileSystemStorage'
 import IndexingService, {IIndexingService} from './IndexingService'
-import { Address, Sig } from 'bsv'
+import { Address, Sig, Script } from 'bsv'
 import { KeyPair } from './KeyPair'
 import { TransactionBuilder } from './TransactionBuilder'
 import { OutputCollection } from './OutputCollection'
@@ -205,6 +205,7 @@ export class Wallet {
     }
 
     // legacy p2pkh spend
+    // currently spends to this wallet ;)
     async makeSimpleSpend(satoshis: Long, utxos?:OutputCollection): Promise<any> {
         if (!this._keypair) { throw new Error('Load wallet before spending') }
         const filteredUtxos = utxos || await this.getAnUnspentOutput()
@@ -240,7 +241,8 @@ export class Wallet {
     }
 
     // standard method for a streaming wallet
-    async makeStreamableCashTx(satoshis:Long, payTo?:string, 
+    // payTo should be script, as instance of Script or string
+    async makeStreamableCashTx(satoshis:Long, payTo?:string|any, 
         makeFuture:boolean = true,
         utxos?:OutputCollection) {
         if (!utxos) await this.tryLoadWalletUtxos()
@@ -274,18 +276,17 @@ export class Wallet {
             }
             if (outSatoshis >= 0) {
                 //console.log(outSatoshis)
-                txb.addOutput(
+                txb.addOutputAddress(
                     outSatoshis, 
                     this._keypair.toAddress()
                 )
             }
         }
-        //balance goes to payto address
-        //payout address is not signed
+        //balance goes to payto (string|Script)
+        //payout output is signed by service provider wallet
         if (payTo) {
-            txb.addOutput(
-                satoshis.toNumber(),
-                Address.fromString(payTo)
+            txb.addOutputScript(
+                satoshis.toNumber(), payTo
             )
         }
         this.lastTx = txb.buildAndSign(this._keypair, makeFuture)
@@ -316,7 +317,7 @@ export class Wallet {
             txb.addInput(splits.utxo.firstItem, this._keypair.pubKey)
             for (let index = 0; index < splits.breakdown.items.length; index++) {
                 const split = splits.breakdown.items[index]
-                txb.addOutput(split.satoshis, this._keypair.toAddress())
+                txb.addOutputAddress(split.satoshis, this._keypair.toAddress())
             }
             this.lastTx = txb.buildAndSign(this._keypair)
             return {

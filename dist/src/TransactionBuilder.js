@@ -42,7 +42,7 @@ var TransactionBuilder = /** @class */ (function () {
         return this;
     };
     TransactionBuilder.prototype.toAddress = function (satoshis, address) {
-        this.addOutput(satoshis, address);
+        this.addOutputAddress(satoshis, address);
         return this;
     };
     TransactionBuilder.prototype.change = function (address) {
@@ -66,7 +66,13 @@ var TransactionBuilder = /** @class */ (function () {
         //return the new length of inputs
         return this.txb.txIns.length;
     };
-    TransactionBuilder.prototype.addOutput = function (satoshis, address) {
+    TransactionBuilder.prototype.addOutputScript = function (satoshis, script) {
+        if (typeof script === "string") {
+            script = new bsv_1.Script().fromString(script);
+        }
+        this.txb.outputToScript(new bsv_1.Bn().fromNumber(satoshis), script);
+    };
+    TransactionBuilder.prototype.addOutputAddress = function (satoshis, address) {
         this.txb.outputToAddress(new bsv_1.Bn().fromNumber(satoshis), address);
     };
     //TODO: might be able to use txbuilder?

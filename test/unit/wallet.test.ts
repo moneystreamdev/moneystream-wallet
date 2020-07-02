@@ -118,7 +118,7 @@ describe('Wallet tests', () => {
     const tokensLessDust = 1000 - 500
     const buildResult = await w.makeStreamableCashTx(
       Long.fromNumber(tokensLessDust),
-      '1KUrv2Ns8SwNkLgVKrVbSHJmdXLpsEvaDf'
+      new KeyPair().fromRandom().toOutputScript()
     )
     expect (buildResult.hex.length).toBeGreaterThan(20)
     expect (buildResult.tx.txIns.length).toBe(1)

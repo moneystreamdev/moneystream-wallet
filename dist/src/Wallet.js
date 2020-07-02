@@ -259,6 +259,7 @@ var Wallet = /** @class */ (function () {
         });
     };
     // legacy p2pkh spend
+    // currently spends to this wallet ;)
     Wallet.prototype.makeSimpleSpend = function (satoshis, utxos) {
         return __awaiter(this, void 0, void 0, function () {
             var filteredUtxos, _a, utxoSatoshis, changeSatoshis, txb;
@@ -323,6 +324,7 @@ var Wallet = /** @class */ (function () {
         });
     };
     // standard method for a streaming wallet
+    // payTo should be script, as instance of Script or string
     Wallet.prototype.makeStreamableCashTx = function (satoshis, payTo, makeFuture, utxos) {
         if (makeFuture === void 0) { makeFuture = true; }
         return __awaiter(this, void 0, void 0, function () {
@@ -367,13 +369,13 @@ var Wallet = /** @class */ (function () {
                             }
                             if (outSatoshis >= 0) {
                                 //console.log(outSatoshis)
-                                txb.addOutput(outSatoshis, this._keypair.toAddress());
+                                txb.addOutputAddress(outSatoshis, this._keypair.toAddress());
                             }
                         }
-                        //balance goes to payto address
-                        //payout address is not signed
+                        //balance goes to payto (string|Script)
+                        //payout output is signed by service provider wallet
                         if (payTo) {
-                            txb.addOutput(satoshis.toNumber(), bsv_1.Address.fromString(payTo));
+                            txb.addOutputScript(satoshis.toNumber(), payTo);
                         }
                         this.lastTx = txb.buildAndSign(this._keypair, makeFuture);
                         return [2 /*return*/, {
@@ -415,7 +417,7 @@ var Wallet = /** @class */ (function () {
                             txb.addInput(splits.utxo.firstItem, this._keypair.pubKey);
                             for (index = 0; index < splits.breakdown.items.length; index++) {
                                 split = splits.breakdown.items[index];
-                                txb.addOutput(split.satoshis, this._keypair.toAddress());
+                                txb.addOutputAddress(split.satoshis, this._keypair.toAddress());
                             }
                             this.lastTx = txb.buildAndSign(this._keypair);
                             return [2 /*return*/, {
