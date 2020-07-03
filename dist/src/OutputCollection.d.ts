@@ -13,6 +13,7 @@ export declare class OutputCollection {
     encumbered(): OutputCollection;
     spent(): OutputCollection;
     get satoshis(): number;
+    static fromJSON(json: any): OutputCollection;
     find(txHashBuf: any, txOutNum: number): UnspentOutput | null;
     filter(satoshis: Long): OutputCollection;
     split(targetCount: number, satoshis: number): {

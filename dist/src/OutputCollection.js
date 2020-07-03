@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OutputCollection = void 0;
 var UnspentOutput_1 = require("./UnspentOutput");
+var bsv_1 = require("bsv");
 //a list of transaction outputs
 var OutputCollection = /** @class */ (function () {
     function OutputCollection(outputs) {
@@ -58,6 +59,17 @@ var OutputCollection = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
+    //create a collection from json
+    OutputCollection.fromJSON = function (json) {
+        var result = new OutputCollection();
+        json._outs.forEach(function (output) {
+            var unspent = new UnspentOutput_1.UnspentOutput(output.satoshis, new bsv_1.Script().fromString(output.script), 
+            //string
+            output.txId, output.outputIndex, output._status);
+            result.add(unspent);
+        });
+        return result;
+    };
     OutputCollection.prototype.find = function (txHashBuf, txOutNum) {
         for (var i = 0; i < this._outs.length; i++) {
             var thisOut = this._outs[i];

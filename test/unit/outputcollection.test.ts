@@ -68,4 +68,16 @@ describe('output collection tests', () => {
         expect(utxos.encumbered().count).toBe(2)
         expect(utxos.spent().count).toBe(0)
     })
+    it('should get output to json', () => {
+        const utxos = createUtxos(2,1)
+        expect(utxos.count).toBe(2)
+        utxos.firstItem.encumber()
+        const sx = JSON.stringify(utxos)
+        const rehydrate = OutputCollection.fromJSON(JSON.parse(sx))
+        expect(rehydrate).toBeInstanceOf(OutputCollection)
+        expect(rehydrate.count).toBe(2)
+        expect(rehydrate.spendable().count).toBe(1)
+        expect(rehydrate.spendable().satoshis).toBe(1)
+    })
+
 })

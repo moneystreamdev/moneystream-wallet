@@ -192,13 +192,13 @@
         "affectsGlobalScope": false
       },
       "../src/UnspentOutput.ts": {
-        "version": "913ad7addde4485e3769526ea94c783d06062d733e55b5dfead4e5a35a536f56",
-        "signature": "0012ebfa65c4c7a5d802b543578a02454b1a6529cf9842767fd161de1b702e07",
+        "version": "1593accfd10801f200c42698335832eeb520a697e5416c5fc2d5ff30a5f396a3",
+        "signature": "6691afaaeb6e09b3c37e59e83758da5542f61df04279c52abd562d6a344a5654",
         "affectsGlobalScope": false
       },
       "../src/OutputCollection.ts": {
-        "version": "ced1ab9cd6e1116dca190dd36fe0e49088ae443c6bfc482e3c5f8eb6ad26259e",
-        "signature": "9aa59edf6317ab38a66f51983b03c4603cc5493cd0ffef0f74f1c6c789619dea",
+        "version": "c49b1c9bff5902261ba247f35e8004f533dbc238724fad5fca222b85c0c4f50d",
+        "signature": "2b86f3b5c71cbe5499912aaf480d8c919a908d372d5c65adbf88b08686cbbb11",
         "affectsGlobalScope": false
       },
       "../src/TransactionBuilder.ts": {
@@ -237,7 +237,7 @@
         "affectsGlobalScope": false
       },
       "../test/unit/outputcollection.test.ts": {
-        "version": "4bed2a1fbb724b5e06269c90f9b53b105fedae3e65779373d6a7bae60f9a1baa",
+        "version": "acc8f9ebf768496943dd5a70ac3cb4a9024fa58700aa5b4388bdc3a972e8539a",
         "signature": "574938e762a716357d423e9ad8036f980b2f1a25d174a841e4744dde28b83601",
         "affectsGlobalScope": false
       },
@@ -1620,6 +1620,7 @@
         "../node_modules/@types/node/ts3.2/fs.d.ts",
         "../node_modules/@types/node/ts3.2/util.d.ts",
         "../node_modules/@types/node/util.d.ts",
+        "../node_modules/bsv/index.d.ts",
         "../src/UnspentOutput.ts"
       ],
       "../src/TransactionBuilder.ts": [

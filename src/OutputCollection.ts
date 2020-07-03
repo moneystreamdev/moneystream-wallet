@@ -1,4 +1,5 @@
 import { UnspentOutput } from "./UnspentOutput"
+import { Script } from 'bsv'
 
 //a list of transaction outputs
 export class OutputCollection {
@@ -39,6 +40,23 @@ export class OutputCollection {
             sum += this._outs[i].satoshis
         }
         return sum
+    }
+
+    //create a collection from json
+    static fromJSON(json:any) {
+        const result = new OutputCollection()
+        json._outs.forEach((output:any) => {
+            const unspent = new UnspentOutput(
+                output.satoshis,
+                new Script().fromString(output.script),
+                //string
+                output.txId,
+                output.outputIndex,
+                output._status
+            )
+            result.add(unspent)
+        })
+        return result
     }
 
     find(txHashBuf:any, txOutNum:number):UnspentOutput|null {

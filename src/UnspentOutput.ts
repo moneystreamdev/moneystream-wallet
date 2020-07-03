@@ -9,11 +9,14 @@ export class UnspentOutput {
     txId:string = ""
     outputIndex:number|undefined = 0
 
-    constructor(satoshis:number,script:typeof Script,txid?:string,txoutindex?:number) {
+    constructor(satoshis:number,script:typeof Script,
+        txid?:string,txoutindex?:number,
+        status?:string) {
         this.script = script
         this.satoshis = satoshis
         this.txId = txid || ""
         this.outputIndex = txoutindex
+        this._status = status || 'available'
     }
 
     get status() { return this._status}
