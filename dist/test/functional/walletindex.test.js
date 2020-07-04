@@ -37,18 +37,21 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var Wallet_1 = require("../../src/Wallet");
+var demo_wif = 'Kyy7baVyD24NHQVJZrap3s5CvaLPUvFfEQ74eYwsBigbjEJu3HBg';
 describe('real wallet works with WOC', function () {
     it('should load wallet balance', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var w;
+        var w, utxos;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     w = new Wallet_1.Wallet();
                     expect(w).toBeInstanceOf(Wallet_1.Wallet);
-                    w.loadWallet('L5o1VbLNhELT6uCu8v7KdZpvVocHWnHBqaHe686ZkMkyszyU6D7n');
+                    w.loadWallet(demo_wif);
                     return [4 /*yield*/, w.loadUnspent()];
                 case 1:
-                    _a.sent();
+                    utxos = _a.sent();
+                    expect(utxos.count).toBeGreaterThan(0);
+                    w.logUtxos(utxos.items);
                     expect(w.balance).toBeGreaterThan(0);
                     console.log(w.balance);
                     return [2 /*return*/];

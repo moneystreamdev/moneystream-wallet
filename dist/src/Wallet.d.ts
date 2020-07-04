@@ -37,7 +37,7 @@ export declare class Wallet {
     loadWallet(wif?: string): void;
     generateKey(): any;
     store(wallet: any): Promise<void>;
-    loadUnspent(): Promise<void>;
+    loadUnspent(): Promise<OutputCollection>;
     logUtxos(utxos: any): void;
     getAnUnspentOutput(force?: boolean): Promise<OutputCollection>;
     makeSimpleSpend(satoshis: Long, utxos?: OutputCollection): Promise<any>;

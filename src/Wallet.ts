@@ -167,10 +167,11 @@ export class Wallet {
         return stored
     }
 
-    async loadUnspent() {
-        await this.getAnUnspentOutput(true)
+    async loadUnspent(): Promise<OutputCollection> {
+        return this.getAnUnspentOutput(true)
     }
 
+    // use OutputCollection.items
     logUtxos(utxos:any) {
         let logit = `In ${this.constructor.name} ${utxos.length} Unspent outputs`
         let tot = 0

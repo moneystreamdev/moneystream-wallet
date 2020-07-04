@@ -207,8 +207,8 @@
         "affectsGlobalScope": false
       },
       "../src/Wallet.ts": {
-        "version": "11a9a9c7d72fed8cfc8ae80a4e6a1946137d3ece386b933dccb14f6948b5d276",
-        "signature": "f3b096a62424465be1f037fe60a55b3ffe2fe4bb353999799eaf2204eeccd8e0",
+        "version": "b93b98ad2a99fa602d4696662fc02ce5ba52d651949c76cedcca8f3b2e147cd5",
+        "signature": "ac7376a052ba5b7c919b876c31f3409296221f04791d53383df391912bbb6df0",
         "affectsGlobalScope": false
       },
       "../src/index.ts": {
@@ -227,7 +227,7 @@
         "affectsGlobalScope": false
       },
       "../test/functional/walletindex.test.ts": {
-        "version": "323b2fbd9535fc0c56061f754f6c4b7c3c91af746ee38d4b95654915d9b8b21f",
+        "version": "11fd12e45cfc17d6a3a72a6f9a89792ad85997100046504284c84983f7864d50",
         "signature": "c662b385625bab2bbf31f48f7256bbb94cef840479496441567674035777a63d",
         "affectsGlobalScope": false
       },
@@ -1696,7 +1696,6 @@
       ],
       "../test/functional/walletindex.test.ts": [
         "../node_modules/@types/graceful-fs/index.d.ts",
-        "../node_modules/@types/long/index.d.ts",
         "../node_modules/@types/node/fs.d.ts",
         "../node_modules/@types/node/ts3.2/fs.d.ts",
         "../node_modules/@types/node/ts3.2/util.d.ts",

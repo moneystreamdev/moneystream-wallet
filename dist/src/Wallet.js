@@ -214,15 +214,11 @@ var Wallet = /** @class */ (function () {
     Wallet.prototype.loadUnspent = function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.getAnUnspentOutput(true)];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
+                return [2 /*return*/, this.getAnUnspentOutput(true)];
             });
         });
     };
+    // use OutputCollection.items
     Wallet.prototype.logUtxos = function (utxos) {
         var logit = "In " + this.constructor.name + " " + utxos.length + " Unspent outputs";
         var tot = 0;
