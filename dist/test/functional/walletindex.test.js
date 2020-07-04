@@ -40,7 +40,7 @@ var Wallet_1 = require("../../src/Wallet");
 var demo_wif = 'Kyy7baVyD24NHQVJZrap3s5CvaLPUvFfEQ74eYwsBigbjEJu3HBg';
 describe('real wallet works with WOC', function () {
     it('should load wallet balance', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var w, utxos;
+        var w, utxos, firstbalance, refreshUtxos;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -52,7 +52,13 @@ describe('real wallet works with WOC', function () {
                     utxos = _a.sent();
                     expect(utxos.count).toBeGreaterThan(0);
                     w.logUtxos(utxos.items);
-                    expect(w.balance).toBeGreaterThan(0);
+                    firstbalance = w.balance;
+                    expect(firstbalance).toBeGreaterThan(0);
+                    return [4 /*yield*/, w.loadUnspent()];
+                case 2:
+                    refreshUtxos = _a.sent();
+                    expect(w.balance).toBe(firstbalance);
+                    expect(refreshUtxos.count).toBe(utxos.count);
                     console.log(w.balance);
                     return [2 /*return*/];
             }

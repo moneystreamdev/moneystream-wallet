@@ -9,7 +9,11 @@ describe('real wallet works with WOC', () => {
         const utxos = await w.loadUnspent()
         expect(utxos.count).toBeGreaterThan(0)
         w.logUtxos(utxos.items)
-        expect(w.balance).toBeGreaterThan(0)
+        const firstbalance = w.balance
+        expect(firstbalance).toBeGreaterThan(0)
+        const refreshUtxos = await w.loadUnspent()
+        expect (w.balance).toBe(firstbalance)
+        expect(refreshUtxos.count).toBe(utxos.count)
         console.log(w.balance)
     })
 })

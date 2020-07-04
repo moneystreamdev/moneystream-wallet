@@ -197,8 +197,8 @@
         "affectsGlobalScope": false
       },
       "../src/OutputCollection.ts": {
-        "version": "c49b1c9bff5902261ba247f35e8004f533dbc238724fad5fca222b85c0c4f50d",
-        "signature": "2b86f3b5c71cbe5499912aaf480d8c919a908d372d5c65adbf88b08686cbbb11",
+        "version": "4a3753386c9b71fe615d4039f20ba9f73feeedea80c6475cb12c7d2203fb6f1a",
+        "signature": "75a4f096fabaaedd145dd96e593ad90244f65d05200e09fc7b159ebf58e3767e",
         "affectsGlobalScope": false
       },
       "../src/TransactionBuilder.ts": {
@@ -207,7 +207,7 @@
         "affectsGlobalScope": false
       },
       "../src/Wallet.ts": {
-        "version": "b93b98ad2a99fa602d4696662fc02ce5ba52d651949c76cedcca8f3b2e147cd5",
+        "version": "7e75828081e0b5f7a6286821f07c9de6922a215e8b41beb579ee869e296e0661",
         "signature": "ac7376a052ba5b7c919b876c31f3409296221f04791d53383df391912bbb6df0",
         "affectsGlobalScope": false
       },
@@ -227,7 +227,7 @@
         "affectsGlobalScope": false
       },
       "../test/functional/walletindex.test.ts": {
-        "version": "11fd12e45cfc17d6a3a72a6f9a89792ad85997100046504284c84983f7864d50",
+        "version": "d55411ef69bb970f38da9c67cb169d71c13bf68d7e5cdbbccdc42e4f900a2d57",
         "signature": "c662b385625bab2bbf31f48f7256bbb94cef840479496441567674035777a63d",
         "affectsGlobalScope": false
       },
@@ -237,7 +237,7 @@
         "affectsGlobalScope": false
       },
       "../test/unit/outputcollection.test.ts": {
-        "version": "acc8f9ebf768496943dd5a70ac3cb4a9024fa58700aa5b4388bdc3a972e8539a",
+        "version": "8311c3d8cec24200f61d593449d7da2c562c858ab4f1d8368a3e9424c9c0dd25",
         "signature": "574938e762a716357d423e9ad8036f980b2f1a25d174a841e4744dde28b83601",
         "affectsGlobalScope": false
       },

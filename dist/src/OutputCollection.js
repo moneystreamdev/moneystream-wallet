@@ -18,8 +18,19 @@ var OutputCollection = /** @class */ (function () {
     OutputCollection.prototype.hasAny = function () {
         return this._outs.length > 0;
     };
-    OutputCollection.prototype.add = function (output) {
-        this._outs.push(output);
+    // unconditional add
+    OutputCollection.prototype.add = function (output) { return this._outs.push(output); };
+    //add it if not already here, leave status unchanged
+    OutputCollection.prototype.add_conditional = function (output) {
+        //if there is no txid (i.e. split) then just add it
+        var found = null;
+        if (output.txId) {
+            found = this.find(Buffer.from(output.txId, 'hex'), output.outputIndex);
+        }
+        if (!found) {
+            return this.add(output);
+        }
+        return this._outs.length;
     };
     Object.defineProperty(OutputCollection.prototype, "count", {
         get: function () { return this._outs.length; },

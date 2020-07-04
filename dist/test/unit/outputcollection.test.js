@@ -93,5 +93,13 @@ describe('output collection tests', function () {
         expect(rehydrate.spendable().count).toBe(1);
         expect(rehydrate.spendable().satoshis).toBe(1);
     });
+    it('should not add duplicate outputs', function () {
+        var outputs = new OutputCollection_1.OutputCollection();
+        var txout = new src_1.UnspentOutput(1, null, someHashBufString, 99);
+        outputs.add_conditional(txout);
+        expect(outputs.count).toBe(1);
+        outputs.add_conditional(txout);
+        expect(outputs.count).toBe(1);
+    });
 });
 //# sourceMappingURL=outputcollection.test.js.map

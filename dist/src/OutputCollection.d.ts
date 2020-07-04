@@ -1,3 +1,4 @@
+/// <reference types="node" />
 /// <reference types="long" />
 import { UnspentOutput } from "./UnspentOutput";
 export declare class OutputCollection {
@@ -5,7 +6,8 @@ export declare class OutputCollection {
     constructor(outputs?: UnspentOutput[]);
     get items(): UnspentOutput[];
     hasAny(): boolean;
-    add(output: any): void;
+    add(output: UnspentOutput): number;
+    add_conditional(output: UnspentOutput): number;
     get count(): number;
     get firstItem(): UnspentOutput;
     get lastItem(): UnspentOutput;
@@ -14,7 +16,7 @@ export declare class OutputCollection {
     spent(): OutputCollection;
     get satoshis(): number;
     static fromJSON(json: any): OutputCollection;
-    find(txHashBuf: any, txOutNum: number): UnspentOutput | null;
+    find(txHashBuf: Buffer, txOutNum: number): UnspentOutput | null;
     filter(satoshis: Long): OutputCollection;
     split(targetCount: number, satoshis: number): {
         utxo: OutputCollection;

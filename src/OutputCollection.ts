@@ -13,8 +13,20 @@ export class OutputCollection {
         return this._outs.length > 0
     }
 
-    add(output:any) {
-        this._outs.push(output)
+    // unconditional add
+    add(output:UnspentOutput):number { return this._outs.push(output) }
+
+    //add it if not already here, leave status unchanged
+    add_conditional(output:UnspentOutput): number {
+        //if there is no txid (i.e. split) then just add it
+        let found = null
+        if (output.txId) {
+            found = this.find(Buffer.from(output.txId,'hex'), output.outputIndex as number)
+        }
+        if (!found) {
+            return this.add(output)
+        }
+        return this._outs.length
     }
 
     get count(): number { return this._outs.length }
@@ -59,7 +71,7 @@ export class OutputCollection {
         return result
     }
 
-    find(txHashBuf:any, txOutNum:number):UnspentOutput|null {
+    find(txHashBuf:Buffer, txOutNum:number):UnspentOutput|null {
         for (let i=0; i<this._outs.length; i++ ) {
             const thisOut = this._outs[i]
             if (thisOut.outputIndex === txOutNum

@@ -233,7 +233,7 @@ var Wallet = /** @class */ (function () {
     //todo cache utxos
     Wallet.prototype.getAnUnspentOutput = function (force) {
         return __awaiter(this, void 0, void 0, function () {
-            var utxos, i, utxo0, newutxo;
+            var utxos, i, utxo0, newutxo, addcount;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -245,7 +245,9 @@ var Wallet = /** @class */ (function () {
                             for (i = 0; i < utxos.length; i++) {
                                 utxo0 = utxos[i];
                                 newutxo = new UnspentOutput_1.UnspentOutput(utxo0.value, this._keypair.toOutputScript(), Buffer.from(utxo0.tx_hash, 'hex').reverse().toString('hex'), utxo0.tx_pos);
-                                this._selectedUtxos.add(newutxo);
+                                console.log(newutxo);
+                                addcount = this._selectedUtxos.add_conditional(newutxo);
+                                console.log(addcount);
                             }
                         }
                         _a.label = 2;

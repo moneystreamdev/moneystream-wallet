@@ -198,7 +198,9 @@ export class Wallet {
                         Buffer.from(utxo0.tx_hash,'hex').reverse().toString('hex'),
                         utxo0.tx_pos
                         )
-                    this._selectedUtxos.add(newutxo)
+                    console.log(newutxo)
+                    const addcount = this._selectedUtxos.add_conditional(newutxo)
+                    console.log(addcount)
                 }
             }
         }
