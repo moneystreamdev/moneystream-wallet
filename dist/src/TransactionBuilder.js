@@ -49,10 +49,24 @@ var TransactionBuilder = /** @class */ (function () {
         this.txb.setChangeAddress(address);
         return this;
     };
+    TransactionBuilder.prototype.hasInput = function (utxo) {
+        for (var index = 0; index < this.txb.txIns.length; index++) {
+            var txin = this.txb.txIns[index];
+            if (txin.txHashBuf.toString('hex') === utxo.txId
+                && txin.txOutNum === utxo.outputIndex) {
+                return true;
+            }
+        }
+        return false;
+    };
     // spend a utxo
     // pubkey is the address it was spent from
     // sighash is the signing method for the input
     TransactionBuilder.prototype.addInput = function (utxo, pubKey, sigHash) {
+        //raise an error if this would be a duplicate input
+        if (this.hasInput(utxo)) {
+            throw new Error("duplicate input " + utxo.txPointer.toString());
+        }
         // make sure this utxo will not get chosen in another session
         utxo.encumber();
         //spend utxo as input, first 3 param required
