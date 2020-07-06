@@ -303,18 +303,19 @@ var Wallet = /** @class */ (function () {
     //tries to load utxos for wallet and
     //throws error if it cannot get any
     Wallet.prototype.tryLoadWalletUtxos = function () {
+        var _a;
         return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+            return __generator(this, function (_b) {
+                switch (_b.label) {
                     case 0:
                         if (!!this._selectedUtxos.hasAny()) return [3 /*break*/, 2];
                         return [4 /*yield*/, this.getAnUnspentOutput()];
                     case 1:
-                        _a.sent();
-                        _a.label = 2;
+                        _b.sent();
+                        _b.label = 2;
                     case 2:
                         if (!this._selectedUtxos.hasAny()) {
-                            throw Error('Manager wallet does not have available utxo!');
+                            throw Error("Wallet " + ((_a = this._keypair) === null || _a === void 0 ? void 0 : _a.toAddress().toString()) + " does not have any unspent outputs!");
                         }
                         return [2 /*return*/];
                 }

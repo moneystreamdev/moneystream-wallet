@@ -239,7 +239,7 @@ export class Wallet {
     async tryLoadWalletUtxos() {
         if (!this._selectedUtxos.hasAny()) await this.getAnUnspentOutput()
         if (!this._selectedUtxos.hasAny()) {
-            throw Error('Manager wallet does not have available utxo!')
+            throw Error(`Wallet ${this._keypair?.toAddress().toString()} does not have any unspent outputs!`)
         }
     }
 
