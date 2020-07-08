@@ -10,7 +10,7 @@ export declare class Wallet {
     protected _dustLimit: number;
     protected _allowMultipleInputs: boolean;
     protected _fundingInputCount?: number;
-    _selectedUtxos: OutputCollection;
+    _selectedUtxos: OutputCollection | null;
     _keypair: KeyPair;
     lastTx: any;
     protected SIGN_MY_INPUT: number;
@@ -21,6 +21,7 @@ export declare class Wallet {
     get selectedUtxos(): OutputCollection;
     set selectedUtxos(val: OutputCollection);
     get balance(): number;
+    clear(): void;
     txInDescription(txIn: any, index: number): {
         value: any;
         desc: string;

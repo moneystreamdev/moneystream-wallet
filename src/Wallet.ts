@@ -26,7 +26,7 @@ export class Wallet {
     //txbuilder has reference to txoutmap, use that instead?
     //private _txOutMap:any
     // a previously encumbered utxo
-    _selectedUtxos: OutputCollection = new OutputCollection()
+    _selectedUtxos: OutputCollection | null = null
     //wallet pub/priv key pair for signing tx
     _keypair!: KeyPair
     //the last transaction this wallet made
@@ -50,12 +50,19 @@ export class Wallet {
     }
 
     get keyPair() { return this._keypair }
-    get selectedUtxos() { return this._selectedUtxos }
+    get selectedUtxos() { 
+        if (!this._selectedUtxos) this._selectedUtxos = new OutputCollection()
+        return this._selectedUtxos 
+    }
     set selectedUtxos(val) { this._selectedUtxos = val }
 
     get balance():number {
         if (!this._selectedUtxos) return 0
-        return this.selectedUtxos.spendable().satoshis
+        return this.selectedUtxos?.spendable().satoshis || 0
+    }
+
+    clear() {
+        this._selectedUtxos = null
     }
 
     txInDescription(txIn:any, index:number) {
@@ -72,7 +79,7 @@ export class Wallet {
     //get the txout that the txin is spending
     getInputOutput(txin:any):any {
         //txout being spent will probably be in _selectedUtxos
-        return this._selectedUtxos.find(txin.txHashBuf, txin.txOutNum)
+        return this._selectedUtxos?.find(txin.txHashBuf, txin.txOutNum)
     }
 
     getTxFund(tx:any):number {
@@ -186,7 +193,7 @@ export class Wallet {
 
     //todo cache utxos
     async getAnUnspentOutput(force?: boolean): Promise<OutputCollection> {
-        if ( force || !this._selectedUtxos.hasAny()) {
+        if ( force || !this._selectedUtxos?.hasAny()) {
             const utxos = await this._index.getUtxosAPI(this._keypair.toAddress())
             if (utxos && utxos.length > 0) {
                 for(let i=0; i<utxos.length; i++)
@@ -198,11 +205,11 @@ export class Wallet {
                         Buffer.from(utxo0.tx_hash,'hex').reverse().toString('hex'),
                         utxo0.tx_pos
                         )
-                    const addcount = this._selectedUtxos.add_conditional(newutxo)
+                    const addcount = this.selectedUtxos.add_conditional(newutxo)
                 }
             }
         }
-        return this._selectedUtxos
+        return this.selectedUtxos
     }
 
     // legacy p2pkh spend
@@ -235,8 +242,8 @@ export class Wallet {
     //tries to load utxos for wallet and
     //throws error if it cannot get any
     async tryLoadWalletUtxos() {
-        if (!this._selectedUtxos.hasAny()) await this.getAnUnspentOutput()
-        if (!this._selectedUtxos.hasAny()) {
+        if (!this.selectedUtxos.hasAny()) await this.getAnUnspentOutput()
+        if (!this.selectedUtxos.hasAny()) {
             throw Error(`Wallet ${this._keypair?.toAddress().toString()} does not have any unspent outputs!`)
         }
     }
@@ -248,7 +255,7 @@ export class Wallet {
         utxos?:OutputCollection) {
         if (!utxos) await this.tryLoadWalletUtxos()
         //from all possible utxos, select enough to pay amount
-        const filteredUtxos = utxos || this._selectedUtxos.spendable().filter(satoshis)
+        const filteredUtxos = utxos || this.selectedUtxos.spendable().filter(satoshis)
         this._fundingInputCount = filteredUtxos.count
         const utxoSatoshis = filteredUtxos.satoshis
         const changeSatoshis = utxoSatoshis - satoshis.toNumber()
@@ -307,7 +314,7 @@ export class Wallet {
         //get utxos not emcumbered
         await this.tryLoadWalletUtxos()
         //from all possible utxos, 
-        const splits = this._selectedUtxos.spendable().split(targetCount, minSatoshis)
+        const splits = this.selectedUtxos.spendable().split(targetCount, minSatoshis)
         //only ones greater than min or dust
         if (splits.utxo.satoshis > 0) {
             splits.breakdown.lastItem.satoshis -= this._dustLimit

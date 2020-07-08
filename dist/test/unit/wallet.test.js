@@ -98,6 +98,14 @@ describe('Wallet tests', function () {
             }
         });
     }); });
+    it('should clear wallet', function () {
+        var w = new Wallet_1.Wallet();
+        w.selectedUtxos = createUtxos(1, 1000);
+        expect(w.balance).toBe(1000);
+        w.clear();
+        expect(w.balance).toBe(0);
+        expect(w.selectedUtxos.hasAny()).toBeFalsy();
+    });
     it('should create simple tx with no lock time', function () { return __awaiter(void 0, void 0, void 0, function () {
         var w, buildResult;
         return __generator(this, function (_a) {

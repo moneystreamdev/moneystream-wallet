@@ -63,7 +63,7 @@ var Wallet = /** @class */ (function () {
         //txbuilder has reference to txoutmap, use that instead?
         //private _txOutMap:any
         // a previously encumbered utxo
-        this._selectedUtxos = new OutputCollection_1.OutputCollection();
+        this._selectedUtxos = null;
         // certifies "I am signing for my input and output, 
         // anyone else can add inputs and outputs"
         this.SIGN_MY_INPUT = bsv_1.Sig.SIGHASH_SINGLE
@@ -81,20 +81,28 @@ var Wallet = /** @class */ (function () {
         configurable: true
     });
     Object.defineProperty(Wallet.prototype, "selectedUtxos", {
-        get: function () { return this._selectedUtxos; },
+        get: function () {
+            if (!this._selectedUtxos)
+                this._selectedUtxos = new OutputCollection_1.OutputCollection();
+            return this._selectedUtxos;
+        },
         set: function (val) { this._selectedUtxos = val; },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(Wallet.prototype, "balance", {
         get: function () {
+            var _a;
             if (!this._selectedUtxos)
                 return 0;
-            return this.selectedUtxos.spendable().satoshis;
+            return ((_a = this.selectedUtxos) === null || _a === void 0 ? void 0 : _a.spendable().satoshis) || 0;
         },
         enumerable: false,
         configurable: true
     });
+    Wallet.prototype.clear = function () {
+        this._selectedUtxos = null;
+    };
     Wallet.prototype.txInDescription = function (txIn, index) {
         var _a;
         var inputValue = (_a = this.getInputOutput(txIn)) === null || _a === void 0 ? void 0 : _a.satoshis;
@@ -108,8 +116,9 @@ var Wallet = /** @class */ (function () {
     };
     //get the txout that the txin is spending
     Wallet.prototype.getInputOutput = function (txin) {
+        var _a;
         //txout being spent will probably be in _selectedUtxos
-        return this._selectedUtxos.find(txin.txHashBuf, txin.txOutNum);
+        return (_a = this._selectedUtxos) === null || _a === void 0 ? void 0 : _a.find(txin.txHashBuf, txin.txOutNum);
     };
     Wallet.prototype.getTxFund = function (tx) {
         var fundingTotal = 0;
@@ -232,24 +241,25 @@ var Wallet = /** @class */ (function () {
     };
     //todo cache utxos
     Wallet.prototype.getAnUnspentOutput = function (force) {
+        var _a;
         return __awaiter(this, void 0, void 0, function () {
             var utxos, i, utxo0, newutxo, addcount;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+            return __generator(this, function (_b) {
+                switch (_b.label) {
                     case 0:
-                        if (!(force || !this._selectedUtxos.hasAny())) return [3 /*break*/, 2];
+                        if (!(force || !((_a = this._selectedUtxos) === null || _a === void 0 ? void 0 : _a.hasAny()))) return [3 /*break*/, 2];
                         return [4 /*yield*/, this._index.getUtxosAPI(this._keypair.toAddress())];
                     case 1:
-                        utxos = _a.sent();
+                        utxos = _b.sent();
                         if (utxos && utxos.length > 0) {
                             for (i = 0; i < utxos.length; i++) {
                                 utxo0 = utxos[i];
                                 newutxo = new UnspentOutput_1.UnspentOutput(utxo0.value, this._keypair.toOutputScript(), Buffer.from(utxo0.tx_hash, 'hex').reverse().toString('hex'), utxo0.tx_pos);
-                                addcount = this._selectedUtxos.add_conditional(newutxo);
+                                addcount = this.selectedUtxos.add_conditional(newutxo);
                             }
                         }
-                        _a.label = 2;
-                    case 2: return [2 /*return*/, this._selectedUtxos];
+                        _b.label = 2;
+                    case 2: return [2 /*return*/, this.selectedUtxos];
                 }
             });
         });
@@ -306,13 +316,13 @@ var Wallet = /** @class */ (function () {
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        if (!!this._selectedUtxos.hasAny()) return [3 /*break*/, 2];
+                        if (!!this.selectedUtxos.hasAny()) return [3 /*break*/, 2];
                         return [4 /*yield*/, this.getAnUnspentOutput()];
                     case 1:
                         _b.sent();
                         _b.label = 2;
                     case 2:
-                        if (!this._selectedUtxos.hasAny()) {
+                        if (!this.selectedUtxos.hasAny()) {
                             throw Error("Wallet " + ((_a = this._keypair) === null || _a === void 0 ? void 0 : _a.toAddress().toString()) + " does not have any unspent outputs!");
                         }
                         return [2 /*return*/];
@@ -337,7 +347,7 @@ var Wallet = /** @class */ (function () {
                         _a.sent();
                         _a.label = 2;
                     case 2:
-                        filteredUtxos = utxos || this._selectedUtxos.spendable().filter(satoshis);
+                        filteredUtxos = utxos || this.selectedUtxos.spendable().filter(satoshis);
                         this._fundingInputCount = filteredUtxos.count;
                         utxoSatoshis = filteredUtxos.satoshis;
                         changeSatoshis = utxoSatoshis - satoshis.toNumber();
@@ -403,7 +413,7 @@ var Wallet = /** @class */ (function () {
                     case 1:
                         //get utxos not emcumbered
                         _a.sent();
-                        splits = this._selectedUtxos.spendable().split(targetCount, minSatoshis);
+                        splits = this.selectedUtxos.spendable().split(targetCount, minSatoshis);
                         //only ones greater than min or dust
                         if (splits.utxo.satoshis > 0) {
                             splits.breakdown.lastItem.satoshis -= this._dustLimit;

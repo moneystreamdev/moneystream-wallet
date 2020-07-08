@@ -57,36 +57,39 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var Wallet_1 = require("../../src/Wallet");
 var Long = __importStar(require("long"));
+//const demo_wif = 'L5o1VbLNhELT6uCu8v7KdZpvVocHWnHBqaHe686ZkMkyszyU6D7n'
+var demo_wif = 'Kyy7baVyD24NHQVJZrap3s5CvaLPUvFfEQ74eYwsBigbjEJu3HBg';
 describe('wallet broadcasts simple spend', function () {
     it('should create transaction', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var w, nftx;
+        var w, buildResult;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     w = new Wallet_1.Wallet();
                     expect(w).toBeInstanceOf(Wallet_1.Wallet);
-                    w.loadWallet('L5o1VbLNhELT6uCu8v7KdZpvVocHWnHBqaHe686ZkMkyszyU6D7n');
+                    w.loadWallet(demo_wif);
                     return [4 /*yield*/, w.makeStreamableCashTx(Long.fromNumber(100))];
                 case 1:
-                    nftx = _a.sent();
+                    buildResult = _a.sent();
                     expect(w.lastTx.txIns.length).toBe(1);
+                    expect(buildResult.utxos.firstItem.satoshis).toBeGreaterThan(20000);
                     return [2 /*return*/];
             }
         });
     }); });
     it('broadcasts', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var sender, sender_hex, sent;
+        var sender, sent, buildResult;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     sender = new Wallet_1.Wallet();
-                    sender.loadWallet('L5o1VbLNhELT6uCu8v7KdZpvVocHWnHBqaHe686ZkMkyszyU6D7n');
-                    sender.logDetails();
+                    sender.loadWallet(demo_wif);
                     return [4 /*yield*/, sender.makeStreamableCashTx(Long.fromNumber(500))];
                 case 1:
-                    sender_hex = _a.sent();
+                    buildResult = _a.sent();
                     expect(sender.lastTx.txIns.length).toBe(1);
                     sender.logDetailsLastTx();
+                    expect(buildResult.utxos.firstItem.satoshis).toBeGreaterThan(20000);
                     return [2 /*return*/];
             }
         });

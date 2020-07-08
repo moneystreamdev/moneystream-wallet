@@ -62,7 +62,14 @@ describe('Wallet tests', () => {
     await expect(
       w.makeSimpleSpend(Long.fromNumber(600))
     ).rejects.toThrow(Error)
-    
+  })
+  it('should clear wallet', () => {
+    const w = new Wallet()
+    w.selectedUtxos = createUtxos(1,1000)
+    expect(w.balance).toBe(1000)
+    w.clear()
+    expect(w.balance).toBe(0)
+    expect(w.selectedUtxos.hasAny()).toBeFalsy()
   })
   it('should create simple tx with no lock time', async () => {
     const w = new Wallet()
