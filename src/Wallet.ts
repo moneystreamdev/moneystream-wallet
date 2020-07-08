@@ -198,9 +198,7 @@ export class Wallet {
                         Buffer.from(utxo0.tx_hash,'hex').reverse().toString('hex'),
                         utxo0.tx_pos
                         )
-                    console.log(newutxo)
                     const addcount = this._selectedUtxos.add_conditional(newutxo)
-                    console.log(addcount)
                 }
             }
         }
@@ -278,7 +276,6 @@ export class Wallet {
                 }
             }
             if (outSatoshis >= 0) {
-                //console.log(outSatoshis)
                 txb.addOutputAddress(
                     outSatoshis, 
                     this._keypair.toAddress()
@@ -286,7 +283,6 @@ export class Wallet {
             }
         }
         //balance goes to payto (string|Script)
-        //payout output is signed by service provider wallet
         if (payTo) {
             txb.addOutputScript(
                 satoshis.toNumber(), payTo
@@ -300,7 +296,6 @@ export class Wallet {
         }
         // at this point, tx is spendable by anyone!
         // only pass it through secure channel to recipient
-        // tx needs further processing before broadcast
     }
 
     // attempt to split utxos, trying to create

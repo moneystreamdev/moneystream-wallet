@@ -245,9 +245,7 @@ var Wallet = /** @class */ (function () {
                             for (i = 0; i < utxos.length; i++) {
                                 utxo0 = utxos[i];
                                 newutxo = new UnspentOutput_1.UnspentOutput(utxo0.value, this._keypair.toOutputScript(), Buffer.from(utxo0.tx_hash, 'hex').reverse().toString('hex'), utxo0.tx_pos);
-                                console.log(newutxo);
                                 addcount = this._selectedUtxos.add_conditional(newutxo);
-                                console.log(addcount);
                             }
                         }
                         _a.label = 2;
@@ -367,12 +365,10 @@ var Wallet = /** @class */ (function () {
                                 }
                             }
                             if (outSatoshis >= 0) {
-                                //console.log(outSatoshis)
                                 txb.addOutputAddress(outSatoshis, this._keypair.toAddress());
                             }
                         }
                         //balance goes to payto (string|Script)
-                        //payout output is signed by service provider wallet
                         if (payTo) {
                             txb.addOutputScript(satoshis.toNumber(), payTo);
                         }
@@ -384,7 +380,6 @@ var Wallet = /** @class */ (function () {
                             }
                             // at this point, tx is spendable by anyone!
                             // only pass it through secure channel to recipient
-                            // tx needs further processing before broadcast
                         ];
                 }
             });
