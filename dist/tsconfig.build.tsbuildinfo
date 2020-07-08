@@ -222,7 +222,7 @@
         "affectsGlobalScope": false
       },
       "../test/functional/simplespend.test.ts": {
-        "version": "33917b200b6a134a1528f9554f0c7c1d5f9de9fa860fd0c6fe0300efdff2ee81",
+        "version": "7bae933746d2e6b5d9ca8b914fb9172e746ce41dd61bbf047db00f1c4dbce9ea",
         "signature": "e3080866f5da32f06e18e06d704f5760a9916d2bb09de5c9594731fdbac8bd98",
         "affectsGlobalScope": false
       },

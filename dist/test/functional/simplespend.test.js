@@ -57,8 +57,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var Wallet_1 = require("../../src/Wallet");
 var Long = __importStar(require("long"));
-//const demo_wif = 'L5o1VbLNhELT6uCu8v7KdZpvVocHWnHBqaHe686ZkMkyszyU6D7n'
-var demo_wif = 'Kyy7baVyD24NHQVJZrap3s5CvaLPUvFfEQ74eYwsBigbjEJu3HBg';
+var demo_wif = 'L5o1VbLNhELT6uCu8v7KdZpvVocHWnHBqaHe686ZkMkyszyU6D7n';
 describe('wallet broadcasts simple spend', function () {
     it('should create transaction', function () { return __awaiter(void 0, void 0, void 0, function () {
         var w, buildResult;
@@ -72,7 +71,7 @@ describe('wallet broadcasts simple spend', function () {
                 case 1:
                     buildResult = _a.sent();
                     expect(w.lastTx.txIns.length).toBe(1);
-                    expect(buildResult.utxos.firstItem.satoshis).toBeGreaterThan(20000);
+                    expect(buildResult.utxos.firstItem.satoshis).toBeGreaterThan(0);
                     return [2 /*return*/];
             }
         });
@@ -89,7 +88,7 @@ describe('wallet broadcasts simple spend', function () {
                     buildResult = _a.sent();
                     expect(sender.lastTx.txIns.length).toBe(1);
                     sender.logDetailsLastTx();
-                    expect(buildResult.utxos.firstItem.satoshis).toBeGreaterThan(20000);
+                    expect(buildResult.utxos.firstItem.satoshis).toBeGreaterThan(0);
                     return [2 /*return*/];
             }
         });
