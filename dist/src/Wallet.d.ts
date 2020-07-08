@@ -26,7 +26,7 @@ export declare class Wallet {
         value: any;
         desc: string;
     };
-    getInputOutput(txin: any): any;
+    getInputOutput(txin: any, index: number): any;
     getTxFund(tx: any): number;
     logDetailsLastTx(): void;
     logDetails(tx?: any): void;

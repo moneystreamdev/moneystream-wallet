@@ -66,7 +66,7 @@ export class Wallet {
     }
 
     txInDescription(txIn:any, index:number) {
-        const inputValue = this.getInputOutput(txIn)?.satoshis
+        const inputValue = this.getInputOutput(txIn, index)?.satoshis
         const inputSeq = txIn.nSequence || this.FINAL
         const inputPrevHash = txIn.txHashBuf.toString('hex')
         const inputPrevIndex = txIn.txOutNum
@@ -77,7 +77,7 @@ export class Wallet {
     }
 
     //get the txout that the txin is spending
-    getInputOutput(txin:any):any {
+    getInputOutput(txin:any, index:number):any {
         //txout being spent will probably be in _selectedUtxos
         return this._selectedUtxos?.find(txin.txHashBuf, txin.txOutNum)
     }
@@ -89,7 +89,7 @@ export class Wallet {
             for (let index = 0; index < len; index++) {
                 const txin = tx.txIns[index]
                 const txout = tx.txOuts[index]
-                const txInputOut = this.getInputOutput(txin)
+                const txInputOut = this.getInputOutput(txin, index)
                 fundingTotal += (txInputOut ? txInputOut.satoshis:0) - txout.valueBn.toNumber()
             }
         }

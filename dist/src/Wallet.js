@@ -105,7 +105,7 @@ var Wallet = /** @class */ (function () {
     };
     Wallet.prototype.txInDescription = function (txIn, index) {
         var _a;
-        var inputValue = (_a = this.getInputOutput(txIn)) === null || _a === void 0 ? void 0 : _a.satoshis;
+        var inputValue = (_a = this.getInputOutput(txIn, index)) === null || _a === void 0 ? void 0 : _a.satoshis;
         var inputSeq = txIn.nSequence || this.FINAL;
         var inputPrevHash = txIn.txHashBuf.toString('hex');
         var inputPrevIndex = txIn.txOutNum;
@@ -115,7 +115,7 @@ var Wallet = /** @class */ (function () {
         return { value: inputValue, desc: "[" + index + "]" + inputValue + ":" + (inputSeq === this.FINAL ? 'Final' : inputSeq.toString()) + " spends " + inputPrevHashCondensed + " Type:" + signingText };
     };
     //get the txout that the txin is spending
-    Wallet.prototype.getInputOutput = function (txin) {
+    Wallet.prototype.getInputOutput = function (txin, index) {
         var _a;
         //txout being spent will probably be in _selectedUtxos
         return (_a = this._selectedUtxos) === null || _a === void 0 ? void 0 : _a.find(txin.txHashBuf, txin.txOutNum);
@@ -127,7 +127,7 @@ var Wallet = /** @class */ (function () {
             for (var index = 0; index < len; index++) {
                 var txin = tx.txIns[index];
                 var txout = tx.txOuts[index];
-                var txInputOut = this.getInputOutput(txin);
+                var txInputOut = this.getInputOutput(txin, index);
                 fundingTotal += (txInputOut ? txInputOut.satoshis : 0) - txout.valueBn.toNumber();
             }
         }
