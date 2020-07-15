@@ -265,8 +265,7 @@ var Wallet = /** @class */ (function () {
         });
     };
     // legacy p2pkh spend
-    // currently spends to this wallet ;)
-    Wallet.prototype.makeSimpleSpend = function (satoshis, utxos) {
+    Wallet.prototype.makeSimpleSpend = function (satoshis, utxos, toAddress) {
         return __awaiter(this, void 0, void 0, function () {
             var filteredUtxos, _a, utxoSatoshis, changeSatoshis, txb;
             return __generator(this, function (_b) {
@@ -293,7 +292,7 @@ var Wallet = /** @class */ (function () {
                         }
                         txb = new TransactionBuilder_1.TransactionBuilder()
                             .from(filteredUtxos.items, this._keypair.pubKey)
-                            .toAddress(changeSatoshis, this._keypair.toAddress())
+                            .toAddress(changeSatoshis, toAddress ? new bsv_1.Address.fromString(toAddress) : this._keypair.toAddress())
                             .change(this._keypair.toAddress());
                         //txb.sign(this._keypair)
                         this.lastTx = txb.buildAndSign(this._keypair);

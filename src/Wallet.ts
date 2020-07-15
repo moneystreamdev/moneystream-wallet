@@ -213,8 +213,7 @@ export class Wallet {
     }
 
     // legacy p2pkh spend
-    // currently spends to this wallet ;)
-    async makeSimpleSpend(satoshis: Long, utxos?:OutputCollection): Promise<any> {
+    async makeSimpleSpend(satoshis: Long, utxos?:OutputCollection, toAddress?:string): Promise<any> {
         if (!this._keypair) { throw new Error('Load wallet before spending') }
         const filteredUtxos = utxos || await this.getAnUnspentOutput()
         if (!filteredUtxos || filteredUtxos.count < 1) {
@@ -227,7 +226,7 @@ export class Wallet {
         }
         const txb = new TransactionBuilder()
             .from(filteredUtxos.items, this._keypair.pubKey)
-            .toAddress(changeSatoshis, this._keypair.toAddress())
+            .toAddress(changeSatoshis, toAddress ? new Address.fromString(toAddress) : this._keypair.toAddress())
             .change(this._keypair.toAddress())
         //txb.sign(this._keypair)
         this.lastTx = txb.buildAndSign(this._keypair)
