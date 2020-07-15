@@ -16,6 +16,7 @@ export declare class OutputCollection {
     spent(): OutputCollection;
     get satoshis(): number;
     static fromJSON(json: any): OutputCollection;
+    findTxOut(txout: UnspentOutput): UnspentOutput | null;
     find(txHashBuf: Buffer, txOutNum: number): UnspentOutput | null;
     filter(satoshis: Long): OutputCollection;
     split(targetCount: number, satoshis: number): {

@@ -87,5 +87,23 @@ describe('output collection tests', () => {
         outputs.add_conditional(txout)
         expect(outputs.count).toBe(1)
     })
+    it ('should find by attribute', () => {
+        const outputs = new OutputCollection()
+        const txout = new UnspentOutput(1,null,someHashBufString,99)
+        outputs.add_conditional(txout)
+        expect(outputs.count).toBe(1)
+        const txfound = outputs.find(Buffer.from(someHashBufString,'hex'), 99)
+        expect(txfound).toBeDefined()
+        expect(txfound?.txId).toBe(txout.txId)
+    })
+    it ('should find by txout', () => {
+        const outputs = new OutputCollection()
+        const txout = new UnspentOutput(1,null,someHashBufString,99)
+        outputs.add_conditional(txout)
+        expect(outputs.count).toBe(1)
+        const txfound = outputs.findTxOut(txout)
+        expect(txfound).toBeDefined()
+        expect(txfound?.txId).toBe(txout.txId)
+    })
 
 })

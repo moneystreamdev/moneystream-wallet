@@ -101,5 +101,23 @@ describe('output collection tests', function () {
         outputs.add_conditional(txout);
         expect(outputs.count).toBe(1);
     });
+    it('should find by attribute', function () {
+        var outputs = new OutputCollection_1.OutputCollection();
+        var txout = new src_1.UnspentOutput(1, null, someHashBufString, 99);
+        outputs.add_conditional(txout);
+        expect(outputs.count).toBe(1);
+        var txfound = outputs.find(Buffer.from(someHashBufString, 'hex'), 99);
+        expect(txfound).toBeDefined();
+        expect(txfound === null || txfound === void 0 ? void 0 : txfound.txId).toBe(txout.txId);
+    });
+    it('should find by txout', function () {
+        var outputs = new OutputCollection_1.OutputCollection();
+        var txout = new src_1.UnspentOutput(1, null, someHashBufString, 99);
+        outputs.add_conditional(txout);
+        expect(outputs.count).toBe(1);
+        var txfound = outputs.findTxOut(txout);
+        expect(txfound).toBeDefined();
+        expect(txfound === null || txfound === void 0 ? void 0 : txfound.txId).toBe(txout.txId);
+    });
 });
 //# sourceMappingURL=outputcollection.test.js.map

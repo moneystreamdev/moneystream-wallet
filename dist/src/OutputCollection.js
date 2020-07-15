@@ -81,6 +81,9 @@ var OutputCollection = /** @class */ (function () {
         });
         return result;
     };
+    OutputCollection.prototype.findTxOut = function (txout) {
+        return this.find(Buffer.from(txout.txId, 'hex'), txout.outputIndex || 0);
+    };
     OutputCollection.prototype.find = function (txHashBuf, txOutNum) {
         for (var i = 0; i < this._outs.length; i++) {
             var thisOut = this._outs[i];

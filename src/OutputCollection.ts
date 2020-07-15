@@ -71,6 +71,10 @@ export class OutputCollection {
         return result
     }
 
+    findTxOut(txout:UnspentOutput):UnspentOutput|null {
+        return this.find(Buffer.from(txout.txId,'hex'), txout.outputIndex || 0)
+    }
+
     find(txHashBuf:Buffer, txOutNum:number):UnspentOutput|null {
         for (let i=0; i<this._outs.length; i++ ) {
             const thisOut = this._outs[i]
