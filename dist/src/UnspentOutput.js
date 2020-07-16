@@ -25,6 +25,12 @@ var UnspentOutput = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
+    UnspentOutput.fromTxOut = function (txOut, txid, txoutindex) {
+        var output = new UnspentOutput(txOut.valueBn.toNumber(), txOut.script);
+        output.txId = txid;
+        output.outputIndex = txoutindex;
+        return output;
+    };
     UnspentOutput.prototype.toTxOut = function () {
         return bsv_1.TxOut.fromProperties(new bsv_1.Bn(this.satoshis), this.script);
     };

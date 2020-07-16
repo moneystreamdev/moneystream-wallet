@@ -9,6 +9,7 @@ export declare class UnspentOutput {
     constructor(satoshis: number, script: typeof Script, txid?: string, txoutindex?: number, status?: string);
     get status(): string;
     get txPointer(): TxPointer;
+    static fromTxOut(txOut: any, txid: string, txoutindex: number): UnspentOutput;
     toTxOut(): any;
     encumber(): void;
     spend(): void;
