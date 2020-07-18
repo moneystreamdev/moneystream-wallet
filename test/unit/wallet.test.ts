@@ -69,6 +69,7 @@ describe('Wallet tests', () => {
     w.selectedUtxos = createUtxos(1,1000)
     const buildResult = await w.makeSimpleSpend(Long.fromNumber(600), undefined, '1SCVmCzdLaECeRkMq3egwJ6yJLwT1x3wu')
     expect(buildResult.hex).toBeDefined()
+    expect(buildResult.tx.txOuts[0].valueBn.toNumber()).toBe(600)
   })
   it('should clear wallet', () => {
     const w = new Wallet()
@@ -88,6 +89,7 @@ describe('Wallet tests', () => {
     expect (buildResult.tx.nLockTime).toBe(0)
     expect (buildResult.tx.txIns.length).toBeGreaterThan(0)
     expect (buildResult.tx.txOuts.length).toBeGreaterThan(0)
+    expect(buildResult.tx.txOuts[0].valueBn.toNumber()).toBe(600)
     w.logDetailsLastTx()
   })
   it('should create streamable tx with lock time', async () => {

@@ -292,9 +292,9 @@ var Wallet = /** @class */ (function () {
                         }
                         txb = new TransactionBuilder_1.TransactionBuilder()
                             .from(filteredUtxos.items, this._keypair.pubKey)
-                            .toAddress(changeSatoshis, toAddress ? bsv_1.Address.fromString(toAddress) : this._keypair.toAddress())
+                            //satoshis is the desired output amount
+                            .toAddress(satoshis.toNumber(), toAddress ? bsv_1.Address.fromString(toAddress) : this._keypair.toAddress())
                             .change(this._keypair.toAddress());
-                        //txb.sign(this._keypair)
                         this.lastTx = txb.buildAndSign(this._keypair);
                         return [2 /*return*/, {
                                 hex: this.lastTx.toHex(),

@@ -110,6 +110,7 @@ describe('Wallet tests', function () {
                 case 1:
                     buildResult = _a.sent();
                     expect(buildResult.hex).toBeDefined();
+                    expect(buildResult.tx.txOuts[0].valueBn.toNumber()).toBe(600);
                     return [2 /*return*/];
             }
         });
@@ -137,6 +138,7 @@ describe('Wallet tests', function () {
                     expect(buildResult.tx.nLockTime).toBe(0);
                     expect(buildResult.tx.txIns.length).toBeGreaterThan(0);
                     expect(buildResult.tx.txOuts.length).toBeGreaterThan(0);
+                    expect(buildResult.tx.txOuts[0].valueBn.toNumber()).toBe(600);
                     w.logDetailsLastTx();
                     return [2 /*return*/];
             }

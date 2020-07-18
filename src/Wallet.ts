@@ -226,9 +226,9 @@ export class Wallet {
         }
         const txb = new TransactionBuilder()
             .from(filteredUtxos.items, this._keypair.pubKey)
-            .toAddress(changeSatoshis, toAddress ? Address.fromString(toAddress) : this._keypair.toAddress())
+            //satoshis is the desired output amount
+            .toAddress(satoshis.toNumber(), toAddress ? Address.fromString(toAddress) : this._keypair.toAddress())
             .change(this._keypair.toAddress())
-        //txb.sign(this._keypair)
         this.lastTx = txb.buildAndSign(this._keypair)
         return {
             hex: this.lastTx.toHex(),
