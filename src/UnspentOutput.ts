@@ -46,6 +46,10 @@ export class UnspentOutput {
         this._status = "hold"
     }
 
+    unencumber() {
+        this._status = "available"
+    }
+
     // mark this utxo when it is finally spent
     // at end of session
     spend() {

@@ -40,6 +40,9 @@ var UnspentOutput = /** @class */ (function () {
     UnspentOutput.prototype.encumber = function () {
         this._status = "hold";
     };
+    UnspentOutput.prototype.unencumber = function () {
+        this._status = "available";
+    };
     // mark this utxo when it is finally spent
     // at end of session
     UnspentOutput.prototype.spend = function () {

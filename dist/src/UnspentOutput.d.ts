@@ -12,6 +12,7 @@ export declare class UnspentOutput {
     static fromTxOut(txOut: any, txid: string, txoutindex: number): UnspentOutput;
     toTxOut(): any;
     encumber(): void;
+    unencumber(): void;
     spend(): void;
 }
 //# sourceMappingURL=UnspentOutput.d.ts.map
