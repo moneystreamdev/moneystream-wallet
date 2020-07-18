@@ -292,7 +292,7 @@ var Wallet = /** @class */ (function () {
                         }
                         txb = new TransactionBuilder_1.TransactionBuilder()
                             .from(filteredUtxos.items, this._keypair.pubKey)
-                            .toAddress(changeSatoshis, toAddress ? new bsv_1.Address.fromString(toAddress) : this._keypair.toAddress())
+                            .toAddress(changeSatoshis, toAddress ? bsv_1.Address.fromString(toAddress) : this._keypair.toAddress())
                             .change(this._keypair.toAddress());
                         //txb.sign(this._keypair)
                         this.lastTx = txb.buildAndSign(this._keypair);

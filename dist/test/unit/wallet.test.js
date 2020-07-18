@@ -98,6 +98,22 @@ describe('Wallet tests', function () {
             }
         });
     }); });
+    it('should spend to address', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var w, buildResult;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    w = new Wallet_1.Wallet();
+                    w.loadWallet();
+                    w.selectedUtxos = createUtxos(1, 1000);
+                    return [4 /*yield*/, w.makeSimpleSpend(Long.fromNumber(600), undefined, '1SCVmCzdLaECeRkMq3egwJ6yJLwT1x3wu')];
+                case 1:
+                    buildResult = _a.sent();
+                    expect(buildResult.hex).toBeDefined();
+                    return [2 /*return*/];
+            }
+        });
+    }); });
     it('should clear wallet', function () {
         var w = new Wallet_1.Wallet();
         w.selectedUtxos = createUtxos(1, 1000);

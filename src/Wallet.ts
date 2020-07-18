@@ -226,7 +226,7 @@ export class Wallet {
         }
         const txb = new TransactionBuilder()
             .from(filteredUtxos.items, this._keypair.pubKey)
-            .toAddress(changeSatoshis, toAddress ? new Address.fromString(toAddress) : this._keypair.toAddress())
+            .toAddress(changeSatoshis, toAddress ? Address.fromString(toAddress) : this._keypair.toAddress())
             .change(this._keypair.toAddress())
         //txb.sign(this._keypair)
         this.lastTx = txb.buildAndSign(this._keypair)

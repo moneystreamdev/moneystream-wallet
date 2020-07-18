@@ -63,6 +63,13 @@ describe('Wallet tests', () => {
       w.makeSimpleSpend(Long.fromNumber(600))
     ).rejects.toThrow(Error)
   })
+  it('should spend to address', async () => {
+    const w = new Wallet()
+    w.loadWallet()
+    w.selectedUtxos = createUtxos(1,1000)
+    const buildResult = await w.makeSimpleSpend(Long.fromNumber(600), undefined, '1SCVmCzdLaECeRkMq3egwJ6yJLwT1x3wu')
+    expect(buildResult.hex).toBeDefined()
+  })
   it('should clear wallet', () => {
     const w = new Wallet()
     w.selectedUtxos = createUtxos(1,1000)
