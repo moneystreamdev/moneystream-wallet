@@ -277,8 +277,41 @@ describe('Wallet tests', function () {
                     buildResult = _a.sent();
                     expect(buildResult === null || buildResult === void 0 ? void 0 : buildResult.tx.txIns.length).toBe(1);
                     expect(buildResult === null || buildResult === void 0 ? void 0 : buildResult.tx.txOuts.length).toBe(10);
-                    expect(buildResult === null || buildResult === void 0 ? void 0 : buildResult.tx.txOuts[0].valueBn.toNumber()).toBe(1000);
-                    expect(buildResult === null || buildResult === void 0 ? void 0 : buildResult.tx.txOuts[9].valueBn.toNumber()).toBe(500);
+                    expect(buildResult === null || buildResult === void 0 ? void 0 : buildResult.tx.txOuts[0].valueBn.toNumber()).toBe(945);
+                    expect(buildResult === null || buildResult === void 0 ? void 0 : buildResult.tx.txOuts[9].valueBn.toNumber()).toBe(945);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    it('should create tx to split a utxo', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var w, utxos, total, count, splitAmount, buildResult;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    w = new Wallet_1.Wallet();
+                    w.loadWallet();
+                    utxos = new OutputCollection_1.OutputCollection();
+                    utxos.add(new UnspentOutput_1.UnspentOutput(3611, w.keyPair.toOutputScript(), someHashBufString, 0));
+                    utxos.add(new UnspentOutput_1.UnspentOutput(3450, w.keyPair.toOutputScript(), someHashBufString, 1));
+                    utxos.add(new UnspentOutput_1.UnspentOutput(5323, w.keyPair.toOutputScript(), someHashBufString, 2));
+                    utxos.add(new UnspentOutput_1.UnspentOutput(2987, w.keyPair.toOutputScript(), someHashBufString, 3));
+                    utxos.add(new UnspentOutput_1.UnspentOutput(2987, w.keyPair.toOutputScript(), someHashBufString, 4));
+                    utxos.add(new UnspentOutput_1.UnspentOutput(2487, w.keyPair.toOutputScript(), someHashBufString, 5));
+                    w.selectedUtxos = utxos;
+                    total = 5323 //utxos.satoshis
+                    ;
+                    count = 7;
+                    splitAmount = Math.floor(total / count);
+                    return [4 /*yield*/, w.split(count, 600)];
+                case 1:
+                    buildResult = _a.sent();
+                    expect(buildResult === null || buildResult === void 0 ? void 0 : buildResult.tx.txIns.length).toBe(1);
+                    expect(buildResult === null || buildResult === void 0 ? void 0 : buildResult.tx.txOuts.length).toBe(count);
+                    expect(buildResult === null || buildResult === void 0 ? void 0 : buildResult.tx.txOuts[0].valueBn.toNumber()).toBe(600);
+                    expect(buildResult === null || buildResult === void 0 ? void 0 : buildResult.tx.txOuts[count - 1].valueBn.toNumber()).toBeGreaterThan(545);
+                    expect(splitAmount).toBeGreaterThan(545);
+                    //TODO: make sure fee is reasonable before broadcast
+                    w.logDetails(buildResult === null || buildResult === void 0 ? void 0 : buildResult.tx);
                     return [2 /*return*/];
             }
         });

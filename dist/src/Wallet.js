@@ -415,13 +415,13 @@ var Wallet = /** @class */ (function () {
                         splits = this.selectedUtxos.spendable().split(targetCount, minSatoshis);
                         //only ones greater than min or dust
                         if (splits.utxo.satoshis > 0) {
-                            splits.breakdown.lastItem.satoshis -= this._dustLimit;
                             txb = new TransactionBuilder_1.TransactionBuilder();
                             txb.addInput(splits.utxo.firstItem, this._keypair.pubKey);
                             for (index = 0; index < splits.breakdown.items.length; index++) {
                                 split = splits.breakdown.items[index];
                                 txb.addOutputAddress(split.satoshis, this._keypair.toAddress());
                             }
+                            console.log(splits.breakdown);
                             this.lastTx = txb.buildAndSign(this._keypair);
                             return [2 /*return*/, {
                                     hex: this.lastTx.toHex(),

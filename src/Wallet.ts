@@ -316,13 +316,15 @@ export class Wallet {
         const splits = this.selectedUtxos.spendable().split(targetCount, minSatoshis)
         //only ones greater than min or dust
         if (splits.utxo.satoshis > 0) {
-            splits.breakdown.lastItem.satoshis -= this._dustLimit
+            //mining fee is maken out of each utxo instead of at end
+            //splits.breakdown.lastItem.satoshis -= this._dustLimit
             const txb = new TransactionBuilder()
             txb.addInput(splits.utxo.firstItem, this._keypair.pubKey)
             for (let index = 0; index < splits.breakdown.items.length; index++) {
                 const split = splits.breakdown.items[index]
                 txb.addOutputAddress(split.satoshis, this._keypair.toAddress())
             }
+            console.log(splits.breakdown)
             this.lastTx = txb.buildAndSign(this._keypair)
             return {
                 hex: this.lastTx.toHex(),

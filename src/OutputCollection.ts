@@ -109,6 +109,7 @@ export class OutputCollection {
     // return a OutputCollection for wallet to
     // operate upon
     split (targetCount:number, satoshis:number) {
+        const DUST = 546
         this._outs.sort((a:any,b:any) => b.satoshis - a.satoshis)
         const result = 
             {
@@ -120,8 +121,8 @@ export class OutputCollection {
             const largest:UnspentOutput = this._outs[0]
             let actualBreak = satoshis
             if (largest.satoshis > satoshis) {
-                const desiredBreak = largest.satoshis / targetCount
-                if (desiredBreak > satoshis) {
+                const desiredBreak = Math.floor((largest.satoshis - DUST) / targetCount)
+                if (desiredBreak < satoshis) {
                     actualBreak = desiredBreak
                 }
             }
@@ -132,6 +133,7 @@ export class OutputCollection {
                     new UnspentOutput(actualBreak,largest.script)
                 )
                 remaining -= actualBreak
+                console.log(remaining)
             }
             if (result.breakdown.count > 0) {
                 result.breakdown.lastItem.satoshis += remaining

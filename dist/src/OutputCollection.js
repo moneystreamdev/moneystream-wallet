@@ -117,6 +117,7 @@ var OutputCollection = /** @class */ (function () {
     // return a OutputCollection for wallet to
     // operate upon
     OutputCollection.prototype.split = function (targetCount, satoshis) {
+        var DUST = 546;
         this._outs.sort(function (a, b) { return b.satoshis - a.satoshis; });
         var result = {
             utxo: new OutputCollection(),
@@ -127,8 +128,8 @@ var OutputCollection = /** @class */ (function () {
             var largest = this._outs[0];
             var actualBreak = satoshis;
             if (largest.satoshis > satoshis) {
-                var desiredBreak = largest.satoshis / targetCount;
-                if (desiredBreak > satoshis) {
+                var desiredBreak = Math.floor((largest.satoshis - DUST) / targetCount);
+                if (desiredBreak < satoshis) {
                     actualBreak = desiredBreak;
                 }
             }
@@ -137,6 +138,7 @@ var OutputCollection = /** @class */ (function () {
             while (remaining > 0) {
                 result.breakdown.add(new UnspentOutput_1.UnspentOutput(actualBreak, largest.script));
                 remaining -= actualBreak;
+                console.log(remaining);
             }
             if (result.breakdown.count > 0) {
                 result.breakdown.lastItem.satoshis += remaining;
