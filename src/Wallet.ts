@@ -90,7 +90,7 @@ export class Wallet {
                 const txin = tx.txIns[index]
                 const txout = tx.txOuts[index]
                 const txInputOut = this.getInputOutput(txin, index)
-                fundingTotal += (txInputOut ? txInputOut.satoshis:0) - txout.valueBn.toNumber()
+                fundingTotal += (txInputOut ? txInputOut.satoshis:0) - (txout?txout.valueBn.toNumber():0)
             }
         }
         return fundingTotal
@@ -247,20 +247,32 @@ export class Wallet {
         }
     }
 
+    selectExpandableInputs (satoshis:Long, utxos?: OutputCollection):OutputCollection {
+        const filtered = utxos || this.selectedUtxos.spendable().filter(satoshis)
+        if (filtered.satoshis < satoshis.toNumber()) {
+            // add additional utxos
+            const additional = this.selectedUtxos.spendable().filter(satoshis)
+            // TODO: make sure filtered includes utxos
+            filtered.addOutputs(additional)
+        }
+        return filtered
+    }
+
     // standard method for a streaming wallet
     // payTo should be script, as instance of Script or string
     async makeStreamableCashTx(satoshis:Long, payTo?:string|any, 
         makeFuture:boolean = true,
         utxos?:OutputCollection) {
         if (!utxos) await this.tryLoadWalletUtxos()
-        //from all possible utxos, select enough to pay amount
-        const filteredUtxos = utxos || this.selectedUtxos.spendable().filter(satoshis)
+        const filteredUtxos = this.selectExpandableInputs(satoshis, utxos)
         this._fundingInputCount = filteredUtxos.count
         const utxoSatoshis = filteredUtxos.satoshis
         const changeSatoshis = utxoSatoshis - satoshis.toNumber()
         if (changeSatoshis < 0) {
-            throw Error(`the utxo ran out of money ${changeSatoshis}`)
+            throw Error(`the utxo ran out of money ${this._fundingInputCount} ${utxoSatoshis} ${changeSatoshis}`)
         }
+        console.log(utxoSatoshis)
+        console.log(changeSatoshis)
         const txb = new TransactionBuilder()
         txb.setChangeAddress(this._keypair.toAddress())
         //TODO: for now, inputs have to be more than dust limit!
@@ -272,16 +284,16 @@ export class Wallet {
             const inputCount = txb.addInput(element, this._keypair.pubKey, this.SIGN_MY_INPUT)
             if (inputCount !== index + 1) throw Error(`Input did not get added!`)
             //TODO: need many more unit tests
-            let outSatoshis = this._dustLimit
+            let outSatoshis = 0 //this._dustLimit
             if (index === 0) {
-                if (filteredUtxos.count < 2) {
-                    // only one output, put all change there
+                // if (filteredUtxos.count < 2) {
+                //     // only one output, put all change there
                     outSatoshis = Math.max(changeSatoshis,0)
-                } else {
-                    outSatoshis = Math.max(changeSatoshis-dustTotal,0)
-                }
+                // } else {
+                //     outSatoshis = Math.max(changeSatoshis-dustTotal,0)
+                // }
             }
-            if (outSatoshis >= 0) {
+            if (outSatoshis > 0) {
                 txb.addOutputAddress(
                     outSatoshis, 
                     this._keypair.toAddress()

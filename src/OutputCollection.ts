@@ -29,6 +29,12 @@ export class OutputCollection {
         return this._outs.length
     }
 
+    addOutputs(outs: OutputCollection) {
+        outs.items.forEach(output => {
+            this.add(output)
+        })
+    }
+
     get count(): number { return this._outs.length }
 
     get firstItem(): UnspentOutput { return this._outs[0]}    
