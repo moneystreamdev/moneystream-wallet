@@ -128,7 +128,7 @@ var Wallet = /** @class */ (function () {
                 var txin = tx.txIns[index];
                 var txout = tx.txOuts[index];
                 var txInputOut = this.getInputOutput(txin, index);
-                fundingTotal += (txInputOut ? txInputOut.satoshis : 0) - txout.valueBn.toNumber();
+                fundingTotal += (txInputOut ? txInputOut.satoshis : 0) - (txout ? txout.valueBn.toNumber() : 0);
             }
         }
         return fundingTotal;
@@ -329,6 +329,16 @@ var Wallet = /** @class */ (function () {
             });
         });
     };
+    Wallet.prototype.selectExpandableInputs = function (satoshis, utxos) {
+        var filtered = utxos || this.selectedUtxos.spendable().filter(satoshis);
+        if (filtered.satoshis < satoshis.toNumber()) {
+            // add additional utxos
+            var additional = this.selectedUtxos.spendable().filter(satoshis);
+            // TODO: make sure filtered includes utxos
+            filtered.addOutputs(additional);
+        }
+        return filtered;
+    };
     // standard method for a streaming wallet
     // payTo should be script, as instance of Script or string
     Wallet.prototype.makeStreamableCashTx = function (satoshis, payTo, makeFuture, utxos) {
@@ -339,20 +349,20 @@ var Wallet = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         if (!!utxos) return [3 /*break*/, 2];
-                        return [4 /*yield*/, this.tryLoadWalletUtxos()
-                            //from all possible utxos, select enough to pay amount
-                        ];
+                        return [4 /*yield*/, this.tryLoadWalletUtxos()];
                     case 1:
                         _a.sent();
                         _a.label = 2;
                     case 2:
-                        filteredUtxos = utxos || this.selectedUtxos.spendable().filter(satoshis);
+                        filteredUtxos = this.selectExpandableInputs(satoshis, utxos);
                         this._fundingInputCount = filteredUtxos.count;
                         utxoSatoshis = filteredUtxos.satoshis;
                         changeSatoshis = utxoSatoshis - satoshis.toNumber();
                         if (changeSatoshis < 0) {
-                            throw Error("the utxo ran out of money " + changeSatoshis);
+                            throw Error("the utxo ran out of money " + this._fundingInputCount + " " + utxoSatoshis + " " + changeSatoshis);
                         }
+                        console.log(utxoSatoshis);
+                        console.log(changeSatoshis);
                         txb = new TransactionBuilder_1.TransactionBuilder();
                         txb.setChangeAddress(this._keypair.toAddress());
                         dustTotal = filteredUtxos.count * this._dustLimit;
@@ -363,17 +373,17 @@ var Wallet = /** @class */ (function () {
                             inputCount = txb.addInput(element, this._keypair.pubKey, this.SIGN_MY_INPUT);
                             if (inputCount !== index + 1)
                                 throw Error("Input did not get added!");
-                            outSatoshis = this._dustLimit;
+                            outSatoshis = 0 //this._dustLimit
+                            ;
                             if (index === 0) {
-                                if (filteredUtxos.count < 2) {
-                                    // only one output, put all change there
-                                    outSatoshis = Math.max(changeSatoshis, 0);
-                                }
-                                else {
-                                    outSatoshis = Math.max(changeSatoshis - dustTotal, 0);
-                                }
+                                // if (filteredUtxos.count < 2) {
+                                //     // only one output, put all change there
+                                outSatoshis = Math.max(changeSatoshis, 0);
+                                // } else {
+                                //     outSatoshis = Math.max(changeSatoshis-dustTotal,0)
+                                // }
                             }
-                            if (outSatoshis >= 0) {
+                            if (outSatoshis > 0) {
                                 txb.addOutputAddress(outSatoshis, this._keypair.toAddress());
                             }
                         }

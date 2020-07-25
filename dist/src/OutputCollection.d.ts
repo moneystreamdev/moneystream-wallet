@@ -8,6 +8,7 @@ export declare class OutputCollection {
     hasAny(): boolean;
     add(output: UnspentOutput): number;
     add_conditional(output: UnspentOutput): number;
+    addOutputs(outs: OutputCollection): void;
     get count(): number;
     get firstItem(): UnspentOutput;
     get lastItem(): UnspentOutput;

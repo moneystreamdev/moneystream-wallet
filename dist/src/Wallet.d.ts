@@ -43,6 +43,7 @@ export declare class Wallet {
     getAnUnspentOutput(force?: boolean): Promise<OutputCollection>;
     makeSimpleSpend(satoshis: Long, utxos?: OutputCollection, toAddress?: string): Promise<any>;
     tryLoadWalletUtxos(): Promise<void>;
+    selectExpandableInputs(satoshis: Long, utxos?: OutputCollection): OutputCollection;
     makeStreamableCashTx(satoshis: Long, payTo?: string | any, makeFuture?: boolean, utxos?: OutputCollection): Promise<{
         hex: any;
         tx: any;

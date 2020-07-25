@@ -197,8 +197,8 @@
         "affectsGlobalScope": false
       },
       "../src/outputcollection.ts": {
-        "version": "29d541f301d21b4d5c681ed6b50bc5263cb64b1e874f8e64fcd4b9cc028642e8",
-        "signature": "87969777047af338362bc0c3439816583406773c964c8286b796a48e6e0022bc",
+        "version": "325969ee4be72c2ee9acb2685786cc79f50dca1bc4f90fead7e839fd82662bf3",
+        "signature": "7df3a462e632f1e4098b49f3af32ee01685e0ed5e8b0c906030892524697a5df",
         "affectsGlobalScope": false
       },
       "../src/transactionbuilder.ts": {
@@ -207,8 +207,8 @@
         "affectsGlobalScope": false
       },
       "../src/wallet.ts": {
-        "version": "8b47d2fc2d12a940d81cc67d367c6ba7367ccac02e5f1070b7f2d8a99994ef31",
-        "signature": "0152ab82458a202f7c15545ec15fb310117b963b3d3dcb3d15b97c891fb6791a",
+        "version": "713af729c62035fffbaa70701365476dec85e9433ed9fc5e3eaee4dc3bb6b239",
+        "signature": "4f829f34854cdc3cb1f26b927189f53098d616c3f5953866d27f5b1bfe6ee981",
         "affectsGlobalScope": false
       },
       "../src/index.ts": {
@@ -219,6 +219,11 @@
       "../node_modules/@types/long/index.d.ts": {
         "version": "e8465811693dfe4e96ef2b3dffda539d6edfe896961b7af37b44db2c0e48532b",
         "signature": "e8465811693dfe4e96ef2b3dffda539d6edfe896961b7af37b44db2c0e48532b",
+        "affectsGlobalScope": false
+      },
+      "../test/functional/browse.test.ts": {
+        "version": "4ae41d5ab3f5d166ec59cfaa351de6f7241b76cb6613f58af23414db3d9fd499",
+        "signature": "b0929b144c040bf58c018bc0a6d04d38f6193ffc959162b4fabb302e2580f914",
         "affectsGlobalScope": false
       },
       "../test/functional/simplespend.test.ts": {
@@ -262,7 +267,7 @@
         "affectsGlobalScope": false
       },
       "../test/unit/wallet.test.ts": {
-        "version": "40f754c9242ae5c2820f6a6bfa3ff26a0524353351584e8b463320621f7d0fb5",
+        "version": "6fcc27989f01d7eeaefd033c184fe616eb64a95767be63c640140fca006b9372",
         "signature": "5a3d7dbaa82f6a3b361a7a538fbfd6c166a33b8c92b5ae5bcc7d494e402d55db",
         "affectsGlobalScope": false
       },
@@ -1695,6 +1700,17 @@
         "../src/transactionbuilder.ts",
         "../src/unspentoutput.ts"
       ],
+      "../test/functional/browse.test.ts": [
+        "../node_modules/@types/graceful-fs/index.d.ts",
+        "../node_modules/@types/long/index.d.ts",
+        "../node_modules/@types/node/fs.d.ts",
+        "../node_modules/@types/node/ts3.2/fs.d.ts",
+        "../node_modules/@types/node/ts3.2/util.d.ts",
+        "../node_modules/@types/node/util.d.ts",
+        "../src/keypair.ts",
+        "../src/outputcollection.ts",
+        "../src/wallet.ts"
+      ],
       "../test/functional/simplespend.test.ts": [
         "../node_modules/@types/graceful-fs/index.d.ts",
         "../node_modules/@types/long/index.d.ts",
@@ -2854,6 +2870,7 @@
       "../src/unspentoutput.ts",
       "../src/utils/portablefetch.ts",
       "../src/wallet.ts",
+      "../test/functional/browse.test.ts",
       "../test/functional/simplespend.test.ts",
       "../test/functional/walletindex.test.ts",
       "../test/unit/keypair.test.ts",
