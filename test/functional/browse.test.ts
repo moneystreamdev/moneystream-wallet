@@ -28,7 +28,8 @@ describe('browse stream', () => {
             utxos = buildResult.utxos
             expect(buildResult.tx.txIns.length).toBeGreaterThan(0)
             expect(w.getTxFund(buildResult.tx)).toBe(packetsize*x)
-            w.logDetailsLastTx()
+            //w.logDetailsLastTx()
         }
+        expect(w.fundingInputCount).toBe(19)
     })
 })

@@ -60,6 +60,7 @@ export class Wallet {
         if (!this._selectedUtxos) return 0
         return this.selectedUtxos?.spendable().satoshis || 0
     }
+    get fundingInputCount() { return this._fundingInputCount }
 
     clear() {
         this._selectedUtxos = null
@@ -88,10 +89,11 @@ export class Wallet {
             const len = this._fundingInputCount || tx.txIns.length
             for (let index = 0; index < len; index++) {
                 const txin = tx.txIns[index]
-                const txout = tx.txOuts[index]
                 const txInputOut = this.getInputOutput(txin, index)
-                fundingTotal += (txInputOut ? txInputOut.satoshis:0) - (txout?txout.valueBn.toNumber():0)
+                fundingTotal += (txInputOut ? txInputOut.satoshis:0)
             }
+            const txout = tx.txOuts[0]
+            fundingTotal -= (txout?txout.valueBn.toNumber():0)
         }
         return fundingTotal
     }
@@ -271,8 +273,8 @@ export class Wallet {
         if (changeSatoshis < 0) {
             throw Error(`the utxo ran out of money ${this._fundingInputCount} ${utxoSatoshis} ${changeSatoshis}`)
         }
-        console.log(utxoSatoshis)
-        console.log(changeSatoshis)
+        // console.log(utxoSatoshis)
+        // console.log(changeSatoshis)
         const txb = new TransactionBuilder()
         txb.setChangeAddress(this._keypair.toAddress())
         //TODO: for now, inputs have to be more than dust limit!

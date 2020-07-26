@@ -3,6 +3,7 @@ import * as Long from 'long'
 import { KeyPair } from '../../src/KeyPair'
 import { OutputCollection } from '../../src/OutputCollection'
 import { UnspentOutput } from '../../src/UnspentOutput'
+import {Bn} from 'bsv'
 
 const dustLimit = 500
 const someHashBufString = '1aebb7d0776cec663cbbdd87f200bf15406adb0ef91916d102bcd7f86c86934e'
@@ -151,6 +152,9 @@ describe('Wallet tests', () => {
     expect(buildResult.tx.txIns.length).toBe(2)
     expect(buildResult.tx.txOuts.length).toBe(1)
     expect(buildResult.tx.txOuts[0].valueBn.toNumber()).toBe(500)
+    expect(w.getTxFund(w.lastTx)).toBe(2500)
+    // add an output, funding doesnt change
+    buildResult.tx.addTxOut(new Bn().fromNumber(100), w.keyPair.toOutputScript()) 
     expect(w.getTxFund(w.lastTx)).toBe(2500)
   })
   it('should create streamable tx with increasing', async () => {
