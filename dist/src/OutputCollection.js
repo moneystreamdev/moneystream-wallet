@@ -32,6 +32,12 @@ var OutputCollection = /** @class */ (function () {
         }
         return this._outs.length;
     };
+    OutputCollection.prototype.addOutputs = function (outs) {
+        var _this = this;
+        outs.items.forEach(function (output) {
+            _this.add(output);
+        });
+    };
     Object.defineProperty(OutputCollection.prototype, "count", {
         get: function () { return this._outs.length; },
         enumerable: false,

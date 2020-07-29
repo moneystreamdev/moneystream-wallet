@@ -60,6 +60,7 @@ var Long = __importStar(require("long"));
 var KeyPair_1 = require("../../src/KeyPair");
 var OutputCollection_1 = require("../../src/OutputCollection");
 var UnspentOutput_1 = require("../../src/UnspentOutput");
+var bsv_1 = require("bsv");
 var dustLimit = 500;
 var someHashBufString = '1aebb7d0776cec663cbbdd87f200bf15406adb0ef91916d102bcd7f86c86934e';
 var dummyOutput1 = new UnspentOutput_1.UnspentOutput(1000, new KeyPair_1.KeyPair().fromRandom().toOutputScript(), someHashBufString, 0);
@@ -158,7 +159,7 @@ describe('Wallet tests', function () {
                     expect(buildResult.hex.length).toBeGreaterThan(20);
                     expect(buildResult.tx.nLockTime).toBeGreaterThan(0);
                     expect(buildResult.tx.txIns.length).toBeGreaterThan(0);
-                    expect(buildResult.tx.txOuts.length).toBeGreaterThan(0);
+                    expect(buildResult.tx.txOuts.length).toBe(0);
                     return [2 /*return*/];
             }
         });
@@ -177,7 +178,7 @@ describe('Wallet tests', function () {
                     expect(buildResult.hex.length).toBeGreaterThan(20);
                     expect(buildResult.tx.nLockTime).toBe(0);
                     expect(buildResult.tx.txIns.length).toBeGreaterThan(0);
-                    expect(buildResult.tx.txOuts.length).toBeGreaterThan(0);
+                    expect(buildResult.tx.txOuts.length).toBe(0);
                     return [2 /*return*/];
             }
         });
@@ -232,10 +233,42 @@ describe('Wallet tests', function () {
                     buildResult = _a.sent();
                     expect(buildResult.hex.length).toBeGreaterThan(20);
                     expect(buildResult.tx.txIns.length).toBe(2);
-                    expect(buildResult.tx.txOuts.length).toBe(2);
-                    expect(buildResult.tx.txOuts[0].valueBn.toNumber()).toBe(0);
-                    expect(buildResult.tx.txOuts[1].valueBn.toNumber()).toBe(500);
+                    expect(buildResult.tx.txOuts.length).toBe(1);
+                    expect(buildResult.tx.txOuts[0].valueBn.toNumber()).toBe(500);
                     expect(w.getTxFund(w.lastTx)).toBe(2500);
+                    // add an output, funding doesnt change
+                    buildResult.tx.addTxOut(new bsv_1.Bn().fromNumber(100), w.keyPair.toOutputScript());
+                    expect(w.getTxFund(w.lastTx)).toBe(2500);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    it('should create streamable tx with increasing', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var w, buildResult, buildResult2;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    w = new Wallet_1.Wallet();
+                    w.loadWallet();
+                    w.selectedUtxos = makeDummyTwo();
+                    return [4 /*yield*/, w.makeStreamableCashTx(Long.fromNumber(100))];
+                case 1:
+                    buildResult = _a.sent();
+                    expect(buildResult.hex.length).toBeGreaterThan(20);
+                    expect(buildResult.tx.txIns.length).toBe(1);
+                    expect(buildResult.tx.txOuts.length).toBe(1);
+                    expect(buildResult.tx.txOuts[0].valueBn.toNumber()).toBe(1900);
+                    //expect(buildResult.tx.txOuts[1].valueBn.toNumber()).toBe(500)
+                    expect(w.getTxFund(w.lastTx)).toBe(100);
+                    return [4 /*yield*/, w.makeStreamableCashTx(Long.fromNumber(2100), null, true, buildResult.utxos)];
+                case 2:
+                    buildResult2 = _a.sent();
+                    expect(buildResult2.hex.length).toBeGreaterThan(20);
+                    expect(buildResult2.tx.txIns.length).toBe(2);
+                    w.logDetailsLastTx();
+                    expect(w.getTxFund(buildResult2.tx)).toBe(2100);
+                    expect(buildResult2.tx.txOuts.length).toBe(1);
+                    expect(buildResult2.tx.txOuts[0].valueBn.toNumber()).toBe(900);
                     return [2 /*return*/];
             }
         });
@@ -344,7 +377,7 @@ describe('Wallet tests', function () {
                     expect(buildResult.hex.length).toBeGreaterThan(20);
                     expect(buildResult === null || buildResult === void 0 ? void 0 : buildResult.tx.nLockTime).toBeGreaterThan(0);
                     expect(buildResult === null || buildResult === void 0 ? void 0 : buildResult.tx.txIns.length).toBe(257);
-                    expect(buildResult === null || buildResult === void 0 ? void 0 : buildResult.tx.txOuts.length).toBeGreaterThan(0);
+                    expect(buildResult === null || buildResult === void 0 ? void 0 : buildResult.tx.txOuts.length).toBe(0);
                     return [2 /*return*/];
             }
         });
