@@ -60,6 +60,7 @@ var Long = __importStar(require("long"));
 var KeyPair_1 = require("../../src/KeyPair");
 var OutputCollection_1 = require("../../src/OutputCollection");
 var UnspentOutput_1 = require("../../src/UnspentOutput");
+var bsv_1 = require("bsv");
 var dustLimit = 500;
 var someHashBufString = '1aebb7d0776cec663cbbdd87f200bf15406adb0ef91916d102bcd7f86c86934e';
 var dummyOutput1 = new UnspentOutput_1.UnspentOutput(1000, new KeyPair_1.KeyPair().fromRandom().toOutputScript(), someHashBufString, 0);
@@ -234,6 +235,9 @@ describe('Wallet tests', function () {
                     expect(buildResult.tx.txIns.length).toBe(2);
                     expect(buildResult.tx.txOuts.length).toBe(1);
                     expect(buildResult.tx.txOuts[0].valueBn.toNumber()).toBe(500);
+                    expect(w.getTxFund(w.lastTx)).toBe(2500);
+                    // add an output, funding doesnt change
+                    buildResult.tx.addTxOut(new bsv_1.Bn().fromNumber(100), w.keyPair.toOutputScript());
                     expect(w.getTxFund(w.lastTx)).toBe(2500);
                     return [2 /*return*/];
             }

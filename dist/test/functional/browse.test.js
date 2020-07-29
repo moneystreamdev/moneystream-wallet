@@ -61,6 +61,7 @@ var Long = __importStar(require("long"));
 var demo_wif = 'L5bxi2ef2R8LuTvQbGwkY9w6KJzpPckqRQMnjtD8D2EFqjGeJnSq';
 var keyPair = new KeyPair_1.KeyPair().fromRandom();
 // stream from a real wallet
+// with max inputs 1 the last hex tx is the max spendable tx
 describe('browse stream', function () {
     it('should browse session', function () { return __awaiter(void 0, void 0, void 0, function () {
         var w, packetsize, iterations, utxos, x, buildResult;
@@ -75,12 +76,12 @@ describe('browse stream', function () {
                     _a.sent();
                     expect(w.balance).toBeGreaterThan(0);
                     packetsize = 500;
-                    iterations = Math.floor(w.balance / packetsize);
+                    iterations = Math.floor((w.balance - 546) / packetsize);
                     console.log("streaming " + iterations + " money packets");
                     x = 1;
                     _a.label = 2;
                 case 2:
-                    if (!(x < iterations)) return [3 /*break*/, 5];
+                    if (!(x <= iterations)) return [3 /*break*/, 5];
                     return [4 /*yield*/, w.makeStreamableCashTx(Long.fromNumber(packetsize * x), null, //keyPair.toOutputScript(),
                         true, utxos)];
                 case 3:
@@ -88,12 +89,16 @@ describe('browse stream', function () {
                     utxos = buildResult.utxos;
                     expect(buildResult.tx.txIns.length).toBeGreaterThan(0);
                     expect(w.getTxFund(buildResult.tx)).toBe(packetsize * x);
-                    w.logDetailsLastTx();
+                    //w.logDetailsLastTx()
+                    console.log(buildResult.hex);
                     _a.label = 4;
                 case 4:
                     x++;
                     return [3 /*break*/, 2];
-                case 5: return [2 /*return*/];
+                case 5:
+                    w.logDetailsLastTx();
+                    expect(w.fundingInputCount).toBe(2);
+                    return [2 /*return*/];
             }
         });
     }); });

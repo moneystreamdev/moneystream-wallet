@@ -7,13 +7,15 @@ export declare class Wallet {
     protected readonly FINAL: number;
     _isDebug: boolean;
     protected _walletFileName: string;
+    protected _maxInputs: number;
     protected _dustLimit: number;
     protected _allowMultipleInputs: boolean;
     protected _fundingInputCount?: number;
     _selectedUtxos: OutputCollection | null;
     _keypair: KeyPair;
     lastTx: any;
-    protected SIGN_MY_INPUT: number;
+    protected SIGN_INPUT_CHANGE: number;
+    protected SIGN_INPUT_NOCHANGE: number;
     protected _storage: IStorage;
     protected _index: IIndexingService;
     constructor(storage?: IStorage, index?: IIndexingService);
@@ -21,6 +23,7 @@ export declare class Wallet {
     get selectedUtxos(): OutputCollection;
     set selectedUtxos(val: OutputCollection);
     get balance(): number;
+    get fundingInputCount(): number | undefined;
     clear(): void;
     txInDescription(txIn: any, index: number): {
         value: any;
@@ -48,6 +51,7 @@ export declare class Wallet {
         hex: any;
         tx: any;
         utxos: OutputCollection;
+        txOutMap: any;
     }>;
     split(targetCount: number, satoshis: number): Promise<{
         hex: any;
