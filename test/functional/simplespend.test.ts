@@ -1,7 +1,9 @@
 import { Wallet } from '../../src/Wallet'
+import { OutputCollection } from '../../src/OutputCollection'
 import * as Long from 'long'
 
-const demo_wif = 'L5o1VbLNhELT6uCu8v7KdZpvVocHWnHBqaHe686ZkMkyszyU6D7n'
+const demo_wif = 'L5bxi2ef2R8LuTvQbGwkY9w6KJzpPckqRQMnjtD8D2EFqjGeJnSq'
+//const demo_wif = 'L5o1VbLNhELT6uCu8v7KdZpvVocHWnHBqaHe686ZkMkyszyU6D7n'
 
 describe('wallet broadcasts simple spend', () => {
     it ('should create transaction', () => {
@@ -35,4 +37,5 @@ describe('wallet broadcasts simple spend', () => {
 //         // //result should be 32 byte hex
 //         // expect(sent.length).toBe(64)
 //     },10000)
+
 })

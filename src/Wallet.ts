@@ -90,7 +90,7 @@ export class Wallet {
 
     getTxFund(tx:any):number {
         let fundingTotal = 0
-        if (tx.txIns.length > 0 && tx.txOuts.length > 0) {
+        if (tx.txIns.length > 0) {
             const len = this.fundingInputCount || tx.txIns.length
             for (let index = 0; index < len; index++) {
                 const txin = tx.txIns[index]
@@ -257,9 +257,10 @@ export class Wallet {
 
     selectExpandableInputs (satoshis:Long, utxos?: OutputCollection):OutputCollection {
         const filtered = utxos || this.selectedUtxos.spendable().filter(satoshis)
-        if (filtered.count < this._maxInputs && filtered.satoshis < satoshis.toNumber()) {
+        //console.log(`${filtered.satoshis} < ${satoshis.toNumber() - this._dustLimit}`)
+        if (filtered.count < this._maxInputs && filtered.satoshis < (satoshis.toNumber() + this._dustLimit)) {
             // add additional utxos
-            const additional = this.selectedUtxos.spendable().filter(satoshis)
+            const additional = this.selectedUtxos.spendable().filter(satoshis.add(this._dustLimit))
             // TODO: make sure filtered includes utxos
             filtered.addOutputs(additional)
         }
@@ -289,15 +290,15 @@ export class Wallet {
         //TODO: could spread them out?
         for (let index = 0; index < this._fundingInputCount; index++) {
             const element = filteredUtxos.items[index]
-            const inputCount = txb.addInput(element, this._keypair.pubKey, 
-                index === 0 ? this.SIGN_INPUT_CHANGE : this.SIGN_INPUT_NOCHANGE
-            )
-            if (inputCount !== index + 1) throw Error(`Input did not get added!`)
-            //TODO: need many more unit tests
             let outSatoshis = 0 //this._dustLimit
             if (index === 0) {
                 outSatoshis = Math.max(changeSatoshis,0)
             }
+            const inputCount = txb.addInput(element, this._keypair.pubKey, 
+                index === 0 && outSatoshis>0 ? this.SIGN_INPUT_CHANGE : this.SIGN_INPUT_NOCHANGE
+            )
+            if (inputCount !== index + 1) throw Error(`Input did not get added!`)
+            //TODO: need many more unit tests
             if (outSatoshis > 0) {
                 txb.addOutputAddress(
                     outSatoshis, 

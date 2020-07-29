@@ -131,7 +131,7 @@ var Wallet = /** @class */ (function () {
     };
     Wallet.prototype.getTxFund = function (tx) {
         var fundingTotal = 0;
-        if (tx.txIns.length > 0 && tx.txOuts.length > 0) {
+        if (tx.txIns.length > 0) {
             var len = this.fundingInputCount || tx.txIns.length;
             for (var index = 0; index < len; index++) {
                 var txin = tx.txIns[index];
@@ -342,9 +342,10 @@ var Wallet = /** @class */ (function () {
     };
     Wallet.prototype.selectExpandableInputs = function (satoshis, utxos) {
         var filtered = utxos || this.selectedUtxos.spendable().filter(satoshis);
-        if (filtered.count < this._maxInputs && filtered.satoshis < satoshis.toNumber()) {
+        //console.log(`${filtered.satoshis} < ${satoshis.toNumber() - this._dustLimit}`)
+        if (filtered.count < this._maxInputs && filtered.satoshis < (satoshis.toNumber() + this._dustLimit)) {
             // add additional utxos
-            var additional = this.selectedUtxos.spendable().filter(satoshis);
+            var additional = this.selectedUtxos.spendable().filter(satoshis.add(this._dustLimit));
             // TODO: make sure filtered includes utxos
             filtered.addOutputs(additional);
         }
@@ -355,7 +356,7 @@ var Wallet = /** @class */ (function () {
     Wallet.prototype.makeStreamableCashTx = function (satoshis, payTo, makeFuture, utxos) {
         if (makeFuture === void 0) { makeFuture = true; }
         return __awaiter(this, void 0, void 0, function () {
-            var filteredUtxos, utxoSatoshis, changeSatoshis, txb, dustTotal, index, element, inputCount, outSatoshis;
+            var filteredUtxos, utxoSatoshis, changeSatoshis, txb, dustTotal, index, element, outSatoshis, inputCount;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -379,14 +380,15 @@ var Wallet = /** @class */ (function () {
                         //TODO: could spread them out?
                         for (index = 0; index < this._fundingInputCount; index++) {
                             element = filteredUtxos.items[index];
-                            inputCount = txb.addInput(element, this._keypair.pubKey, index === 0 ? this.SIGN_INPUT_CHANGE : this.SIGN_INPUT_NOCHANGE);
-                            if (inputCount !== index + 1)
-                                throw Error("Input did not get added!");
                             outSatoshis = 0 //this._dustLimit
                             ;
                             if (index === 0) {
                                 outSatoshis = Math.max(changeSatoshis, 0);
                             }
+                            inputCount = txb.addInput(element, this._keypair.pubKey, index === 0 && outSatoshis > 0 ? this.SIGN_INPUT_CHANGE : this.SIGN_INPUT_NOCHANGE);
+                            if (inputCount !== index + 1)
+                                throw Error("Input did not get added!");
+                            //TODO: need many more unit tests
                             if (outSatoshis > 0) {
                                 txb.addOutputAddress(outSatoshis, this._keypair.toAddress());
                             }

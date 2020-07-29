@@ -58,13 +58,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var Wallet_1 = require("../../src/Wallet");
 var KeyPair_1 = require("../../src/KeyPair");
 var Long = __importStar(require("long"));
+var DUST_LIMIT = 546;
 var demo_wif = 'L5bxi2ef2R8LuTvQbGwkY9w6KJzpPckqRQMnjtD8D2EFqjGeJnSq';
 var keyPair = new KeyPair_1.KeyPair().fromRandom();
 // stream from a real wallet
 // with max inputs 1 the last hex tx is the max spendable tx
 describe('browse stream', function () {
     it('should browse session', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var w, packetsize, iterations, utxos, x, buildResult;
+        var w, packetsize, iterations, utxos, lastBuild, x, buildResult, lastChange, lastFund, buildResult;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -76,29 +77,44 @@ describe('browse stream', function () {
                     _a.sent();
                     expect(w.balance).toBeGreaterThan(0);
                     packetsize = 500;
-                    iterations = Math.floor((w.balance - 546) / packetsize);
+                    iterations = Math.floor(w.balance / packetsize);
+                    lastBuild = null;
                     console.log("streaming " + iterations + " money packets");
                     x = 1;
                     _a.label = 2;
                 case 2:
-                    if (!(x <= iterations)) return [3 /*break*/, 5];
+                    if (!(x < iterations)) return [3 /*break*/, 5];
                     return [4 /*yield*/, w.makeStreamableCashTx(Long.fromNumber(packetsize * x), null, //keyPair.toOutputScript(),
                         true, utxos)];
                 case 3:
                     buildResult = _a.sent();
                     utxos = buildResult.utxos;
+                    lastBuild = buildResult;
+                    w.logDetailsLastTx();
                     expect(buildResult.tx.txIns.length).toBeGreaterThan(0);
+                    // wallet should add utxos and not leave any dust outputs
+                    expect(buildResult.tx.txOuts[0].valueBn.toNumber()).toBeGreaterThan(DUST_LIMIT);
                     expect(w.getTxFund(buildResult.tx)).toBe(packetsize * x);
-                    //w.logDetailsLastTx()
                     console.log(buildResult.hex);
                     _a.label = 4;
                 case 4:
                     x++;
                     return [3 /*break*/, 2];
                 case 5:
+                    if (!lastBuild) return [3 /*break*/, 7];
+                    lastChange = lastBuild.tx.txOuts[0].valueBn.toNumber();
+                    expect(lastChange).toBeGreaterThan(DUST_LIMIT);
+                    expect(lastChange).toBeLessThan(DUST_LIMIT * 2);
+                    lastFund = w.getTxFund(lastBuild.tx);
+                    return [4 /*yield*/, w.makeStreamableCashTx(Long.fromNumber(lastFund + lastChange), null, true, utxos)];
+                case 6:
+                    buildResult = _a.sent();
                     w.logDetailsLastTx();
-                    expect(w.fundingInputCount).toBe(2);
-                    return [2 /*return*/];
+                    // should be no change outputs, all inputs signed NONE
+                    expect(buildResult.tx.txOuts.length).toBe(0);
+                    expect(w.getTxFund(buildResult.tx)).toBe(lastFund + lastChange);
+                    _a.label = 7;
+                case 7: return [2 /*return*/];
             }
         });
     }); });
