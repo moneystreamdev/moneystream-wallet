@@ -31,7 +31,7 @@ export class OutputCollection {
 
     addOutputs(outs: OutputCollection) {
         outs.items.forEach(output => {
-            this.add(output)
+            this.add_conditional(output)
         })
     }
 

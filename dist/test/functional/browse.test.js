@@ -72,9 +72,12 @@ describe('browse stream', function () {
                     w = new Wallet_1.Wallet();
                     expect(w).toBeInstanceOf(Wallet_1.Wallet);
                     w.loadWallet(demo_wif);
-                    return [4 /*yield*/, w.loadUnspent()];
+                    return [4 /*yield*/, w.loadUnspent()
+                        //console.log(w.selectedUtxos)
+                    ];
                 case 1:
                     _a.sent();
+                    //console.log(w.selectedUtxos)
                     expect(w.balance).toBeGreaterThan(0);
                     packetsize = 500;
                     iterations = Math.floor(w.balance / packetsize);
@@ -84,6 +87,7 @@ describe('browse stream', function () {
                     _a.label = 2;
                 case 2:
                     if (!(x < iterations)) return [3 /*break*/, 5];
+                    console.log("iteration " + x + " of " + iterations);
                     return [4 /*yield*/, w.makeStreamableCashTx(Long.fromNumber(packetsize * x), null, //keyPair.toOutputScript(),
                         true, utxos)];
                 case 3:

@@ -35,7 +35,7 @@ var OutputCollection = /** @class */ (function () {
     OutputCollection.prototype.addOutputs = function (outs) {
         var _this = this;
         outs.items.forEach(function (output) {
-            _this.add(output);
+            _this.add_conditional(output);
         });
     };
     Object.defineProperty(OutputCollection.prototype, "count", {

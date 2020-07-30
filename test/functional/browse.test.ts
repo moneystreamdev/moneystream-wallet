@@ -16,6 +16,7 @@ describe('browse stream', () => {
         expect(w).toBeInstanceOf(Wallet)
         w.loadWallet(demo_wif)
         await w.loadUnspent()
+        //console.log(w.selectedUtxos)
         expect(w.balance).toBeGreaterThan(0)
         const packetsize = 500
         const iterations = Math.floor(w.balance/packetsize)
@@ -23,6 +24,7 @@ describe('browse stream', () => {
         let lastBuild = null
         console.log(`streaming ${iterations} money packets`)
         for( let x = 1; x < iterations; x++) {
+            console.log(`iteration ${x} of ${iterations}`)
             const buildResult = await w.makeStreamableCashTx(
                 Long.fromNumber(packetsize*x),
                 null, //keyPair.toOutputScript(),
