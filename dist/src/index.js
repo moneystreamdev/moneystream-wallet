@@ -12,6 +12,8 @@ var TxPointer_1 = require("./TxPointer");
 Object.defineProperty(exports, "TxPointer", { enumerable: true, get: function () { return TxPointer_1.TxPointer; } });
 var OutputCollection_1 = require("./OutputCollection");
 Object.defineProperty(exports, "OutputCollection", { enumerable: true, get: function () { return OutputCollection_1.OutputCollection; } });
+var FileSystemStorage_1 = require("./FileSystemStorage");
+Object.defineProperty(exports, "FileSystemStorage", { enumerable: true, get: function () { return FileSystemStorage_1.default; } });
 var IndexingService_1 = require("./IndexingService");
 Object.defineProperty(exports, "IndexingService", { enumerable: true, get: function () { return IndexingService_1.default; } });
 //# sourceMappingURL=index.js.map

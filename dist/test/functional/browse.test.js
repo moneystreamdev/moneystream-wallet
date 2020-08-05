@@ -65,7 +65,7 @@ var keyPair = new KeyPair_1.KeyPair().fromRandom();
 // with max inputs 1 the last hex tx is the max spendable tx
 describe('browse stream', function () {
     it('should browse session', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var w, packetsize, iterations, utxos, lastBuild, x, buildResult, lastChange, lastFund, buildResult;
+        var w, balance, packetsize, iterations, utxos, lastBuild, x, buildResult, lastChange, lastFund, buildResult;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -77,12 +77,12 @@ describe('browse stream', function () {
                     ];
                 case 1:
                     _a.sent();
-                    //console.log(w.selectedUtxos)
-                    expect(w.balance).toBeGreaterThan(0);
+                    balance = w.balance;
+                    expect(balance).toBeGreaterThan(0);
                     packetsize = 500;
-                    iterations = Math.floor(w.balance / packetsize);
+                    iterations = Math.floor(balance / packetsize);
                     lastBuild = null;
-                    console.log("streaming " + iterations + " money packets");
+                    console.log("streaming " + iterations + " money packets (" + w.balance + "/500)");
                     x = 1;
                     _a.label = 2;
                 case 2:
@@ -94,12 +94,11 @@ describe('browse stream', function () {
                     buildResult = _a.sent();
                     utxos = buildResult.utxos;
                     lastBuild = buildResult;
-                    w.logDetailsLastTx();
+                    //w.logDetailsLastTx()
                     expect(buildResult.tx.txIns.length).toBeGreaterThan(0);
                     // wallet should add utxos and not leave any dust outputs
                     expect(buildResult.tx.txOuts[0].valueBn.toNumber()).toBeGreaterThan(DUST_LIMIT);
                     expect(w.getTxFund(buildResult.tx)).toBe(packetsize * x);
-                    console.log(buildResult.hex);
                     _a.label = 4;
                 case 4:
                     x++;

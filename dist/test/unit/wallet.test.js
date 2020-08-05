@@ -362,21 +362,22 @@ describe('Wallet tests', function () {
         });
     }); });
     it('should create streamable tx with more than 256 inputs', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var w, lotsOfUtxos, buildResult;
+        var size, w, lotsOfUtxos, buildResult;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
+                    size = 258;
                     w = new Wallet_1.Wallet();
                     w.loadWallet();
-                    lotsOfUtxos = createUtxos(258, 1000);
-                    expect(lotsOfUtxos.count).toBe(258);
+                    lotsOfUtxos = createUtxos(size, 1000);
+                    expect(lotsOfUtxos.count).toBe(size);
                     w.selectedUtxos = lotsOfUtxos;
-                    return [4 /*yield*/, w.makeStreamableCashTx(Long.fromNumber(257 * 1000))];
+                    return [4 /*yield*/, w.makeStreamableCashTx(Long.fromNumber(size * 1000))];
                 case 1:
                     buildResult = _a.sent();
                     expect(buildResult.hex.length).toBeGreaterThan(20);
                     expect(buildResult === null || buildResult === void 0 ? void 0 : buildResult.tx.nLockTime).toBeGreaterThan(0);
-                    expect(buildResult === null || buildResult === void 0 ? void 0 : buildResult.tx.txIns.length).toBe(257);
+                    expect(buildResult === null || buildResult === void 0 ? void 0 : buildResult.tx.txIns.length).toBe(size);
                     expect(buildResult === null || buildResult === void 0 ? void 0 : buildResult.tx.txOuts.length).toBe(0);
                     return [2 /*return*/];
             }

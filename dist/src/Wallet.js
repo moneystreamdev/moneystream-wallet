@@ -75,7 +75,7 @@ var Wallet = /** @class */ (function () {
             | bsv_1.Sig.SIGHASH_FORKID;
         this._isDebug = true;
         this._walletFileName = 'wallet.json';
-        this._dustLimit = 500;
+        this._dustLimit = 546;
         this._storage = storage || new FileSystemStorage_1.default(this._walletFileName);
         this._index = index || new IndexingService_1.default();
     }
@@ -342,11 +342,12 @@ var Wallet = /** @class */ (function () {
     };
     Wallet.prototype.selectExpandableInputs = function (satoshis, utxos) {
         var filtered = utxos || this.selectedUtxos.spendable().filter(satoshis);
-        //console.log(`${filtered.satoshis} < ${satoshis.toNumber() - this._dustLimit}`)
+        console.log(filtered.satoshis + " < " + (satoshis.toNumber() + this._dustLimit));
         if (filtered.count < this._maxInputs && filtered.satoshis < (satoshis.toNumber() + this._dustLimit)) {
             // add additional utxos
             var additional = this.selectedUtxos.spendable().filter(satoshis.add(this._dustLimit));
             // TODO: make sure filtered includes utxos
+            console.log(additional);
             filtered.addOutputs(additional);
         }
         return filtered;
