@@ -239,17 +239,18 @@ describe('Wallet tests', () => {
     expect(w.balance).toBe(9)
   })
   it('should create streamable tx with more than 256 inputs', async () => {
+    const size = 258
     const w = new Wallet()
     w.loadWallet()
-    const lotsOfUtxos = createUtxos(258,1000)
-    expect(lotsOfUtxos.count).toBe(258)
+    const lotsOfUtxos = createUtxos(size,1000)
+    expect(lotsOfUtxos.count).toBe(size)
     w.selectedUtxos = lotsOfUtxos
     const buildResult = await w.makeStreamableCashTx(
-      Long.fromNumber(257*1000)
+      Long.fromNumber(size*1000)
     )
     expect (buildResult.hex.length).toBeGreaterThan(20)
     expect (buildResult?.tx.nLockTime).toBeGreaterThan(0)
-    expect (buildResult?.tx.txIns.length).toBe(257)
+    expect (buildResult?.tx.txIns.length).toBe(size)
     expect (buildResult?.tx.txOuts.length).toBe(0)
   })
   it('encumbers utxo', async () => {

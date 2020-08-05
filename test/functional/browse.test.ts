@@ -17,12 +17,13 @@ describe('browse stream', () => {
         w.loadWallet(demo_wif)
         await w.loadUnspent()
         //console.log(w.selectedUtxos)
-        expect(w.balance).toBeGreaterThan(0)
+        const balance = w.balance
+        expect(balance).toBeGreaterThan(0)
         const packetsize = 500
-        const iterations = Math.floor(w.balance/packetsize)
+        const iterations = Math.floor(balance/packetsize)
         let utxos!: OutputCollection
         let lastBuild = null
-        console.log(`streaming ${iterations} money packets`)
+        console.log(`streaming ${iterations} money packets (${w.balance}/500)`)
         for( let x = 1; x < iterations; x++) {
             console.log(`iteration ${x} of ${iterations}`)
             const buildResult = await w.makeStreamableCashTx(
@@ -33,12 +34,12 @@ describe('browse stream', () => {
             )
             utxos = buildResult.utxos
             lastBuild = buildResult
-            w.logDetailsLastTx()
+            //w.logDetailsLastTx()
             expect(buildResult.tx.txIns.length).toBeGreaterThan(0)
             // wallet should add utxos and not leave any dust outputs
             expect (buildResult.tx.txOuts[0].valueBn.toNumber()).toBeGreaterThan(DUST_LIMIT)
             expect(w.getTxFund(buildResult.tx)).toBe(packetsize*x)
-            console.log(buildResult.hex)
+            //console.log(buildResult.hex)
         }
         // there should be enough utxos for one or two more spends
         if (lastBuild) {

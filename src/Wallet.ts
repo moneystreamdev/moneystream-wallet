@@ -49,7 +49,7 @@ export class Wallet {
     constructor(storage?:IStorage, index?:IIndexingService) {
         this._isDebug = true
         this._walletFileName = 'wallet.json'
-        this._dustLimit = 500
+        this._dustLimit = 546
         this._storage = storage || new FileSystemStorage(this._walletFileName)
         this._index = index || new IndexingService()
     }
@@ -257,11 +257,12 @@ export class Wallet {
 
     selectExpandableInputs (satoshis:Long, utxos?: OutputCollection):OutputCollection {
         const filtered = utxos || this.selectedUtxos.spendable().filter(satoshis)
-        //console.log(`${filtered.satoshis} < ${satoshis.toNumber() - this._dustLimit}`)
+        console.log(`${filtered.satoshis} < ${satoshis.toNumber() + this._dustLimit}`)
         if (filtered.count < this._maxInputs && filtered.satoshis < (satoshis.toNumber() + this._dustLimit)) {
             // add additional utxos
             const additional = this.selectedUtxos.spendable().filter(satoshis.add(this._dustLimit))
             // TODO: make sure filtered includes utxos
+            console.log(additional)
             filtered.addOutputs(additional)
         }
         return filtered
