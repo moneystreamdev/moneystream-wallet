@@ -55,6 +55,8 @@ var Wallet = /** @class */ (function () {
     function Wallet(storage, index) {
         this.FINAL = 0xffffffff;
         this._maxInputs = 999;
+        // if true, allows wallet to be completely spent
+        this._allowFundingBelowRequested = true;
         //true if user can combine inputs to extend session
         this._allowMultipleInputs = true;
         //outputs that this wallet needs to deal with
@@ -342,12 +344,11 @@ var Wallet = /** @class */ (function () {
     };
     Wallet.prototype.selectExpandableInputs = function (satoshis, utxos) {
         var filtered = utxos || this.selectedUtxos.spendable().filter(satoshis);
-        console.log(filtered.satoshis + " < " + (satoshis.toNumber() + this._dustLimit));
+        // console.log(`${filtered.satoshis} < ${satoshis.toNumber() + this._dustLimit}`)
         if (filtered.count < this._maxInputs && filtered.satoshis < (satoshis.toNumber() + this._dustLimit)) {
             // add additional utxos
             var additional = this.selectedUtxos.spendable().filter(satoshis.add(this._dustLimit));
-            // TODO: make sure filtered includes utxos
-            console.log(additional);
+            // TODO: make sure filtered includes previous utxos
             filtered.addOutputs(additional);
         }
         return filtered;
@@ -372,7 +373,17 @@ var Wallet = /** @class */ (function () {
                         utxoSatoshis = filteredUtxos.satoshis;
                         changeSatoshis = utxoSatoshis - satoshis.toNumber();
                         if (changeSatoshis < 0) {
-                            throw Error("the utxo ran out of money " + this.fundingInputCount + " " + utxoSatoshis + " " + changeSatoshis);
+                            if (this._allowFundingBelowRequested) {
+                                if (Math.abs(changeSatoshis) <= this._dustLimit) {
+                                    // the deficit was less than dust
+                                    // wallet is about to run out of money
+                                    // exhaust remaining funds
+                                    changeSatoshis = 0;
+                                }
+                            }
+                            else {
+                                throw Error("the wallet ran out of money " + this.fundingInputCount + " " + utxoSatoshis + " " + changeSatoshis);
+                            }
                         }
                         txb = new TransactionBuilder_1.TransactionBuilder();
                         txb.setChangeAddress(this._keypair.toAddress());

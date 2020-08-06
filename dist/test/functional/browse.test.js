@@ -61,11 +61,12 @@ var Long = __importStar(require("long"));
 var DUST_LIMIT = 546;
 var demo_wif = 'L5bxi2ef2R8LuTvQbGwkY9w6KJzpPckqRQMnjtD8D2EFqjGeJnSq';
 var keyPair = new KeyPair_1.KeyPair().fromRandom();
+// This is a functional test, not a unit test
 // stream from a real wallet
 // with max inputs 1 the last hex tx is the max spendable tx
 describe('browse stream', function () {
     it('should browse session', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var w, balance, packetsize, iterations, utxos, lastBuild, x, buildResult, lastChange, lastFund, buildResult;
+        var w, balance, packetsize, iterations, utxos, lastBuild, x, buildResult;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -79,15 +80,15 @@ describe('browse stream', function () {
                     _a.sent();
                     balance = w.balance;
                     expect(balance).toBeGreaterThan(0);
-                    packetsize = 500;
-                    iterations = Math.floor(balance / packetsize);
+                    packetsize = 250;
+                    iterations = Math.ceil(balance / packetsize);
                     lastBuild = null;
                     console.log("streaming " + iterations + " money packets (" + w.balance + "/500)");
                     x = 1;
                     _a.label = 2;
                 case 2:
-                    if (!(x < iterations)) return [3 /*break*/, 5];
-                    console.log("iteration " + x + " of " + iterations);
+                    if (!(x <= iterations)) return [3 /*break*/, 5];
+                    console.log("iteration " + x + " of " + iterations + ". " + (utxos === null || utxos === void 0 ? void 0 : utxos.count) + " utxos");
                     return [4 /*yield*/, w.makeStreamableCashTx(Long.fromNumber(packetsize * x), null, //keyPair.toOutputScript(),
                         true, utxos)];
                 case 3:
@@ -97,27 +98,22 @@ describe('browse stream', function () {
                     //w.logDetailsLastTx()
                     expect(buildResult.tx.txIns.length).toBeGreaterThan(0);
                     // wallet should add utxos and not leave any dust outputs
-                    expect(buildResult.tx.txOuts[0].valueBn.toNumber()).toBeGreaterThan(DUST_LIMIT);
-                    expect(w.getTxFund(buildResult.tx)).toBe(packetsize * x);
+                    if (buildResult.tx.txOuts.length > 0) {
+                        expect(buildResult.tx.txOuts[0].valueBn.toNumber()).toBeGreaterThan(0);
+                    }
+                    if (x < iterations) {
+                        expect(w.getTxFund(buildResult.tx)).toBe(packetsize * x);
+                    }
                     _a.label = 4;
                 case 4:
                     x++;
                     return [3 /*break*/, 2];
                 case 5:
-                    if (!lastBuild) return [3 /*break*/, 7];
-                    lastChange = lastBuild.tx.txOuts[0].valueBn.toNumber();
-                    expect(lastChange).toBeGreaterThan(DUST_LIMIT);
-                    expect(lastChange).toBeLessThan(DUST_LIMIT * 2);
-                    lastFund = w.getTxFund(lastBuild.tx);
-                    return [4 /*yield*/, w.makeStreamableCashTx(Long.fromNumber(lastFund + lastChange), null, true, utxos)];
-                case 6:
-                    buildResult = _a.sent();
-                    w.logDetailsLastTx();
-                    // should be no change outputs, all inputs signed NONE
-                    expect(buildResult.tx.txOuts.length).toBe(0);
-                    expect(w.getTxFund(buildResult.tx)).toBe(lastFund + lastChange);
-                    _a.label = 7;
-                case 7: return [2 /*return*/];
+                    if (lastBuild) {
+                        // should be no outputs. wallet is spent
+                        expect(lastBuild.tx.txOuts.length).toBe(0);
+                    }
+                    return [2 /*return*/];
             }
         });
     }); });

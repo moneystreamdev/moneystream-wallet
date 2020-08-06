@@ -16,6 +16,8 @@ export class Wallet {
     public _isDebug: boolean
     protected _walletFileName: string
     protected _maxInputs: number = 999
+    // if true, allows wallet to be completely spent
+    protected _allowFundingBelowRequested: boolean = true
     protected _dustLimit: number
     //true if user can combine inputs to extend session
     protected _allowMultipleInputs: boolean = true
@@ -257,12 +259,11 @@ export class Wallet {
 
     selectExpandableInputs (satoshis:Long, utxos?: OutputCollection):OutputCollection {
         const filtered = utxos || this.selectedUtxos.spendable().filter(satoshis)
-        console.log(`${filtered.satoshis} < ${satoshis.toNumber() + this._dustLimit}`)
+        // console.log(`${filtered.satoshis} < ${satoshis.toNumber() + this._dustLimit}`)
         if (filtered.count < this._maxInputs && filtered.satoshis < (satoshis.toNumber() + this._dustLimit)) {
             // add additional utxos
             const additional = this.selectedUtxos.spendable().filter(satoshis.add(this._dustLimit))
-            // TODO: make sure filtered includes utxos
-            console.log(additional)
+            // TODO: make sure filtered includes previous utxos
             filtered.addOutputs(additional)
         }
         return filtered
@@ -276,10 +277,20 @@ export class Wallet {
         if (!utxos) await this.tryLoadWalletUtxos()
         const filteredUtxos = this.selectExpandableInputs(satoshis, utxos)
         this._fundingInputCount = filteredUtxos.count
+        // total value of selected unspents
         const utxoSatoshis = filteredUtxos.satoshis
-        const changeSatoshis = utxoSatoshis - satoshis.toNumber()
+        let changeSatoshis = utxoSatoshis - satoshis.toNumber()
         if (changeSatoshis < 0) {
-            throw Error(`the utxo ran out of money ${this.fundingInputCount} ${utxoSatoshis} ${changeSatoshis}`)
+            if (this._allowFundingBelowRequested) {
+                if (Math.abs(changeSatoshis) <= this._dustLimit) {
+                    // the deficit was less than dust
+                    // wallet is about to run out of money
+                    // exhaust remaining funds
+                    changeSatoshis = 0
+                }
+            } else {
+                throw Error(`the wallet ran out of money ${this.fundingInputCount} ${utxoSatoshis} ${changeSatoshis}`)
+            }
         }
         // console.log(utxoSatoshis)
         // console.log(changeSatoshis)

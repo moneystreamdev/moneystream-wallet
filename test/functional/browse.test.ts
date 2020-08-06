@@ -8,6 +8,7 @@ const DUST_LIMIT = 546
 const demo_wif = 'L5bxi2ef2R8LuTvQbGwkY9w6KJzpPckqRQMnjtD8D2EFqjGeJnSq'
 const keyPair = new KeyPair().fromRandom()
 
+// This is a functional test, not a unit test
 // stream from a real wallet
 // with max inputs 1 the last hex tx is the max spendable tx
 describe('browse stream', () => {
@@ -19,13 +20,14 @@ describe('browse stream', () => {
         //console.log(w.selectedUtxos)
         const balance = w.balance
         expect(balance).toBeGreaterThan(0)
-        const packetsize = 500
-        const iterations = Math.floor(balance/packetsize)
+        const packetsize = 250
+        // consume the whole wallet
+        const iterations = Math.ceil(balance/packetsize)
         let utxos!: OutputCollection
         let lastBuild = null
         console.log(`streaming ${iterations} money packets (${w.balance}/500)`)
-        for( let x = 1; x < iterations; x++) {
-            console.log(`iteration ${x} of ${iterations}`)
+        for( let x = 1; x <= iterations; x++) {
+            console.log(`iteration ${x} of ${iterations}. ${utxos?.count} utxos`)
             const buildResult = await w.makeStreamableCashTx(
                 Long.fromNumber(packetsize*x),
                 null, //keyPair.toOutputScript(),
@@ -37,28 +39,16 @@ describe('browse stream', () => {
             //w.logDetailsLastTx()
             expect(buildResult.tx.txIns.length).toBeGreaterThan(0)
             // wallet should add utxos and not leave any dust outputs
-            expect (buildResult.tx.txOuts[0].valueBn.toNumber()).toBeGreaterThan(DUST_LIMIT)
-            expect(w.getTxFund(buildResult.tx)).toBe(packetsize*x)
-            //console.log(buildResult.hex)
+            if (buildResult.tx.txOuts.length > 0) {
+                expect (buildResult.tx.txOuts[0].valueBn.toNumber()).toBeGreaterThan(0)
+            }
+            if (x < iterations) {
+                expect(w.getTxFund(buildResult.tx)).toBe(packetsize*x)
+            }
         }
-        // there should be enough utxos for one or two more spends
         if (lastBuild) {
-            const lastChange = lastBuild.tx.txOuts[0].valueBn.toNumber()
-            expect(lastChange).toBeGreaterThan(DUST_LIMIT)
-            expect(lastChange).toBeLessThan(DUST_LIMIT*2)
-            // fully spend the last utxo
-            const lastFund = w.getTxFund(lastBuild.tx)
-            const buildResult = await w.makeStreamableCashTx(
-                Long.fromNumber(lastFund + lastChange),
-                null,
-                true,
-                utxos
-            )
-            w.logDetailsLastTx()
-            // should be no change outputs, all inputs signed NONE
-            expect(buildResult.tx.txOuts.length).toBe(0)
-            expect(w.getTxFund(buildResult.tx)).toBe(lastFund + lastChange)
-
+            // should be no outputs. wallet is spent
+            expect(lastBuild.tx.txOuts.length).toBe(0)
         }
     })
 

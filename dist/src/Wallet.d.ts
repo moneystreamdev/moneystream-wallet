@@ -8,6 +8,7 @@ export declare class Wallet {
     _isDebug: boolean;
     protected _walletFileName: string;
     protected _maxInputs: number;
+    protected _allowFundingBelowRequested: boolean;
     protected _dustLimit: number;
     protected _allowMultipleInputs: boolean;
     protected _fundingInputCount?: number;
