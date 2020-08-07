@@ -160,6 +160,11 @@ describe('Wallet tests', function () {
                     expect(buildResult.tx.nLockTime).toBeGreaterThan(0);
                     expect(buildResult.tx.txIns.length).toBeGreaterThan(0);
                     expect(buildResult.tx.txOuts.length).toBe(0);
+                    expect(w.getTxFund(buildResult.tx)).toBe(1000);
+                    // add extra output
+                    buildResult.tx.addTxOut(new bsv_1.Bn().fromNumber(1), new KeyPair_1.KeyPair().fromRandom().toOutputScript());
+                    // funding should not change
+                    expect(w.getTxFund(buildResult.tx)).toBe(1000);
                     return [2 /*return*/];
             }
         });

@@ -140,8 +140,11 @@ var Wallet = /** @class */ (function () {
                 var txInputOut = this.getInputOutput(txin, index);
                 fundingTotal += (txInputOut ? txInputOut.satoshis : 0);
             }
-            var txout = tx.txOuts[0];
-            fundingTotal -= (txout ? txout.valueBn.toNumber() : 0);
+            // only subtract the output if it comes from the sender
+            if (this._senderOutputCount === undefined || this._senderOutputCount > 0) {
+                var txout = tx.txOuts[0];
+                fundingTotal -= (txout ? txout.valueBn.toNumber() : 0);
+            }
         }
         return fundingTotal;
     };
@@ -410,6 +413,7 @@ var Wallet = /** @class */ (function () {
                             txb.addOutputScript(satoshis.toNumber(), payTo);
                         }
                         this.lastTx = txb.buildAndSign(this._keypair, makeFuture);
+                        this._senderOutputCount = this.lastTx.txOuts.length;
                         return [2 /*return*/, {
                                 hex: this.lastTx.toHex(),
                                 tx: this.lastTx,

@@ -22,6 +22,7 @@ export class Wallet {
     //true if user can combine inputs to extend session
     protected _allowMultipleInputs: boolean = true
     protected _fundingInputCount?: number
+    protected _senderOutputCount?: number
     //outputs that this wallet needs to deal with
     //could be outputs for our wallet
     //or others, if we import tx from others
@@ -99,8 +100,11 @@ export class Wallet {
                 const txInputOut = this.getInputOutput(txin, index)
                 fundingTotal += (txInputOut ? txInputOut.satoshis:0)
             }
-            const txout = tx.txOuts[0]
-            fundingTotal -= (txout?txout.valueBn.toNumber():0)
+            // only subtract the output if it comes from the sender
+            if (this._senderOutputCount === undefined || this._senderOutputCount > 0) {
+                const txout = tx.txOuts[0]
+                fundingTotal -= (txout?txout.valueBn.toNumber():0)
+            }
         }
         return fundingTotal
     }
@@ -325,6 +329,7 @@ export class Wallet {
             )
         }
         this.lastTx = txb.buildAndSign(this._keypair, makeFuture)
+        this._senderOutputCount = this.lastTx.txOuts.length
         return {
             hex: this.lastTx.toHex(),
             tx: this.lastTx,

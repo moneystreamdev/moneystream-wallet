@@ -12,6 +12,7 @@ export declare class Wallet {
     protected _dustLimit: number;
     protected _allowMultipleInputs: boolean;
     protected _fundingInputCount?: number;
+    protected _senderOutputCount?: number;
     _selectedUtxos: OutputCollection | null;
     _keypair: KeyPair;
     lastTx: any;

@@ -104,6 +104,11 @@ describe('Wallet tests', () => {
     expect (buildResult.tx.nLockTime).toBeGreaterThan(0)
     expect (buildResult.tx.txIns.length).toBeGreaterThan(0)
     expect (buildResult.tx.txOuts.length).toBe(0)
+    expect(w.getTxFund(buildResult.tx)).toBe(1000)
+    // add extra output
+    buildResult.tx.addTxOut(new Bn().fromNumber(1), new KeyPair().fromRandom().toOutputScript())
+    // funding should not change
+    expect(w.getTxFund(buildResult.tx)).toBe(1000)
   })
   it('should create streamable tx with no lock time', async () => {
     const w = new Wallet()
