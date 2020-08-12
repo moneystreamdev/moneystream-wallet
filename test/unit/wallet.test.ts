@@ -267,7 +267,7 @@ describe('Wallet tests', () => {
     expect(w.getTxFund(w.lastTx)).toBe(100)
     expect(w.selectedUtxos.firstItem.status).toBe('hold')
   })
-  it('errors mulitple streams one utxo', async () => {
+  it('errors multiple streams one utxo', async () => {
     const w = new Wallet()
     w.loadWallet()
     w.selectedUtxos = createUtxos(1,1000)
@@ -275,10 +275,21 @@ describe('Wallet tests', () => {
     expect(stream1.tx).toBeDefined()
     expect(w.getTxFund(w.lastTx)).toBe(100)
     expect(w.selectedUtxos.firstItem.status).toBe('hold')
-    //this should error
+    //this should error because single utxo already encumbered
     expect(
       w.makeStreamableCashTx(Long.fromNumber(100))
     ).rejects.toThrow(Error)
   })
-
-})
+  it ('should error making empty transaction', async () => {
+    const w = new Wallet()
+    expect(w).toBeInstanceOf(Wallet)
+    w.loadWallet()
+    // should error because stream cannot be funded
+    // at all
+    expect(
+      w.makeStreamableCashTx(
+        Long.fromNumber(250),
+        null,true, new OutputCollection()
+      )
+    ).rejects.toThrow(Error)
+})})

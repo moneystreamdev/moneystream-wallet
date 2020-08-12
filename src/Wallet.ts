@@ -18,6 +18,7 @@ export class Wallet {
     protected _maxInputs: number = 999
     // if true, allows wallet to be completely spent
     protected _allowFundingBelowRequested: boolean = true
+    protected _allowZeroFunding: boolean = false
     protected _dustLimit: number
     //true if user can combine inputs to extend session
     protected _allowMultipleInputs: boolean = true
@@ -285,7 +286,8 @@ export class Wallet {
         const utxoSatoshis = filteredUtxos.satoshis
         let changeSatoshis = utxoSatoshis - satoshis.toNumber()
         if (changeSatoshis < 0) {
-            if (this._allowFundingBelowRequested) {
+            if (this._allowFundingBelowRequested
+                && (!this._allowZeroFunding && utxoSatoshis > 0)) {
                 if (Math.abs(changeSatoshis) <= this._dustLimit) {
                     // the deficit was less than dust
                     // wallet is about to run out of money
