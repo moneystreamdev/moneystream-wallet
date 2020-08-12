@@ -57,6 +57,7 @@ var Wallet = /** @class */ (function () {
         this._maxInputs = 999;
         // if true, allows wallet to be completely spent
         this._allowFundingBelowRequested = true;
+        this._allowZeroFunding = false;
         //true if user can combine inputs to extend session
         this._allowMultipleInputs = true;
         //outputs that this wallet needs to deal with
@@ -376,7 +377,8 @@ var Wallet = /** @class */ (function () {
                         utxoSatoshis = filteredUtxos.satoshis;
                         changeSatoshis = utxoSatoshis - satoshis.toNumber();
                         if (changeSatoshis < 0) {
-                            if (this._allowFundingBelowRequested) {
+                            if (this._allowFundingBelowRequested
+                                && (!this._allowZeroFunding && utxoSatoshis > 0)) {
                                 if (Math.abs(changeSatoshis) <= this._dustLimit) {
                                     // the deficit was less than dust
                                     // wallet is about to run out of money

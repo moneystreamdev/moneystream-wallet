@@ -406,7 +406,7 @@ describe('Wallet tests', function () {
             }
         });
     }); });
-    it('errors mulitple streams one utxo', function () { return __awaiter(void 0, void 0, void 0, function () {
+    it('errors multiple streams one utxo', function () { return __awaiter(void 0, void 0, void 0, function () {
         var w, stream1;
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -420,10 +420,22 @@ describe('Wallet tests', function () {
                     expect(stream1.tx).toBeDefined();
                     expect(w.getTxFund(w.lastTx)).toBe(100);
                     expect(w.selectedUtxos.firstItem.status).toBe('hold');
-                    //this should error
+                    //this should error because single utxo already encumbered
                     expect(w.makeStreamableCashTx(Long.fromNumber(100))).rejects.toThrow(Error);
                     return [2 /*return*/];
             }
+        });
+    }); });
+    it('should error making empty transaction', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var w;
+        return __generator(this, function (_a) {
+            w = new Wallet_1.Wallet();
+            expect(w).toBeInstanceOf(Wallet_1.Wallet);
+            w.loadWallet();
+            // should error because stream cannot be funded
+            // at all
+            expect(w.makeStreamableCashTx(Long.fromNumber(250), null, true, new OutputCollection_1.OutputCollection())).rejects.toThrow(Error);
+            return [2 /*return*/];
         });
     }); });
 });
