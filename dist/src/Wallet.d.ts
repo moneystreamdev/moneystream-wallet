@@ -4,6 +4,7 @@ import { IIndexingService } from './IndexingService';
 import { Tx } from 'bsv';
 import { KeyPair } from './KeyPair';
 import { OutputCollection } from './OutputCollection';
+import { UnspentOutput } from './UnspentOutput';
 export declare class Wallet {
     protected readonly FINAL: number;
     _isDebug: boolean;
@@ -33,10 +34,10 @@ export declare class Wallet {
     set allowFundingBelowRequested(val: boolean);
     clear(): void;
     txInDescription(txIn: any, index: number): {
-        value: any;
+        value: number | undefined;
         desc: string;
     };
-    getInputOutput(txin: any, index: number): any;
+    getInputOutput(txin: any, index: number): UnspentOutput | null | undefined;
     getTxFund(tx: typeof Tx): number;
     logDetailsLastTx(): void;
     logDetails(tx?: any): void;

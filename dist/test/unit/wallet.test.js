@@ -441,7 +441,7 @@ describe('Wallet tests', function () {
         });
     }); });
     it('tests funding zero', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var w, buildResult;
+        var w, buildResult, utxo, txinout;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -452,21 +452,25 @@ describe('Wallet tests', function () {
                     return [4 /*yield*/, w.makeStreamableCashTx(Long.fromNumber(0))];
                 case 1:
                     buildResult = _a.sent();
-                    w.logDetailsLastTx();
                     expect(buildResult === null || buildResult === void 0 ? void 0 : buildResult.tx).toBeDefined();
                     expect(w.fundingInputCount).toBe(0);
                     expect(w.getTxFund(buildResult.tx)).toBe(0);
                     expect(w.senderOutputCount).toBe(0);
                     buildResult.tx.addTxIn(someHashBufString, 0, new bsv_1.Script());
+                    utxo = UnspentOutput_1.UnspentOutput.fromTxOut(bsv_1.TxOut.fromProperties(new bsv_1.Bn(999), w.keyPair.toOutputScript()), someHashBufString, 0);
+                    w.selectedUtxos.add(utxo);
                     buildResult.tx.addTxOut(new bsv_1.Bn().fromNumber(100), w.keyPair.toOutputScript());
+                    w.logDetailsLastTx();
                     expect(w.senderOutputCount).toBe(0);
                     expect(w.fundingInputCount).toBe(0);
+                    txinout = w.getInputOutput(buildResult.tx.txIns[0], 0);
+                    expect(txinout).toBeInstanceOf(UnspentOutput_1.UnspentOutput);
                     expect(w.getTxFund(buildResult.tx)).toBe(0);
                     return [2 /*return*/];
             }
         });
     }); });
-    it('tests funding', function () { return __awaiter(void 0, void 0, void 0, function () {
+    it('tests funding more', function () { return __awaiter(void 0, void 0, void 0, function () {
         var w, buildResult;
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -477,15 +481,16 @@ describe('Wallet tests', function () {
                     return [4 /*yield*/, w.makeStreamableCashTx(Long.fromNumber(0))];
                 case 1:
                     buildResult = _a.sent();
-                    w.logDetailsLastTx();
                     expect(buildResult === null || buildResult === void 0 ? void 0 : buildResult.tx).toBeDefined();
                     expect(w.fundingInputCount).toBe(1);
                     expect(w.senderOutputCount).toBe(1);
                     expect(w.getTxFund(buildResult.tx)).toBe(0);
+                    // add more inputs and outputs, not part of funding
                     buildResult.tx.addTxIn(someHashBufString, 0, new bsv_1.Script());
                     buildResult.tx.addTxOut(new bsv_1.Bn().fromNumber(100), w.keyPair.toOutputScript());
                     expect(w.senderOutputCount).toBe(1);
                     expect(w.fundingInputCount).toBe(1);
+                    w.logDetailsLastTx();
                     expect(w.getTxFund(buildResult.tx)).toBe(0);
                     return [2 /*return*/];
             }

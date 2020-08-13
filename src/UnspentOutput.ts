@@ -22,7 +22,7 @@ export class UnspentOutput {
     get status() { return this._status}
     get txPointer() { return new TxPointer(this.txId, this.outputIndex as number) }
 
-    static fromTxOut(txOut:any, txid:string, txoutindex:number ) {
+    static fromTxOut(txOut: typeof TxOut, txid:string, txoutindex:number ) {
         const output = new UnspentOutput(
             txOut.valueBn.toNumber(),
             txOut.script

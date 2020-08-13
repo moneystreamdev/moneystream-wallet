@@ -1,4 +1,4 @@
-import { Script } from 'bsv';
+import { TxOut, Script } from 'bsv';
 import { TxPointer } from './TxPointer';
 export declare class UnspentOutput {
     private _status;
@@ -9,7 +9,7 @@ export declare class UnspentOutput {
     constructor(satoshis: number, script: typeof Script, txid?: string, txoutindex?: number, status?: string);
     get status(): string;
     get txPointer(): TxPointer;
-    static fromTxOut(txOut: any, txid: string, txoutindex: number): UnspentOutput;
+    static fromTxOut(txOut: typeof TxOut, txid: string, txoutindex: number): UnspentOutput;
     toTxOut(): any;
     encumber(): void;
     unencumber(): void;

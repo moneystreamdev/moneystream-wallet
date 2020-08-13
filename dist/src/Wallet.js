@@ -150,7 +150,8 @@ var Wallet = /** @class */ (function () {
     Wallet.prototype.getTxFund = function (tx) {
         var fundingTotal = 0;
         if (tx.txIns.length > 0) {
-            var len = this.fundingInputCount || tx.txIns.length;
+            var len = this.fundingInputCount === null || this.fundingInputCount === undefined
+                ? tx.txIns.length : this.fundingInputCount;
             for (var index = 0; index < len; index++) {
                 var txin = tx.txIns[index];
                 var txInputOut = this.getInputOutput(txin, index);
@@ -183,7 +184,7 @@ var Wallet = /** @class */ (function () {
                 var txIn = tx.txIns[i];
                 var _a = this.txInDescription(txIn, i), value = _a.value, desc = _a.desc;
                 details += "\n   " + desc;
-                inputTotal += value;
+                inputTotal += value ? value : 0;
             }
             if (inputTotal)
                 details += "\nTotal In:" + inputTotal;

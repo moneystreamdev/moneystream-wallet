@@ -3,7 +3,7 @@ import * as Long from 'long'
 import { KeyPair } from '../../src/KeyPair'
 import { OutputCollection } from '../../src/OutputCollection'
 import { UnspentOutput } from '../../src/UnspentOutput'
-import { Bn, Script } from 'bsv'
+import { Bn, Script, TxOut } from 'bsv'
 
 const dustLimit = 500
 const someHashBufString = '1aebb7d0776cec663cbbdd87f200bf15406adb0ef91916d102bcd7f86c86934e'
@@ -302,32 +302,42 @@ describe('Wallet tests', () => {
     w.loadWallet()
     w.selectedUtxos = new OutputCollection()
     const buildResult = await w.makeStreamableCashTx(Long.fromNumber(0))
-    w.logDetailsLastTx()
     expect(buildResult?.tx).toBeDefined()
     expect(w.fundingInputCount).toBe(0)
     expect(w.getTxFund(buildResult.tx)).toBe(0)
     expect(w.senderOutputCount).toBe(0)
-    buildResult.tx.addTxIn(someHashBufString,0, new Script()) 
+    buildResult.tx.addTxIn(someHashBufString,0, new Script())
+    const utxo = UnspentOutput.fromTxOut(
+      TxOut.fromProperties(
+        new Bn(999), 
+        w.keyPair.toOutputScript()
+      ), someHashBufString,0
+    )
+    w.selectedUtxos.add(utxo)
     buildResult.tx.addTxOut(new Bn().fromNumber(100), w.keyPair.toOutputScript()) 
+    w.logDetailsLastTx()
     expect(w.senderOutputCount).toBe(0)
     expect(w.fundingInputCount).toBe(0)
+    const txinout = w.getInputOutput(buildResult.tx.txIns[0],0)
+    expect(txinout).toBeInstanceOf(UnspentOutput)
     expect(w.getTxFund(buildResult.tx)).toBe(0)
   })
-  it('tests funding', async () => {
+  it('tests funding more', async () => {
     // what to do if user wants to make tx with 0 funding?
     const w = new Wallet()
     w.loadWallet()
     w.selectedUtxos = createUtxos(1,1000)
     const buildResult = await w.makeStreamableCashTx(Long.fromNumber(0))
-    w.logDetailsLastTx()
     expect(buildResult?.tx).toBeDefined()
     expect(w.fundingInputCount).toBe(1)
     expect(w.senderOutputCount).toBe(1)
     expect(w.getTxFund(buildResult.tx)).toBe(0)
+    // add more inputs and outputs, not part of funding
     buildResult.tx.addTxIn(someHashBufString,0, new Script()) 
     buildResult.tx.addTxOut(new Bn().fromNumber(100), w.keyPair.toOutputScript()) 
     expect(w.senderOutputCount).toBe(1)
     expect(w.fundingInputCount).toBe(1)
+    w.logDetailsLastTx()
     expect(w.getTxFund(buildResult.tx)).toBe(0)
   })
 

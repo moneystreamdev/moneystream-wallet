@@ -90,7 +90,7 @@ export class Wallet {
     }
 
     //get the txout that the txin is spending
-    getInputOutput(txin:any, index:number):any {
+    getInputOutput(txin:any, index:number):UnspentOutput|null|undefined {
         //txout being spent will probably be in _selectedUtxos
         return this._selectedUtxos?.find(txin.txHashBuf, txin.txOutNum)
     }
@@ -98,7 +98,8 @@ export class Wallet {
     getTxFund(tx:typeof Tx):number {
         let fundingTotal = 0
         if (tx.txIns.length > 0) {
-            const len = this.fundingInputCount || tx.txIns.length
+            const len = this.fundingInputCount === null || this.fundingInputCount === undefined 
+                ? tx.txIns.length : this.fundingInputCount
             for (let index = 0; index < len; index++) {
                 const txin = tx.txIns[index]
                 const txInputOut = this.getInputOutput(txin, index)
@@ -132,7 +133,7 @@ export class Wallet {
                 const txIn = tx.txIns[i]
                 const {value,desc} = this.txInDescription(txIn, i)
                 details += `\n   ${desc}`
-                inputTotal += value
+                inputTotal += value ? value : 0
             }
             if (inputTotal) details += `\nTotal In:${inputTotal}`
             if (tx.txOuts && tx.txOuts.length > 0) {
