@@ -1,6 +1,7 @@
 /// <reference types="long" />
 import { IStorage } from './FileSystemStorage';
 import { IIndexingService } from './IndexingService';
+import { Tx } from 'bsv';
 import { KeyPair } from './KeyPair';
 import { OutputCollection } from './OutputCollection';
 export declare class Wallet {
@@ -27,13 +28,16 @@ export declare class Wallet {
     set selectedUtxos(val: OutputCollection);
     get balance(): number;
     get fundingInputCount(): number | undefined;
+    get senderOutputCount(): number | undefined;
+    set allowZeroFunding(val: boolean);
+    set allowFundingBelowRequested(val: boolean);
     clear(): void;
     txInDescription(txIn: any, index: number): {
         value: any;
         desc: string;
     };
     getInputOutput(txin: any, index: number): any;
-    getTxFund(tx: any): number;
+    getTxFund(tx: typeof Tx): number;
     logDetailsLastTx(): void;
     logDetails(tx?: any): void;
     toJSON(): {

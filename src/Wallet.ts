@@ -1,7 +1,7 @@
 'use strict'
 import FileSystemStorage, { IStorage } from './FileSystemStorage'
 import IndexingService, {IIndexingService} from './IndexingService'
-import { Address, Sig, Script } from 'bsv'
+import { Tx, Address, Sig, Script } from 'bsv'
 import { KeyPair } from './KeyPair'
 import { TransactionBuilder } from './TransactionBuilder'
 import { OutputCollection } from './OutputCollection'
@@ -70,6 +70,9 @@ export class Wallet {
         return this.selectedUtxos?.spendable().satoshis || 0
     }
     get fundingInputCount() { return this._fundingInputCount }
+    get senderOutputCount() { return this._senderOutputCount }
+    set allowZeroFunding(val:boolean) { this._allowZeroFunding = val }
+    set allowFundingBelowRequested(val:boolean) { this._allowZeroFunding = val }
 
     clear() {
         this._selectedUtxos = null
@@ -92,7 +95,7 @@ export class Wallet {
         return this._selectedUtxos?.find(txin.txHashBuf, txin.txOutNum)
     }
 
-    getTxFund(tx:any):number {
+    getTxFund(tx:typeof Tx):number {
         let fundingTotal = 0
         if (tx.txIns.length > 0) {
             const len = this.fundingInputCount || tx.txIns.length
@@ -257,7 +260,7 @@ export class Wallet {
     //throws error if it cannot get any
     async tryLoadWalletUtxos() {
         if (!this.selectedUtxos.hasAny()) await this.getAnUnspentOutput()
-        if (!this.selectedUtxos.hasAny()) {
+        if (!this.selectedUtxos.hasAny() && !this._allowZeroFunding) {
             throw Error(`Wallet ${this._keypair?.toAddress().toString()} does not have any unspent outputs!`)
         }
     }

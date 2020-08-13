@@ -3,7 +3,7 @@ import * as Long from 'long'
 import { KeyPair } from '../../src/KeyPair'
 import { OutputCollection } from '../../src/OutputCollection'
 import { UnspentOutput } from '../../src/UnspentOutput'
-import {Bn} from 'bsv'
+import { Bn, Script } from 'bsv'
 
 const dustLimit = 500
 const someHashBufString = '1aebb7d0776cec663cbbdd87f200bf15406adb0ef91916d102bcd7f86c86934e'
@@ -51,6 +51,9 @@ const dummyOutput1 = new UnspentOutput(
     }
     return lotsOfUtxos
   }
+
+  // tx with no inputs and no outputs
+  const nofundinghex = '0100000000000d1b345f'
 
 describe('Wallet tests', () => {
   it('should instantiate a wallet object', () => {
@@ -292,4 +295,40 @@ describe('Wallet tests', () => {
         null,true, new OutputCollection()
       )
     ).rejects.toThrow(Error)
-})})
+  })
+  it('tests funding zero', async () => {
+    const w = new Wallet()
+    w.allowZeroFunding = true
+    w.loadWallet()
+    w.selectedUtxos = new OutputCollection()
+    const buildResult = await w.makeStreamableCashTx(Long.fromNumber(0))
+    w.logDetailsLastTx()
+    expect(buildResult?.tx).toBeDefined()
+    expect(w.fundingInputCount).toBe(0)
+    expect(w.getTxFund(buildResult.tx)).toBe(0)
+    expect(w.senderOutputCount).toBe(0)
+    buildResult.tx.addTxIn(someHashBufString,0, new Script()) 
+    buildResult.tx.addTxOut(new Bn().fromNumber(100), w.keyPair.toOutputScript()) 
+    expect(w.senderOutputCount).toBe(0)
+    expect(w.fundingInputCount).toBe(0)
+    expect(w.getTxFund(buildResult.tx)).toBe(0)
+  })
+  it('tests funding', async () => {
+    // what to do if user wants to make tx with 0 funding?
+    const w = new Wallet()
+    w.loadWallet()
+    w.selectedUtxos = createUtxos(1,1000)
+    const buildResult = await w.makeStreamableCashTx(Long.fromNumber(0))
+    w.logDetailsLastTx()
+    expect(buildResult?.tx).toBeDefined()
+    expect(w.fundingInputCount).toBe(1)
+    expect(w.senderOutputCount).toBe(1)
+    expect(w.getTxFund(buildResult.tx)).toBe(0)
+    buildResult.tx.addTxIn(someHashBufString,0, new Script()) 
+    buildResult.tx.addTxOut(new Bn().fromNumber(100), w.keyPair.toOutputScript()) 
+    expect(w.senderOutputCount).toBe(1)
+    expect(w.fundingInputCount).toBe(1)
+    expect(w.getTxFund(buildResult.tx)).toBe(0)
+  })
+
+})

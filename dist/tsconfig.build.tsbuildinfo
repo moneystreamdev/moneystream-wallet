@@ -207,8 +207,8 @@
         "affectsGlobalScope": false
       },
       "../src/Wallet.ts": {
-        "version": "e998f2e030288839e6f8460826d352ffc44a4269a17d429b3f34ee0c782bc8e5",
-        "signature": "e26aaaeed593ccff7f2ca88c78bac6d0ba1e2b27f258825f4db7a521b4dfb78f",
+        "version": "8fa1ccf853ecf4c085b182666e147dc8a82271c25235f1e2d3e8e657fd0a1e3e",
+        "signature": "b45c080097b823433b4a409ba931965ed4a47d36ee1bc1a39503a0b5940ccb62",
         "affectsGlobalScope": false
       },
       "../src/index.ts": {
@@ -267,7 +267,7 @@
         "affectsGlobalScope": false
       },
       "../test/unit/wallet.test.ts": {
-        "version": "e11d94b2bb649ba7715d5423e11b031faa507be9a995167d689960eec65fe7e8",
+        "version": "e0fc93b8d8cb3cdccba079cc5e6d2d9355901f491fe656e2501e08a7e6a3fb51",
         "signature": "a747a591cf4e8c55cb44f079d82b31556e902fcea79ce8c49ded66ee039eaa11",
         "affectsGlobalScope": false
       },
@@ -2729,6 +2729,7 @@
         "../src/TxPointer.ts"
       ],
       "../src/Wallet.ts": [
+        "../node_modules/bsv/index.d.ts",
         "../src/FileSystemStorage.ts",
         "../src/IndexingService.ts",
         "../src/KeyPair.ts",

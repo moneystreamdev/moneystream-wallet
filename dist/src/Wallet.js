@@ -112,6 +112,21 @@ var Wallet = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
+    Object.defineProperty(Wallet.prototype, "senderOutputCount", {
+        get: function () { return this._senderOutputCount; },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Wallet.prototype, "allowZeroFunding", {
+        set: function (val) { this._allowZeroFunding = val; },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Wallet.prototype, "allowFundingBelowRequested", {
+        set: function (val) { this._allowZeroFunding = val; },
+        enumerable: false,
+        configurable: true
+    });
     Wallet.prototype.clear = function () {
         this._selectedUtxos = null;
     };
@@ -338,7 +353,7 @@ var Wallet = /** @class */ (function () {
                         _b.sent();
                         _b.label = 2;
                     case 2:
-                        if (!this.selectedUtxos.hasAny()) {
+                        if (!this.selectedUtxos.hasAny() && !this._allowZeroFunding) {
                             throw Error("Wallet " + ((_a = this._keypair) === null || _a === void 0 ? void 0 : _a.toAddress().toString()) + " does not have any unspent outputs!");
                         }
                         return [2 /*return*/];
