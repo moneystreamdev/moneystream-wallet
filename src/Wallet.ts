@@ -266,8 +266,8 @@ export class Wallet {
         }
     }
 
-    selectExpandableInputs (satoshis:Long, utxos?: OutputCollection):OutputCollection {
-        const filtered = utxos || this.selectedUtxos.spendable().filter(satoshis)
+    selectExpandableInputs (satoshis:Long, selected:OutputCollection, utxos?: OutputCollection ):OutputCollection {
+        const filtered = utxos || selected.spendable().filter(satoshis)
         // console.log(`${filtered.satoshis} < ${satoshis.toNumber() + this._dustLimit}`)
         if (filtered.count < this._maxInputs && filtered.satoshis < (satoshis.toNumber() + this._dustLimit)) {
             // add additional utxos
@@ -284,7 +284,7 @@ export class Wallet {
         makeFuture:boolean = true,
         utxos?:OutputCollection) {
         if (!utxos) await this.tryLoadWalletUtxos()
-        const filteredUtxos = this.selectExpandableInputs(satoshis, utxos)
+        const filteredUtxos = this.selectExpandableInputs(satoshis, this.selectedUtxos, utxos)
         this._fundingInputCount = filteredUtxos.count
         // total value of selected unspents
         const utxoSatoshis = filteredUtxos.satoshis
