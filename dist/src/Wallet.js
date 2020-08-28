@@ -362,8 +362,8 @@ var Wallet = /** @class */ (function () {
             });
         });
     };
-    Wallet.prototype.selectExpandableInputs = function (satoshis, utxos) {
-        var filtered = utxos || this.selectedUtxos.spendable().filter(satoshis);
+    Wallet.prototype.selectExpandableInputs = function (satoshis, selected, utxos) {
+        var filtered = utxos || selected.spendable().filter(satoshis);
         // console.log(`${filtered.satoshis} < ${satoshis.toNumber() + this._dustLimit}`)
         if (filtered.count < this._maxInputs && filtered.satoshis < (satoshis.toNumber() + this._dustLimit)) {
             // add additional utxos
@@ -388,7 +388,7 @@ var Wallet = /** @class */ (function () {
                         _a.sent();
                         _a.label = 2;
                     case 2:
-                        filteredUtxos = this.selectExpandableInputs(satoshis, utxos);
+                        filteredUtxos = this.selectExpandableInputs(satoshis, this.selectedUtxos, utxos);
                         this._fundingInputCount = filteredUtxos.count;
                         utxoSatoshis = filteredUtxos.satoshis;
                         changeSatoshis = utxoSatoshis - satoshis.toNumber();

@@ -8,14 +8,23 @@ describe('wallet broadcasts simple spend', function () {
         var w = new Wallet_1.Wallet();
         expect(w).toBeInstanceOf(Wallet_1.Wallet);
     });
-    //     it ('should create transaction', async () => {
-    //         const w = new Wallet()
-    //         expect(w).toBeInstanceOf(Wallet)
-    //         w.loadWallet(demo_wif)
-    //         const buildResult = await w.makeStreamableCashTx(Long.fromNumber(100))
-    //         expect(w.lastTx.txIns.length).toBe(1)
-    //         expect(buildResult.utxos.firstItem.satoshis).toBeGreaterThan(0)
-    //     })
+    // it ('should create transaction', async () => {
+    //     const w = new Wallet()
+    //     expect(w).toBeInstanceOf(Wallet)
+    //     w.loadWallet(demo_wif)
+    //     const utxos = await w.loadUnspent()
+    //     utxos?.firstItem?.encumber()
+    //     const buildResult = await w.makeStreamableCashTx(
+    //         Long.fromNumber(44444),
+    //         new Address().fromString('133hMAzFDT4R8KRUqoQggv1UvcuyePzRn5').toTxOutScript(),
+    //         true,
+    //         utxos
+    //     )
+    //     console.log(buildResult)
+    //     w.logDetailsLastTx()
+    //     expect(w.lastTx.txIns.length).toBe(1)
+    //     expect(buildResult.utxos.firstItem.satoshis).toBeGreaterThan(0)
+    // })
     //     it('broadcasts', async () => {
     //         const sender = new Wallet()
     //         sender.loadWallet(demo_wif)

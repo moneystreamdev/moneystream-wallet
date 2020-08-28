@@ -79,7 +79,6 @@ describe('browse stream', function () {
                 case 1:
                     _a.sent();
                     balance = w.balance;
-                    expect(balance).toBeGreaterThan(0);
                     packetsize = 250;
                     iterations = Math.ceil(balance / packetsize);
                     lastBuild = null;
