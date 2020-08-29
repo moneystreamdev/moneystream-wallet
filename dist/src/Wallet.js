@@ -169,6 +169,7 @@ var Wallet = /** @class */ (function () {
         this.logDetails(this.lastTx);
     };
     Wallet.prototype.logDetails = function (tx) {
+        var _a, _b;
         var details = "";
         details += "\n" + this._keypair.toWif();
         details += "\n" + this._keypair.toXpub();
@@ -182,7 +183,7 @@ var Wallet = /** @class */ (function () {
             var inputTotal = 0;
             for (var i = 0; i < tx.txIns.length; i++) {
                 var txIn = tx.txIns[i];
-                var _a = this.txInDescription(txIn, i), value = _a.value, desc = _a.desc;
+                var _c = this.txInDescription(txIn, i), value = _c.value, desc = _c.desc;
                 details += "\n   " + desc;
                 inputTotal += value ? value : 0;
             }
@@ -197,6 +198,12 @@ var Wallet = /** @class */ (function () {
                 var txout = tx.txOuts[i];
                 var satoshis = txout.valueBn.toNumber();
                 details += "\n   [" + i + "]" + satoshis;
+                if ((_a = txout.script) === null || _a === void 0 ? void 0 : _a.isSafeDataOut()) {
+                    details += " " + txout.script.getData();
+                }
+                if ((_b = txout.script) === null || _b === void 0 ? void 0 : _b.isPubKeyHashOut()) {
+                    details += " P2PKH";
+                }
                 outputTotal += satoshis;
                 if (i > 2)
                     platformTotal += satoshis;
@@ -373,9 +380,14 @@ var Wallet = /** @class */ (function () {
         }
         return filtered;
     };
+    // store data into transaction
+    Wallet.prototype.addData = function (txb, data) {
+        var script = bsv_1.Script.fromSafeData(data);
+        txb.txb.outputToScript(new bsv_1.Bn().fromNumber(0), script);
+    };
     // standard method for a streaming wallet
     // payTo should be script, as instance of Script or string
-    Wallet.prototype.makeStreamableCashTx = function (satoshis, payTo, makeFuture, utxos) {
+    Wallet.prototype.makeStreamableCashTx = function (satoshis, payTo, makeFuture, utxos, data) {
         if (makeFuture === void 0) { makeFuture = true; }
         return __awaiter(this, void 0, void 0, function () {
             var filteredUtxos, utxoSatoshis, changeSatoshis, txb, dustTotal, index, element, outSatoshis, inputCount;
@@ -429,6 +441,9 @@ var Wallet = /** @class */ (function () {
                         //balance goes to payto (string|Script)
                         if (payTo) {
                             txb.addOutputScript(satoshis.toNumber(), payTo);
+                        }
+                        if (data) {
+                            this.addData(txb, data);
                         }
                         this.lastTx = txb.buildAndSign(this._keypair, makeFuture);
                         this._senderOutputCount = this.lastTx.txOuts.length;

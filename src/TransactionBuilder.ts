@@ -5,7 +5,7 @@ import { UnspentOutput } from './UnspentOutput'
 //constructs a transaction
 export class TransactionBuilder {
     // our builder is wrapper around bsv.TxBuilder
-    txb: any = new TxBuilder()
+    txb: typeof TxBuilder = new TxBuilder()
     // build future transactions with locktime
     futureSeconds:number = 60
     private FINAL = 0xffffffff

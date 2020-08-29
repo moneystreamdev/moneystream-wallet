@@ -496,5 +496,25 @@ describe('Wallet tests', function () {
             }
         });
     }); });
+    it('adds data output', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var w, buildResult;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    w = new Wallet_1.Wallet();
+                    w.loadWallet();
+                    w.selectedUtxos = createUtxos(1, 1000);
+                    return [4 /*yield*/, w.makeStreamableCashTx(Long.fromNumber(100), null, true, undefined, Buffer.from('moneystream'))];
+                case 1:
+                    buildResult = _a.sent();
+                    w.logDetailsLastTx();
+                    expect(buildResult === null || buildResult === void 0 ? void 0 : buildResult.tx).toBeDefined();
+                    expect(w.getTxFund(w.lastTx)).toBe(100);
+                    expect(buildResult.tx.txOuts.length).toBe(2);
+                    expect(buildResult.tx.txOuts[1].script.isSafeDataOut()).toBeTruthy();
+                    return [2 /*return*/];
+            }
+        });
+    }); });
 });
 //# sourceMappingURL=wallet.test.js.map

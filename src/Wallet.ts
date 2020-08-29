@@ -1,7 +1,7 @@
 'use strict'
 import FileSystemStorage, { IStorage } from './FileSystemStorage'
 import IndexingService, {IIndexingService} from './IndexingService'
-import { Tx, Address, Sig, Script } from 'bsv'
+import { Bn, Tx, Address, Sig, Script } from 'bsv'
 import { KeyPair } from './KeyPair'
 import { TransactionBuilder } from './TransactionBuilder'
 import { OutputCollection } from './OutputCollection'
@@ -145,6 +145,12 @@ export class Wallet {
                 const txout = tx.txOuts[i]
                 const satoshis = txout.valueBn.toNumber()
                 details += `\n   [${i}]${satoshis}`
+                if (txout.script?.isSafeDataOut()) {
+                    details += ` ${txout.script.getData()}`
+                }
+                if (txout.script?.isPubKeyHashOut()) {
+                    details += ` P2PKH`
+                }
                 outputTotal += satoshis
                 if (i > 2) platformTotal += satoshis
             }
@@ -278,11 +284,22 @@ export class Wallet {
         return filtered
     }
 
+
+    // store data into transaction
+    addData(txb: TransactionBuilder, data: Buffer) {
+        const script = Script.fromSafeData(data)
+        txb.txb.outputToScript(new Bn().fromNumber(0), script)
+    }
+
     // standard method for a streaming wallet
     // payTo should be script, as instance of Script or string
-    async makeStreamableCashTx(satoshis:Long, payTo?:string|any, 
+    async makeStreamableCashTx(
+        satoshis:Long, 
+        payTo?:string|any, 
         makeFuture:boolean = true,
-        utxos?:OutputCollection) {
+        utxos?:OutputCollection,
+        data?: Buffer
+    ) {
         if (!utxos) await this.tryLoadWalletUtxos()
         const filteredUtxos = this.selectExpandableInputs(satoshis, this.selectedUtxos, utxos)
         this._fundingInputCount = filteredUtxos.count
@@ -333,6 +350,9 @@ export class Wallet {
             txb.addOutputScript(
                 satoshis.toNumber(), payTo
             )
+        }
+        if (data) {
+            this.addData(txb, data)
         }
         this.lastTx = txb.buildAndSign(this._keypair, makeFuture)
         this._senderOutputCount = this.lastTx.txOuts.length

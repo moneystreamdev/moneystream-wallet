@@ -1,7 +1,8 @@
+import { TxBuilder } from 'bsv';
 import { KeyPair } from './KeyPair';
 import { UnspentOutput } from './UnspentOutput';
 export declare class TransactionBuilder {
-    txb: any;
+    txb: typeof TxBuilder;
     futureSeconds: number;
     private FINAL;
     constructor();

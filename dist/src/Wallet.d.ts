@@ -1,8 +1,10 @@
 /// <reference types="long" />
+/// <reference types="node" />
 import { IStorage } from './FileSystemStorage';
 import { IIndexingService } from './IndexingService';
 import { Tx } from 'bsv';
 import { KeyPair } from './KeyPair';
+import { TransactionBuilder } from './TransactionBuilder';
 import { OutputCollection } from './OutputCollection';
 import { UnspentOutput } from './UnspentOutput';
 export declare class Wallet {
@@ -55,7 +57,8 @@ export declare class Wallet {
     makeSimpleSpend(satoshis: Long, utxos?: OutputCollection, toAddress?: string): Promise<any>;
     tryLoadWalletUtxos(): Promise<void>;
     selectExpandableInputs(satoshis: Long, selected: OutputCollection, utxos?: OutputCollection): OutputCollection;
-    makeStreamableCashTx(satoshis: Long, payTo?: string | any, makeFuture?: boolean, utxos?: OutputCollection): Promise<{
+    addData(txb: TransactionBuilder, data: Buffer): void;
+    makeStreamableCashTx(satoshis: Long, payTo?: string | any, makeFuture?: boolean, utxos?: OutputCollection, data?: Buffer): Promise<{
         hex: any;
         tx: any;
         utxos: OutputCollection;

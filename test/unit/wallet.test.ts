@@ -340,5 +340,20 @@ describe('Wallet tests', () => {
     w.logDetailsLastTx()
     expect(w.getTxFund(buildResult.tx)).toBe(0)
   })
+  it('adds data output', async () => {
+    const w = new Wallet()
+    w.loadWallet()
+    w.selectedUtxos = createUtxos(1,1000)
+    const buildResult = await w.makeStreamableCashTx(
+      Long.fromNumber(100),
+      null, true, undefined, 
+      Buffer.from('moneystream')
+      )
+    w.logDetailsLastTx()
+    expect(buildResult?.tx).toBeDefined()
+    expect(w.getTxFund(w.lastTx)).toBe(100)
+    expect(buildResult.tx.txOuts.length).toBe(2)
+    expect(buildResult.tx.txOuts[1].script.isSafeDataOut()).toBeTruthy()
+  })
 
 })
