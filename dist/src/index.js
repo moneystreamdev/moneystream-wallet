@@ -16,4 +16,6 @@ var FileSystemStorage_1 = require("./FileSystemStorage");
 Object.defineProperty(exports, "FileSystemStorage", { enumerable: true, get: function () { return FileSystemStorage_1.default; } });
 var IndexingService_1 = require("./IndexingService");
 Object.defineProperty(exports, "IndexingService", { enumerable: true, get: function () { return IndexingService_1.default; } });
+var Merkle_1 = require("./Merkle");
+Object.defineProperty(exports, "Merkle", { enumerable: true, get: function () { return Merkle_1.Merkle; } });
 //# sourceMappingURL=index.js.map

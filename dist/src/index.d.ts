@@ -8,4 +8,5 @@ export { IStorage } from './FileSystemStorage';
 export { default as FileSystemStorage } from './FileSystemStorage';
 export { IIndexingService } from './IndexingService';
 export { default as IndexingService } from './IndexingService';
+export { Merkle } from './Merkle';
 //# sourceMappingURL=index.d.ts.map
