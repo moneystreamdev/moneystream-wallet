@@ -3,7 +3,8 @@ import {Merkle} from '../../src/Merkle'
 const sessionContext = {
     "session":"abc-123",
     "txid":"deadbeef",
-    "site":"bitcoinofthings.com"
+    "site":"bitcoinofthings.com",
+    "amount": 0
 }
 
 describe('Merkle tests', () => {
@@ -31,6 +32,9 @@ describe('Merkle tests', () => {
         const h = m.hash(sessionContext)
         expect(h).toBeInstanceOf(Buffer)
         expect(h.toString('hex'))
-            .toBe("feb1df76948fb65d42f6cf67224a8e36a7e471b7e14ffaedf02f6c0db598eaa4")
+            .toBe("ecb02ef91479fd8ef0ef7f3c83ce2642bdd2341dbdd846d5c6a061157eddbf0a")
+        sessionContext.amount = 99
+        const h2 = m.hash(sessionContext)
+        expect(h.toString()).not.toBe(h2.toString())
     })
 })

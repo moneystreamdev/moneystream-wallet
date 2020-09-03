@@ -517,7 +517,7 @@
         "affectsGlobalScope": false
       },
       "../test/unit/merkle.test.ts": {
-        "version": "9aeae2af7444707a46e69562bf80b1fe64a6e99c1dce75cf306162a6e390d03f",
+        "version": "f90616d352e6ab01ff844e52f6de53f9ce5b1701ed88e377c0651c664845e495",
         "signature": "9c08a7b90ff955d2b46fc1ad99c1b6a1a57c2eb00cc93bf9f567b7df3652bca9",
         "affectsGlobalScope": false
       },
