@@ -4,7 +4,8 @@ import SHA256 from 'crypto-js/sha256'
 // Handle hashing of data into merkle tree
 export class Merkle {
     // hash a json object
-    hash(json:any) : Buffer {
+    hash(json:any) : Buffer|null {
+        if (json === null) return null
         const flat = this.flattenToArray(json)
         const leaves = flat.map(x => SHA256(x))
         const tree = new MerkleTree(
