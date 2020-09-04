@@ -395,4 +395,28 @@ export class Wallet {
             }
         }
     }
+
+    //TODO: following utility type funcs can go elsewhere
+    countOutputs(tx: typeof Tx) {
+        let cnt = 0
+        for (let index = 0; index < tx.txOuts.length; index++) {
+            const txout = tx.txOuts[index]
+            if (!txout.script?.isSafeDataOut()) {
+                cnt++
+            }
+        }
+        return cnt
+    }
+
+    filteredOutputs(tx: typeof Tx) {
+        let result = []
+        for (let index = 0; index < tx.txOuts.length; index++) {
+            const txout = tx.txOuts[index]
+            if (!txout.script?.isSafeDataOut()) {
+                result.push(txout)
+            }
+        }
+        return result
+    }
+
 }

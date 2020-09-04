@@ -457,8 +457,8 @@
         "affectsGlobalScope": false
       },
       "../src/Merkle.ts": {
-        "version": "479b572eac1f15ea23fe90393dffe97f669a907074b531594e4a7710190bf1ed",
-        "signature": "ea6473d46e2a8cac3402d8c2317577ef7f6274e0b4c7a07e49cc51af5bbe3985",
+        "version": "23a2df21bce611a86ffa679868792f6db0917771415ce6fe5b8779905e2bfc6f",
+        "signature": "75f9014f5090277994bf124300fe3a102c679e0c71ab98f68ee51e233d3272b1",
         "affectsGlobalScope": false
       },
       "../src/TxPointer.ts": {
@@ -482,8 +482,8 @@
         "affectsGlobalScope": false
       },
       "../src/Wallet.ts": {
-        "version": "d7edd1e67e873204df4367ec69ab92571cb02bef9276dff77888adc368af8bbd",
-        "signature": "ad4753bcfddf350fec0d8d9b516d3ece0012728eb9c5fcc9180b853e85016350",
+        "version": "4d3cbfc85713f77deda30bf1a50345d736c88699a5472663578d7b11b556c16a",
+        "signature": "4c5129fd010f96da884da70c23b6f795f98ec8b7d7d7f9f1e5c4adef16842127",
         "affectsGlobalScope": false
       },
       "../src/index.ts": {
@@ -517,7 +517,7 @@
         "affectsGlobalScope": false
       },
       "../test/unit/merkle.test.ts": {
-        "version": "f90616d352e6ab01ff844e52f6de53f9ce5b1701ed88e377c0651c664845e495",
+        "version": "5b0b541590d379b98d896af9ea9be6b02134545b9244f19c5a747a4811283b35",
         "signature": "9c08a7b90ff955d2b46fc1ad99c1b6a1a57c2eb00cc93bf9f567b7df3652bca9",
         "affectsGlobalScope": false
       },

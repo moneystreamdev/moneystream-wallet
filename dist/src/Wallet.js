@@ -500,6 +500,29 @@ var Wallet = /** @class */ (function () {
             });
         });
     };
+    //TODO: following utility type funcs can go elsewhere
+    Wallet.prototype.countOutputs = function (tx) {
+        var _a;
+        var cnt = 0;
+        for (var index = 0; index < tx.txOuts.length; index++) {
+            var txout = tx.txOuts[index];
+            if (!((_a = txout.script) === null || _a === void 0 ? void 0 : _a.isSafeDataOut())) {
+                cnt++;
+            }
+        }
+        return cnt;
+    };
+    Wallet.prototype.filteredOutputs = function (tx) {
+        var _a;
+        var result = [];
+        for (var index = 0; index < tx.txOuts.length; index++) {
+            var txout = tx.txOuts[index];
+            if (!((_a = txout.script) === null || _a === void 0 ? void 0 : _a.isSafeDataOut())) {
+                result.push(txout);
+            }
+        }
+        return result;
+    };
     return Wallet;
 }());
 exports.Wallet = Wallet;

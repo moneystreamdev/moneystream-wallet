@@ -69,5 +69,7 @@ export declare class Wallet {
         tx: any;
         utxos: OutputCollection;
     } | undefined>;
+    countOutputs(tx: typeof Tx): number;
+    filteredOutputs(tx: typeof Tx): any[];
 }
 //# sourceMappingURL=Wallet.d.ts.map

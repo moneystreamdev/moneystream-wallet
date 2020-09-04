@@ -31,11 +31,16 @@ describe('Merkle tests', function () {
         var m = new Merkle_1.Merkle();
         var h = m.hash(sessionContext);
         expect(h).toBeInstanceOf(Buffer);
-        expect(h.toString('hex'))
+        expect(h === null || h === void 0 ? void 0 : h.toString('hex'))
             .toBe("ecb02ef91479fd8ef0ef7f3c83ce2642bdd2341dbdd846d5c6a061157eddbf0a");
         sessionContext.amount = 99;
         var h2 = m.hash(sessionContext);
-        expect(h.toString()).not.toBe(h2.toString());
+        expect(h === null || h === void 0 ? void 0 : h.toString()).not.toBe(h2 === null || h2 === void 0 ? void 0 : h2.toString());
+    });
+    it('should merkle null', function () {
+        var m = new Merkle_1.Merkle();
+        var h = m.hash(null);
+        expect(h).toBe(null);
     });
 });
 //# sourceMappingURL=merkle.test.js.map
