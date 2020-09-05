@@ -165,6 +165,18 @@ var Wallet = /** @class */ (function () {
         }
         return fundingTotal;
     };
+    Wallet.prototype.getTxSummary = function (tx) {
+        var totins = 0;
+        for (var index = 0; index < tx.txIns.length; index++) {
+            var txin = tx.txIns[index];
+            var txInputOut = this.getInputOutput(txin, index);
+            totins += (txInputOut ? txInputOut.satoshis : 0);
+        }
+        return {
+            input: totins,
+            output: tx.txOuts.reduce(function (x, curr) { return x + curr.valueBn.toNumber(); }, 0)
+        };
+    };
     Wallet.prototype.logDetailsLastTx = function () {
         this.logDetails(this.lastTx);
     };
@@ -439,9 +451,7 @@ var Wallet = /** @class */ (function () {
                             }
                         }
                         //balance goes to payto (string|Script)
-                        if (payTo) {
-                            txb.addOutputScript(satoshis.toNumber(), payTo);
-                        }
+                        this.handlePayTo(txb, payTo, satoshis);
                         if (data) {
                             this.addData(txb, data);
                         }
@@ -459,6 +469,28 @@ var Wallet = /** @class */ (function () {
                 }
             });
         });
+    };
+    Wallet.prototype.handlePayTo = function (txb, payTo, satoshis) {
+        if (payTo) {
+            if (Array.isArray(payTo)) {
+                var tot = 0;
+                for (var index = 0; index < payTo.length; index++) {
+                    var pay = payTo[index];
+                    // pay can be one or object to/percent
+                    var calculatedAmount = Math.floor(satoshis.toNumber() * pay.percent / 100);
+                    tot += calculatedAmount;
+                    if (index === payTo.length - 1) {
+                        // this gives extra amount to last one listed!
+                        calculatedAmount += (satoshis.toNumber() - tot);
+                    }
+                    txb.addOutputScript(calculatedAmount, pay.to);
+                }
+            }
+            else {
+                // just one, pay all to them
+                txb.addOutputScript(satoshis.toNumber(), payTo);
+            }
+        }
     };
     // attempt to split utxos, trying to create
     // the targeted number of outputs with at least

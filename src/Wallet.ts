@@ -114,6 +114,20 @@ export class Wallet {
         return fundingTotal
     }
 
+    getTxSummary(tx:typeof Tx): any {
+        let totins = 0
+        for (let index = 0; index < tx.txIns.length; index++) {
+            const txin = tx.txIns[index]
+            const txInputOut = this.getInputOutput(txin, index)
+            totins += (txInputOut ? txInputOut.satoshis:0)
+        }
+        return {
+            input: totins,
+            output: tx.txOuts.reduce((x:number, curr:any) => x + curr.valueBn.toNumber(), 0)
+        }
+    }
+
+
     logDetailsLastTx() {
         this.logDetails(this.lastTx)
     }
@@ -295,7 +309,7 @@ export class Wallet {
     // payTo should be script, as instance of Script or string
     async makeStreamableCashTx(
         satoshis:Long, 
-        payTo?:string|any, 
+        payTo?:typeof Script|Array<any>|null, 
         makeFuture:boolean = true,
         utxos?:OutputCollection,
         data?: Buffer
@@ -346,11 +360,7 @@ export class Wallet {
             }
         }
         //balance goes to payto (string|Script)
-        if (payTo) {
-            txb.addOutputScript(
-                satoshis.toNumber(), payTo
-            )
-        }
+        this.handlePayTo(txb,payTo, satoshis)
         if (data) {
             this.addData(txb, data)
         }
@@ -364,6 +374,34 @@ export class Wallet {
         }
         // at this point, tx is spendable by anyone!
         // only pass it through secure channel to recipient
+    }
+
+    handlePayTo(
+        txb: TransactionBuilder, 
+        payTo: string|Array<any>|null|undefined, 
+        satoshis: Long
+    ) {
+        if (payTo) {
+            if (Array.isArray(payTo)) {
+                let tot = 0
+                for (let index = 0; index < payTo.length; index++) {
+                    const pay = payTo[index]
+                    // pay can be one or object to/percent
+                    let calculatedAmount = Math.floor(satoshis.toNumber() * pay.percent/100)
+                    tot += calculatedAmount
+                    if (index === payTo.length - 1) {
+                        // this gives extra amount to last one listed!
+                        calculatedAmount += (satoshis.toNumber() - tot)
+                    }
+                    txb.addOutputScript(calculatedAmount, pay.to)
+                }
+            } else {
+                // just one, pay all to them
+                txb.addOutputScript(
+                    satoshis.toNumber(), payTo
+                )
+            }
+        }
     }
 
     // attempt to split utxos, trying to create

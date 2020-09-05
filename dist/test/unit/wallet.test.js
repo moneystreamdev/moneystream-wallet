@@ -516,5 +516,139 @@ describe('Wallet tests', function () {
             }
         });
     }); });
+    it('adds payto', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var w, buildResult;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    w = new Wallet_1.Wallet();
+                    w.loadWallet();
+                    w.selectedUtxos = createUtxos(1, 1000);
+                    return [4 /*yield*/, w.makeStreamableCashTx(Long.fromNumber(100), w.keyPair.toOutputScript(), true, undefined)];
+                case 1:
+                    buildResult = _a.sent();
+                    w.logDetailsLastTx();
+                    expect(buildResult === null || buildResult === void 0 ? void 0 : buildResult.tx).toBeDefined();
+                    expect(w.getTxFund(w.lastTx)).toBe(100);
+                    expect(buildResult.tx.txOuts.length).toBe(2);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    it('adds payto array single', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var w, buildResult;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    w = new Wallet_1.Wallet();
+                    w.loadWallet();
+                    w.selectedUtxos = createUtxos(1, 1000);
+                    return [4 /*yield*/, w.makeStreamableCashTx(Long.fromNumber(100), [{ to: w.keyPair.toOutputScript(), percent: 100 }], true, undefined)];
+                case 1:
+                    buildResult = _a.sent();
+                    w.logDetailsLastTx();
+                    expect(buildResult === null || buildResult === void 0 ? void 0 : buildResult.tx).toBeDefined();
+                    expect(w.getTxFund(w.lastTx)).toBe(100);
+                    expect(w.getTxSummary(w.lastTx).output).toBe(1000);
+                    expect(buildResult.tx.txOuts.length).toBe(2);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    it('adds payto array double', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var w, buildResult;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    w = new Wallet_1.Wallet();
+                    w.loadWallet();
+                    w.selectedUtxos = createUtxos(1, 1000);
+                    return [4 /*yield*/, w.makeStreamableCashTx(Long.fromNumber(100), [
+                            { to: w.keyPair.toOutputScript(), percent: 50 },
+                            { to: w.keyPair.toOutputScript(), percent: 50 },
+                        ], true, undefined)];
+                case 1:
+                    buildResult = _a.sent();
+                    w.logDetailsLastTx();
+                    expect(buildResult === null || buildResult === void 0 ? void 0 : buildResult.tx).toBeDefined();
+                    expect(w.getTxFund(w.lastTx)).toBe(100);
+                    expect(w.getTxSummary(w.lastTx).output).toBe(1000);
+                    expect(buildResult.tx.txOuts.length).toBe(3);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    it('adds payto array tripple', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var w, buildResult;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    w = new Wallet_1.Wallet();
+                    w.loadWallet();
+                    w.selectedUtxos = createUtxos(1, 2000);
+                    return [4 /*yield*/, w.makeStreamableCashTx(Long.fromNumber(1000), [
+                            { to: w.keyPair.toOutputScript(), percent: 33.4 },
+                            { to: w.keyPair.toOutputScript(), percent: 33.3 },
+                            { to: w.keyPair.toOutputScript(), percent: 33.3 },
+                        ], true, undefined)];
+                case 1:
+                    buildResult = _a.sent();
+                    w.logDetailsLastTx();
+                    expect(buildResult === null || buildResult === void 0 ? void 0 : buildResult.tx).toBeDefined();
+                    expect(w.getTxFund(w.lastTx)).toBe(1000);
+                    expect(w.getTxSummary(w.lastTx).output).toBe(2000);
+                    expect(buildResult.tx.txOuts.length).toBe(4);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    it('adds payto array tripple', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var w, buildResult;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    w = new Wallet_1.Wallet();
+                    w.loadWallet();
+                    w.selectedUtxos = createUtxos(1, 1000);
+                    return [4 /*yield*/, w.makeStreamableCashTx(Long.fromNumber(100), [
+                            { to: w.keyPair.toOutputScript(), percent: 33.4 },
+                            { to: w.keyPair.toOutputScript(), percent: 33.3 },
+                            { to: w.keyPair.toOutputScript(), percent: 33.3 },
+                        ], true, undefined)];
+                case 1:
+                    buildResult = _a.sent();
+                    w.logDetailsLastTx();
+                    expect(buildResult === null || buildResult === void 0 ? void 0 : buildResult.tx).toBeDefined();
+                    expect(w.getTxFund(w.lastTx)).toBe(100);
+                    expect(w.getTxSummary(w.lastTx).output).toBe(1000);
+                    expect(buildResult.tx.txOuts.length).toBe(4);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    it('adds payto array tripple', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var w, buildResult;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    w = new Wallet_1.Wallet();
+                    w.loadWallet();
+                    w.selectedUtxos = createUtxos(1, 1000);
+                    return [4 /*yield*/, w.makeStreamableCashTx(Long.fromNumber(100), [
+                            { to: w.keyPair.toOutputScript(), percent: 25 },
+                            { to: w.keyPair.toOutputScript(), percent: 50 },
+                            { to: w.keyPair.toOutputScript(), percent: 25 },
+                        ], true, undefined)];
+                case 1:
+                    buildResult = _a.sent();
+                    w.logDetailsLastTx();
+                    expect(buildResult === null || buildResult === void 0 ? void 0 : buildResult.tx).toBeDefined();
+                    expect(w.getTxFund(w.lastTx)).toBe(100);
+                    expect(w.getTxSummary(w.lastTx).output).toBe(1000);
+                    expect(buildResult.tx.txOuts.length).toBe(4);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
 });
 //# sourceMappingURL=wallet.test.js.map

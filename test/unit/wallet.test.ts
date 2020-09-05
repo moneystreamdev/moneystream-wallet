@@ -355,5 +355,109 @@ describe('Wallet tests', () => {
     expect(buildResult.tx.txOuts.length).toBe(2)
     expect(buildResult.tx.txOuts[1].script.isSafeDataOut()).toBeTruthy()
   })
+  it('adds payto', async () => {
+    const w = new Wallet()
+    w.loadWallet()
+    w.selectedUtxos = createUtxos(1,1000)
+    const buildResult = await w.makeStreamableCashTx(
+      Long.fromNumber(100),
+      w.keyPair.toOutputScript(), 
+      true, undefined
+      )
+    w.logDetailsLastTx()
+    expect(buildResult?.tx).toBeDefined()
+    expect(w.getTxFund(w.lastTx)).toBe(100)
+    expect(buildResult.tx.txOuts.length).toBe(2)
+  })
+  it('adds payto array single', async () => {
+    const w = new Wallet()
+    w.loadWallet()
+    w.selectedUtxos = createUtxos(1,1000)
+    const buildResult = await w.makeStreamableCashTx(
+      Long.fromNumber(100),
+      [{to: w.keyPair.toOutputScript(), percent:100 }], 
+      true, undefined
+      )
+    w.logDetailsLastTx()
+    expect(buildResult?.tx).toBeDefined()
+    expect(w.getTxFund(w.lastTx)).toBe(100)
+    expect(w.getTxSummary(w.lastTx).output).toBe(1000)
+    expect(buildResult.tx.txOuts.length).toBe(2)
+  })
+  it('adds payto array double', async () => {
+    const w = new Wallet()
+    w.loadWallet()
+    w.selectedUtxos = createUtxos(1,1000)
+    const buildResult = await w.makeStreamableCashTx(
+      Long.fromNumber(100),
+      [
+        {to: w.keyPair.toOutputScript(), percent:50 },
+        {to: w.keyPair.toOutputScript(), percent:50 },
+      ], 
+      true, undefined
+      )
+    w.logDetailsLastTx()
+    expect(buildResult?.tx).toBeDefined()
+    expect(w.getTxFund(w.lastTx)).toBe(100)
+    expect(w.getTxSummary(w.lastTx).output).toBe(1000)
+    expect(buildResult.tx.txOuts.length).toBe(3)
+  })
+  it('adds payto array tripple', async () => {
+    const w = new Wallet()
+    w.loadWallet()
+    w.selectedUtxos = createUtxos(1,2000)
+    const buildResult = await w.makeStreamableCashTx(
+      Long.fromNumber(1000),
+      [
+        {to: w.keyPair.toOutputScript(), percent:33.4 },
+        {to: w.keyPair.toOutputScript(), percent:33.3 },
+        {to: w.keyPair.toOutputScript(), percent:33.3 },
+      ], 
+      true, undefined
+      )
+    w.logDetailsLastTx()
+    expect(buildResult?.tx).toBeDefined()
+    expect(w.getTxFund(w.lastTx)).toBe(1000)
+    expect(w.getTxSummary(w.lastTx).output).toBe(2000)
+    expect(buildResult.tx.txOuts.length).toBe(4)
+  })
+  it('adds payto array tripple', async () => {
+    const w = new Wallet()
+    w.loadWallet()
+    w.selectedUtxos = createUtxos(1,1000)
+    const buildResult = await w.makeStreamableCashTx(
+      Long.fromNumber(100),
+      [
+        {to: w.keyPair.toOutputScript(), percent:33.4 },
+        {to: w.keyPair.toOutputScript(), percent:33.3 },
+        {to: w.keyPair.toOutputScript(), percent:33.3 },
+      ], 
+      true, undefined
+      )
+    w.logDetailsLastTx()
+    expect(buildResult?.tx).toBeDefined()
+    expect(w.getTxFund(w.lastTx)).toBe(100)
+    expect(w.getTxSummary(w.lastTx).output).toBe(1000)
+    expect(buildResult.tx.txOuts.length).toBe(4)
+  })
+  it('adds payto array tripple', async () => {
+    const w = new Wallet()
+    w.loadWallet()
+    w.selectedUtxos = createUtxos(1,1000)
+    const buildResult = await w.makeStreamableCashTx(
+      Long.fromNumber(100),
+      [
+        {to: w.keyPair.toOutputScript(), percent:25 },
+        {to: w.keyPair.toOutputScript(), percent:50 },
+        {to: w.keyPair.toOutputScript(), percent:25 },
+      ], 
+      true, undefined
+      )
+    w.logDetailsLastTx()
+    expect(buildResult?.tx).toBeDefined()
+    expect(w.getTxFund(w.lastTx)).toBe(100)
+    expect(w.getTxSummary(w.lastTx).output).toBe(1000)
+    expect(buildResult.tx.txOuts.length).toBe(4)
+  })
 
 })

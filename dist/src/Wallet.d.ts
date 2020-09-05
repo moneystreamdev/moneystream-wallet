@@ -2,7 +2,7 @@
 /// <reference types="node" />
 import { IStorage } from './FileSystemStorage';
 import { IIndexingService } from './IndexingService';
-import { Tx } from 'bsv';
+import { Tx, Script } from 'bsv';
 import { KeyPair } from './KeyPair';
 import { TransactionBuilder } from './TransactionBuilder';
 import { OutputCollection } from './OutputCollection';
@@ -41,6 +41,7 @@ export declare class Wallet {
     };
     getInputOutput(txin: any, index: number): UnspentOutput | null | undefined;
     getTxFund(tx: typeof Tx): number;
+    getTxSummary(tx: typeof Tx): any;
     logDetailsLastTx(): void;
     logDetails(tx?: any): void;
     toJSON(): {
@@ -58,12 +59,13 @@ export declare class Wallet {
     tryLoadWalletUtxos(): Promise<void>;
     selectExpandableInputs(satoshis: Long, selected: OutputCollection, utxos?: OutputCollection): OutputCollection;
     addData(txb: TransactionBuilder, data: Buffer): void;
-    makeStreamableCashTx(satoshis: Long, payTo?: string | any, makeFuture?: boolean, utxos?: OutputCollection, data?: Buffer): Promise<{
+    makeStreamableCashTx(satoshis: Long, payTo?: typeof Script | Array<any> | null, makeFuture?: boolean, utxos?: OutputCollection, data?: Buffer): Promise<{
         hex: any;
         tx: any;
         utxos: OutputCollection;
         txOutMap: any;
     }>;
+    handlePayTo(txb: TransactionBuilder, payTo: string | Array<any> | null | undefined, satoshis: Long): void;
     split(targetCount: number, satoshis: number): Promise<{
         hex: any;
         tx: any;

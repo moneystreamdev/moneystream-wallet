@@ -92,7 +92,7 @@ export class TransactionBuilder {
         return this.txb.txIns.length
     }
 
-    addOutputScript(satoshis:number, script:any) {
+    addOutputScript(satoshis:number, script:string|typeof Script) {
         if (typeof script === "string") {
             script = new Script().fromString(script)
         }
