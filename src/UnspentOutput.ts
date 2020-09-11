@@ -8,15 +8,18 @@ export class UnspentOutput {
     // txid is string but should be buf?
     txId:string = ""
     outputIndex:number|undefined = 0
+    walletId: string = ""
 
     constructor(satoshis:number,script:typeof Script,
         txid?:string,txoutindex?:number,
-        status?:string) {
+        status?:string,
+        walletId?: string) {
         this.script = script
         this.satoshis = satoshis
         this.txId = txid || ""
         this.outputIndex = txoutindex
         this._status = status || 'available'
+        this.walletId = walletId || ""
     }
 
     get status() { return this._status}

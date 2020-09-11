@@ -23,6 +23,15 @@ describe('output collection tests', () => {
         expect(utxos).toBeInstanceOf(OutputCollection)
         expect(utxos.hasAny()).toBeFalsy()
     })
+    it('should set walletid', () => {
+        const unspents: UnspentOutput[] = []
+        const utxos = new OutputCollection(
+            unspents,'somewallet')
+        expect(utxos).toBeInstanceOf(OutputCollection)
+        expect(utxos.hasAny()).toBeFalsy()
+        console.log(utxos)
+        expect(utxos.walletId).toBe('somewallet')
+    })
     it('should break up a utxo', () => {
         const utxos = new OutputCollection()
         utxos.add(new UnspentOutput(10000,''))

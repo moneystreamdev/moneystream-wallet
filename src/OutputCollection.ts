@@ -4,8 +4,13 @@ import { Script } from 'bsv'
 //a list of transaction outputs
 export class OutputCollection {
     private _outs: UnspentOutput[] = []
-    constructor(outputs?:UnspentOutput[]) {
+    walletId: string = ""
+    constructor(
+        outputs?:UnspentOutput[],
+        walletId?:string
+    ) {
         if (outputs) this._outs = outputs
+        this.walletId = walletId || ""
     }
     get items() { return this._outs }
 

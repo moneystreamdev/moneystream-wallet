@@ -50,5 +50,13 @@ describe('unspentoutput tests', () => {
         utxo.spend()
         expect(utxo.status).toBe('spent')
     })
+    it('it should set walletId', () => {
+        const utxo = new UnspentOutput(
+            1111,
+            Script.fromString(''),
+            '123',99,undefined,"userwallet"
+        )
+        expect(utxo.walletId).toBe("userwallet")
+    })
 
 })
