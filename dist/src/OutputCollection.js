@@ -5,10 +5,12 @@ var UnspentOutput_1 = require("./UnspentOutput");
 var bsv_1 = require("bsv");
 //a list of transaction outputs
 var OutputCollection = /** @class */ (function () {
-    function OutputCollection(outputs) {
+    function OutputCollection(outputs, walletId) {
         this._outs = [];
+        this.walletId = "";
         if (outputs)
             this._outs = outputs;
+        this.walletId = walletId || "";
     }
     Object.defineProperty(OutputCollection.prototype, "items", {
         get: function () { return this._outs; },

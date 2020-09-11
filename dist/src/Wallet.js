@@ -305,7 +305,7 @@ var Wallet = /** @class */ (function () {
                         if (utxos && utxos.length > 0) {
                             for (i = 0; i < utxos.length; i++) {
                                 utxo0 = utxos[i];
-                                newutxo = new UnspentOutput_1.UnspentOutput(utxo0.value, this._keypair.toOutputScript(), Buffer.from(utxo0.tx_hash, 'hex').reverse().toString('hex'), utxo0.tx_pos);
+                                newutxo = new UnspentOutput_1.UnspentOutput(utxo0.value, this._keypair.toOutputScript(), Buffer.from(utxo0.tx_hash, 'hex').reverse().toString('hex'), utxo0.tx_pos, undefined, this._keypair.toAddress().toString());
                                 addcount = this.selectedUtxos.add_conditional(newutxo);
                             }
                         }

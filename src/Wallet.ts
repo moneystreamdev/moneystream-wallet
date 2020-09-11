@@ -241,7 +241,9 @@ export class Wallet {
                         utxo0.value, 
                         this._keypair.toOutputScript(),
                         Buffer.from(utxo0.tx_hash,'hex').reverse().toString('hex'),
-                        utxo0.tx_pos
+                        utxo0.tx_pos,
+                        undefined,
+                        this._keypair.toAddress().toString()
                         )
                     const addcount = this.selectedUtxos.add_conditional(newutxo)
                 }

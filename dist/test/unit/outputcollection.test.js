@@ -37,6 +37,14 @@ describe('output collection tests', function () {
         expect(utxos).toBeInstanceOf(OutputCollection_1.OutputCollection);
         expect(utxos.hasAny()).toBeFalsy();
     });
+    it('should set walletid', function () {
+        var unspents = [];
+        var utxos = new OutputCollection_1.OutputCollection(unspents, 'somewallet');
+        expect(utxos).toBeInstanceOf(OutputCollection_1.OutputCollection);
+        expect(utxos.hasAny()).toBeFalsy();
+        console.log(utxos);
+        expect(utxos.walletId).toBe('somewallet');
+    });
     it('should break up a utxo', function () {
         var utxos = new OutputCollection_1.OutputCollection();
         utxos.add(new src_1.UnspentOutput(10000, ''));

@@ -4,16 +4,18 @@ exports.UnspentOutput = void 0;
 var bsv_1 = require("bsv");
 var TxPointer_1 = require("./TxPointer");
 var UnspentOutput = /** @class */ (function () {
-    function UnspentOutput(satoshis, script, txid, txoutindex, status) {
+    function UnspentOutput(satoshis, script, txid, txoutindex, status, walletId) {
         this._status = "available";
         // txid is string but should be buf?
         this.txId = "";
         this.outputIndex = 0;
+        this.walletId = "";
         this.script = script;
         this.satoshis = satoshis;
         this.txId = txid || "";
         this.outputIndex = txoutindex;
         this._status = status || 'available';
+        this.walletId = walletId || "";
     }
     Object.defineProperty(UnspentOutput.prototype, "status", {
         get: function () { return this._status; },

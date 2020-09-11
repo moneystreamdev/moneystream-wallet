@@ -6,7 +6,8 @@ export declare class UnspentOutput {
     script: typeof Script;
     txId: string;
     outputIndex: number | undefined;
-    constructor(satoshis: number, script: typeof Script, txid?: string, txoutindex?: number, status?: string);
+    walletId: string;
+    constructor(satoshis: number, script: typeof Script, txid?: string, txoutindex?: number, status?: string, walletId?: string);
     get status(): string;
     get txPointer(): TxPointer;
     static fromTxOut(txOut: typeof TxOut, txid: string, txoutindex: number): UnspentOutput;

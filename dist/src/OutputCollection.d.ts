@@ -3,7 +3,8 @@
 import { UnspentOutput } from "./UnspentOutput";
 export declare class OutputCollection {
     private _outs;
-    constructor(outputs?: UnspentOutput[]);
+    walletId: string;
+    constructor(outputs?: UnspentOutput[], walletId?: string);
     get items(): UnspentOutput[];
     hasAny(): boolean;
     add(output: UnspentOutput): number;
