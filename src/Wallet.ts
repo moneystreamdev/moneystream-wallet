@@ -410,12 +410,18 @@ export class Wallet {
     // the targeted number of outputs with at least
     // the minimum number of satoshis in each one
     // on a best effort basis
-    async split(targetCount:number, satoshis:number) {
+    // caller must select utxos
+    async split(
+        utxos:OutputCollection,
+        targetCount:number, 
+        satoshis:number
+    ) {
         const minSatoshis = Math.max(satoshis,this._dustLimit)
         //get utxos not emcumbered
-        await this.tryLoadWalletUtxos()
+        //await this.tryLoadWalletUtxos()
         //from all possible utxos, 
-        const splits = this.selectedUtxos.spendable().split(targetCount, minSatoshis)
+        //const splits = this.selectedUtxos.spendable().split(targetCount, minSatoshis)
+        const splits = utxos.split(targetCount, minSatoshis)
         //only ones greater than min or dust
         if (splits.utxo.satoshis > 0) {
             //mining fee is maken out of each utxo instead of at end

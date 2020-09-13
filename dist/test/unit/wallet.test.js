@@ -311,8 +311,7 @@ describe('Wallet tests', function () {
                     w.loadWallet();
                     utxos = new OutputCollection_1.OutputCollection();
                     utxos.add(new UnspentOutput_1.UnspentOutput(10000, w.keyPair.toOutputScript(), someHashBufString, 0));
-                    w.selectedUtxos = utxos;
-                    return [4 /*yield*/, w.split(10, 1000)];
+                    return [4 /*yield*/, w.split(utxos, 10, 1000)];
                 case 1:
                     buildResult = _a.sent();
                     expect(buildResult === null || buildResult === void 0 ? void 0 : buildResult.tx.txIns.length).toBe(1);
@@ -337,12 +336,11 @@ describe('Wallet tests', function () {
                     utxos.add(new UnspentOutput_1.UnspentOutput(2987, w.keyPair.toOutputScript(), someHashBufString, 3));
                     utxos.add(new UnspentOutput_1.UnspentOutput(2987, w.keyPair.toOutputScript(), someHashBufString, 4));
                     utxos.add(new UnspentOutput_1.UnspentOutput(2487, w.keyPair.toOutputScript(), someHashBufString, 5));
-                    w.selectedUtxos = utxos;
                     total = 5323 //utxos.satoshis
                     ;
                     count = 7;
                     splitAmount = Math.floor(total / count);
-                    return [4 /*yield*/, w.split(count, 600)];
+                    return [4 /*yield*/, w.split(utxos, count, 600)];
                 case 1:
                     buildResult = _a.sent();
                     expect(buildResult === null || buildResult === void 0 ? void 0 : buildResult.tx.txIns.length).toBe(1);

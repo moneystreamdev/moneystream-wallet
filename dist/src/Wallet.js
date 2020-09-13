@@ -496,39 +496,30 @@ var Wallet = /** @class */ (function () {
     // the targeted number of outputs with at least
     // the minimum number of satoshis in each one
     // on a best effort basis
-    Wallet.prototype.split = function (targetCount, satoshis) {
+    // caller must select utxos
+    Wallet.prototype.split = function (utxos, targetCount, satoshis) {
         return __awaiter(this, void 0, void 0, function () {
             var minSatoshis, splits, txb, index, split;
             return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        minSatoshis = Math.max(satoshis, this._dustLimit);
-                        //get utxos not emcumbered
-                        return [4 /*yield*/, this.tryLoadWalletUtxos()
-                            //from all possible utxos, 
-                        ];
-                    case 1:
-                        //get utxos not emcumbered
-                        _a.sent();
-                        splits = this.selectedUtxos.spendable().split(targetCount, minSatoshis);
-                        //only ones greater than min or dust
-                        if (splits.utxo.satoshis > 0) {
-                            txb = new TransactionBuilder_1.TransactionBuilder();
-                            txb.addInput(splits.utxo.firstItem, this._keypair.pubKey);
-                            for (index = 0; index < splits.breakdown.items.length; index++) {
-                                split = splits.breakdown.items[index];
-                                txb.addOutputAddress(split.satoshis, this._keypair.toAddress());
-                            }
-                            console.log(splits.breakdown);
-                            this.lastTx = txb.buildAndSign(this._keypair);
-                            return [2 /*return*/, {
-                                    hex: this.lastTx.toHex(),
-                                    tx: this.lastTx,
-                                    utxos: splits.utxo
-                                }];
-                        }
-                        return [2 /*return*/];
+                minSatoshis = Math.max(satoshis, this._dustLimit);
+                splits = utxos.split(targetCount, minSatoshis);
+                //only ones greater than min or dust
+                if (splits.utxo.satoshis > 0) {
+                    txb = new TransactionBuilder_1.TransactionBuilder();
+                    txb.addInput(splits.utxo.firstItem, this._keypair.pubKey);
+                    for (index = 0; index < splits.breakdown.items.length; index++) {
+                        split = splits.breakdown.items[index];
+                        txb.addOutputAddress(split.satoshis, this._keypair.toAddress());
+                    }
+                    console.log(splits.breakdown);
+                    this.lastTx = txb.buildAndSign(this._keypair);
+                    return [2 /*return*/, {
+                            hex: this.lastTx.toHex(),
+                            tx: this.lastTx,
+                            utxos: splits.utxo
+                        }];
                 }
+                return [2 /*return*/];
             });
         });
     };

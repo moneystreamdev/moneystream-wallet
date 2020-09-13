@@ -206,9 +206,8 @@ describe('Wallet tests', () => {
     w.loadWallet()
     const utxos = new OutputCollection()
     utxos.add(new UnspentOutput(10000,w.keyPair.toOutputScript(),someHashBufString,0))
-    w.selectedUtxos = utxos
     // 10000-546/10
-    const buildResult = await w.split(10,1000)
+    const buildResult = await w.split(utxos,10,1000)
     expect(buildResult?.tx.txIns.length).toBe(1)
     expect(buildResult?.tx.txOuts.length).toBe(10)
     expect(buildResult?.tx.txOuts[0].valueBn.toNumber()).toBe(945)
@@ -225,11 +224,10 @@ describe('Wallet tests', () => {
     utxos.add(new UnspentOutput(2987,w.keyPair.toOutputScript(),someHashBufString,3))
     utxos.add(new UnspentOutput(2987,w.keyPair.toOutputScript(),someHashBufString,4))
     utxos.add(new UnspentOutput(2487,w.keyPair.toOutputScript(),someHashBufString,5))
-    w.selectedUtxos = utxos
     const total = 5323 //utxos.satoshis
     const count = 7
     const splitAmount = Math.floor(total/count)
-    const buildResult = await w.split(count,600)
+    const buildResult = await w.split(utxos,count,600)
     expect(buildResult?.tx.txIns.length).toBe(1)
     expect(buildResult?.tx.txOuts.length).toBe(count)
     expect(buildResult?.tx.txOuts[0].valueBn.toNumber()).toBe(600)
