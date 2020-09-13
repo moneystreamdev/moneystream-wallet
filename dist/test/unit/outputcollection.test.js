@@ -127,5 +127,36 @@ describe('output collection tests', function () {
         expect(txfound).toBeDefined();
         expect(txfound === null || txfound === void 0 ? void 0 : txfound.txId).toBe(txout.txId);
     });
+    it('should get largest unspent', function () {
+        var utxos1 = createUtxos(1, 1);
+        expect(utxos1.count).toBe(1);
+        var utxos2 = createUtxos(1, 2);
+        expect(utxos2.count).toBe(1);
+        var utxos3 = createUtxos(1, 3);
+        expect(utxos3.count).toBe(1);
+        var combined = utxos1;
+        combined.add(utxos2.firstItem);
+        combined.add(utxos3.firstItem);
+        expect(combined.count).toBe(3);
+        expect(combined.firstItem.satoshis).toBe(1);
+        expect(combined.largestItem.satoshis).toBe(3);
+        // largest resorts
+        expect(combined.firstItem.satoshis).toBe(3);
+    });
+    it('should get smallest unspent', function () {
+        var utxos1 = createUtxos(1, 1);
+        expect(utxos1.count).toBe(1);
+        var utxos2 = createUtxos(1, 2);
+        expect(utxos2.count).toBe(1);
+        var utxos3 = createUtxos(1, 3);
+        expect(utxos3.count).toBe(1);
+        var combined = utxos3;
+        combined.add(utxos2.firstItem);
+        combined.add(utxos1.firstItem);
+        expect(combined.count).toBe(3);
+        expect(combined.firstItem.satoshis).toBe(3);
+        expect(combined.smallestItem.satoshis).toBe(1);
+        expect(combined.firstItem.satoshis).toBe(3);
+    });
 });
 //# sourceMappingURL=outputcollection.test.js.map

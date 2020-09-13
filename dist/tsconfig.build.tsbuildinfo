@@ -472,8 +472,8 @@
         "affectsGlobalScope": false
       },
       "../src/OutputCollection.ts": {
-        "version": "8c141caf7297427c5393c86f7391fe46fba7f11ce59f764c3615f58dd024d1ba",
-        "signature": "aefe389036ee8fb55861921970858e642672617d7c9c908a76e8e39315182d67",
+        "version": "83bc084aa3be74da125bf31706578e0cfb4cdc5c0ef2cab52c20cf53f81dda2b",
+        "signature": "8e51f89b97a0448dc7c224a66b211e9bb95006547dad29e7a582caa30c04af27",
         "affectsGlobalScope": false
       },
       "../src/TransactionBuilder.ts": {
@@ -522,7 +522,7 @@
         "affectsGlobalScope": false
       },
       "../test/unit/outputcollection.test.ts": {
-        "version": "1c057bca9bd0c2c000586cf0c86079be084e2e27480e3e01fc93fab3f90181da",
+        "version": "92f122c74a37f3318e809dd72324e64c119bb8aa1bc2b7fa954b31a2f29dd45c",
         "signature": "574938e762a716357d423e9ad8036f980b2f1a25d174a841e4744dde28b83601",
         "affectsGlobalScope": false
       },

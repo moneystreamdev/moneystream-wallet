@@ -64,6 +64,24 @@ var OutputCollection = /** @class */ (function () {
     OutputCollection.prototype.spent = function () {
         return new OutputCollection(this._outs.filter(function (o) { return o.status === 'spent'; }));
     };
+    Object.defineProperty(OutputCollection.prototype, "largestItem", {
+        get: function () {
+            // sort by satoshis descending
+            this._outs.sort(function (a, b) { return b.satoshis - a.satoshis; });
+            return this._outs[0];
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(OutputCollection.prototype, "smallestItem", {
+        get: function () {
+            // sort by satoshis descending
+            this._outs.sort(function (a, b) { return b.satoshis - a.satoshis; });
+            return this._outs[this.count - 1];
+        },
+        enumerable: false,
+        configurable: true
+    });
     Object.defineProperty(OutputCollection.prototype, "satoshis", {
         get: function () {
             if (this._outs.length === 0)

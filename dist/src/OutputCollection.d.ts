@@ -16,6 +16,8 @@ export declare class OutputCollection {
     spendable(): OutputCollection;
     encumbered(): OutputCollection;
     spent(): OutputCollection;
+    get largestItem(): UnspentOutput;
+    get smallestItem(): UnspentOutput;
     get satoshis(): number;
     static fromJSON(json: any): OutputCollection;
     findTxOut(txout: UnspentOutput): UnspentOutput | null;
