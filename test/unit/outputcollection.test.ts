@@ -114,5 +114,38 @@ describe('output collection tests', () => {
         expect(txfound).toBeDefined()
         expect(txfound?.txId).toBe(txout.txId)
     })
+    it('should get largest unspent', () => {
+        const utxos1 = createUtxos(1,1)
+        expect(utxos1.count).toBe(1)
+        const utxos2 = createUtxos(1,2)
+        expect(utxos2.count).toBe(1)
+        const utxos3 = createUtxos(1,3)
+        expect(utxos3.count).toBe(1)
+
+        const combined = utxos1
+        combined.add(utxos2.firstItem)
+        combined.add(utxos3.firstItem)
+        expect(combined.count).toBe(3)
+        expect(combined.firstItem.satoshis).toBe(1)
+        expect(combined.largestItem.satoshis).toBe(3)
+        // largest resorts
+        expect(combined.firstItem.satoshis).toBe(3)
+    })
+    it('should get smallest unspent', () => {
+        const utxos1 = createUtxos(1,1)
+        expect(utxos1.count).toBe(1)
+        const utxos2 = createUtxos(1,2)
+        expect(utxos2.count).toBe(1)
+        const utxos3 = createUtxos(1,3)
+        expect(utxos3.count).toBe(1)
+
+        const combined = utxos3
+        combined.add(utxos2.firstItem)
+        combined.add(utxos1.firstItem)
+        expect(combined.count).toBe(3)
+        expect(combined.firstItem.satoshis).toBe(3)
+        expect(combined.smallestItem.satoshis).toBe(1)
+        expect(combined.firstItem.satoshis).toBe(3)
+    })
 
 })

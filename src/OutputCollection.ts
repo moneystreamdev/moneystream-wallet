@@ -55,6 +55,18 @@ export class OutputCollection {
         return new OutputCollection(this._outs.filter( o => o.status === 'spent'))
     }
 
+    get largestItem(): UnspentOutput {
+        // sort by satoshis descending
+        this._outs.sort((a:any,b:any) => b.satoshis - a.satoshis)
+        return this._outs[0]
+    }
+
+    get smallestItem(): UnspentOutput {
+        // sort by satoshis descending
+        this._outs.sort((a:any,b:any) => b.satoshis - a.satoshis)
+        return this._outs[this.count-1]
+    }
+
     get satoshis(): number {
         if (this._outs.length === 0) return 0
         let sum = 0
