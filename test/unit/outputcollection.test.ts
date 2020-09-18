@@ -88,6 +88,21 @@ describe('output collection tests', () => {
         expect(rehydrate.spendable().count).toBe(1)
         expect(rehydrate.spendable().satoshis).toBe(1)
     })
+    it('should handle null', () => {
+        const rehydrate = OutputCollection.fromJSON(null)
+        expect(rehydrate).toBeInstanceOf(OutputCollection)
+        expect(rehydrate.count).toBe(0)
+    })
+    it('should handle empty', () => {
+        const rehydrate = OutputCollection.fromJSON('')
+        expect(rehydrate).toBeInstanceOf(OutputCollection)
+        expect(rehydrate.count).toBe(0)
+    })
+    it('should handle none', () => {
+        const rehydrate = OutputCollection.fromJSON('[]')
+        expect(rehydrate).toBeInstanceOf(OutputCollection)
+        expect(rehydrate.count).toBe(0)
+    })
     it ('should not add duplicate outputs', () => {
         const outputs = new OutputCollection()
         const txout = new UnspentOutput(1,null,someHashBufString,99)

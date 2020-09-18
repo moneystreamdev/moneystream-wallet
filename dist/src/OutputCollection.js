@@ -99,6 +99,8 @@ var OutputCollection = /** @class */ (function () {
     //create a collection from json
     OutputCollection.fromJSON = function (json) {
         var result = new OutputCollection();
+        if (json === null || json === '' || !json._outs)
+            return result;
         json._outs.forEach(function (output) {
             var unspent = new UnspentOutput_1.UnspentOutput(output.satoshis, new bsv_1.Script().fromString(output.script), 
             //string

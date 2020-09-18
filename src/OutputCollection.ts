@@ -78,8 +78,9 @@ export class OutputCollection {
     }
 
     //create a collection from json
-    static fromJSON(json:any) {
+    static fromJSON(json:any|null) {
         const result = new OutputCollection()
+        if (json === null || json === '' || !json._outs) return result
         json._outs.forEach((output:any) => {
             const unspent = new UnspentOutput(
                 output.satoshis,

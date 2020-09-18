@@ -101,6 +101,21 @@ describe('output collection tests', function () {
         expect(rehydrate.spendable().count).toBe(1);
         expect(rehydrate.spendable().satoshis).toBe(1);
     });
+    it('should handle null', function () {
+        var rehydrate = OutputCollection_1.OutputCollection.fromJSON(null);
+        expect(rehydrate).toBeInstanceOf(OutputCollection_1.OutputCollection);
+        expect(rehydrate.count).toBe(0);
+    });
+    it('should handle empty', function () {
+        var rehydrate = OutputCollection_1.OutputCollection.fromJSON('');
+        expect(rehydrate).toBeInstanceOf(OutputCollection_1.OutputCollection);
+        expect(rehydrate.count).toBe(0);
+    });
+    it('should handle none', function () {
+        var rehydrate = OutputCollection_1.OutputCollection.fromJSON('[]');
+        expect(rehydrate).toBeInstanceOf(OutputCollection_1.OutputCollection);
+        expect(rehydrate.count).toBe(0);
+    });
     it('should not add duplicate outputs', function () {
         var outputs = new OutputCollection_1.OutputCollection();
         var txout = new src_1.UnspentOutput(1, null, someHashBufString, 99);
