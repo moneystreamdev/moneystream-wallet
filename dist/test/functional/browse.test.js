@@ -58,7 +58,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var Wallet_1 = require("../../src/Wallet");
 var KeyPair_1 = require("../../src/KeyPair");
 var Long = __importStar(require("long"));
-var DUST_LIMIT = 546;
+var DUST_LIMIT = 140;
 var demo_wif = 'L5bxi2ef2R8LuTvQbGwkY9w6KJzpPckqRQMnjtD8D2EFqjGeJnSq';
 var keyPair = new KeyPair_1.KeyPair().fromRandom();
 // This is a functional test, not a unit test

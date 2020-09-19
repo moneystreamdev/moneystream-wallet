@@ -78,7 +78,7 @@ var Wallet = /** @class */ (function () {
             | bsv_1.Sig.SIGHASH_FORKID;
         this._isDebug = true;
         this._walletFileName = 'wallet.json';
-        this._dustLimit = 546;
+        this._dustLimit = 140;
         this._storage = storage || new FileSystemStorage_1.default(this._walletFileName);
         this._index = index || new IndexingService_1.default();
     }

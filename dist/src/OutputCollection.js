@@ -145,7 +145,7 @@ var OutputCollection = /** @class */ (function () {
     // return a OutputCollection for wallet to
     // operate upon
     OutputCollection.prototype.split = function (targetCount, satoshis) {
-        var DUST = 546;
+        var DUST = 140;
         this._outs.sort(function (a, b) { return b.satoshis - a.satoshis; });
         var result = {
             utxo: new OutputCollection(),

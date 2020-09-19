@@ -4,7 +4,7 @@ import { OutputCollection } from '../../src/OutputCollection'
 import { TxVerifier, TxOutMap } from 'bsv'
 import * as Long from 'long'
 
-const DUST_LIMIT = 546
+const DUST_LIMIT = 140
 const demo_wif = 'L5bxi2ef2R8LuTvQbGwkY9w6KJzpPckqRQMnjtD8D2EFqjGeJnSq'
 const keyPair = new KeyPair().fromRandom()
 

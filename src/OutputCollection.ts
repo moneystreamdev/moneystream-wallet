@@ -133,7 +133,7 @@ export class OutputCollection {
     // return a OutputCollection for wallet to
     // operate upon
     split (targetCount:number, satoshis:number) {
-        const DUST = 546
+        const DUST = 140
         this._outs.sort((a:any,b:any) => b.satoshis - a.satoshis)
         const result = 
             {

@@ -206,12 +206,12 @@ describe('Wallet tests', () => {
     w.loadWallet()
     const utxos = new OutputCollection()
     utxos.add(new UnspentOutput(10000,w.keyPair.toOutputScript(),someHashBufString,0))
-    // 10000-546/10
+    // 10000-140/10
     const buildResult = await w.split(utxos,10,1000)
     expect(buildResult?.tx.txIns.length).toBe(1)
     expect(buildResult?.tx.txOuts.length).toBe(10)
-    expect(buildResult?.tx.txOuts[0].valueBn.toNumber()).toBe(945)
-    expect(buildResult?.tx.txOuts[9].valueBn.toNumber()).toBe(945)
+    expect(buildResult?.tx.txOuts[0].valueBn.toNumber()).toBe(986)
+    expect(buildResult?.tx.txOuts[9].valueBn.toNumber()).toBe(986)
     // fee will be 10000 - 945*10
   })
   it('should create tx to split a utxo', async () => {
