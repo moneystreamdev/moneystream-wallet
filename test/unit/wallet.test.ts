@@ -1,4 +1,5 @@
 import { Wallet } from '../../src/Wallet'
+import { existsSync, unlinkSync } from 'fs'
 import * as Long from 'long'
 import { KeyPair } from '../../src/KeyPair'
 import { OutputCollection } from '../../src/OutputCollection'
@@ -457,5 +458,16 @@ describe('Wallet tests', () => {
     expect(w.getTxSummary(w.lastTx).output).toBe(1000)
     expect(buildResult.tx.txOuts.length).toBe(4)
   })
-
+  it('should load json', async () => {
+    //TODO: mock the file system
+    const w = new Wallet()
+    w.loadWallet()
+    w.fileName='wallet.test.json'
+    await w.store(w.toJSON())
+    expect(existsSync(w.fileName)).toBe(true)
+    const w2 = new Wallet()
+    w2.loadWalletFromJSON(w.fileName)
+    expect(w.keyPair.toWif()).toBe(w2.keyPair.toWif())
+    unlinkSync(w.fileName)
+  })
 })

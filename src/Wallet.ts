@@ -73,6 +73,11 @@ export class Wallet {
     get senderOutputCount() { return this._senderOutputCount }
     set allowZeroFunding(val:boolean) { this._allowZeroFunding = val }
     set allowFundingBelowRequested(val:boolean) { this._allowZeroFunding = val }
+    get fileName() { return this._walletFileName }
+    set fileName(val:string) { 
+        this._walletFileName = val 
+        this._storage = new FileSystemStorage(this._walletFileName)
+    }
 
     clear() {
         this._selectedUtxos = null
@@ -190,6 +195,14 @@ export class Wallet {
         return walletjson
     }
 
+    loadWalletFromJSON(fileName: string) {
+        this._walletFileName = fileName
+        this._storage = new FileSystemStorage(this._walletFileName)
+        const content = this._storage.tryget()
+        const jcontent = JSON.parse(content||'{}')
+        this.loadWallet(jcontent?.wif)
+    }
+
     loadWallet(wif?:string) {
         if (wif) {
             this._keypair = new KeyPair().fromWif(wif)
@@ -208,8 +221,8 @@ export class Wallet {
 
     async store(wallet:any) {
         const sWallet = JSON.stringify(wallet, null, 2)
-        const stored = await this._storage.put(sWallet)
-        return stored
+        this._storage.put(sWallet)
+        return wallet
     }
 
     async loadUnspent(): Promise<OutputCollection> {

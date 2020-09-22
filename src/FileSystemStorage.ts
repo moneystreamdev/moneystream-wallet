@@ -1,8 +1,9 @@
 import fs from 'fs'
 
 export interface IStorage {
-    put(item: string):void
-    get():string
+    put(item: string): void
+    get(): string
+    tryget(): string|null
     backup(): void
 }
 
@@ -17,13 +18,21 @@ export default class FileSystemStorage implements IStorage {
         // make a backup so that keys are no destroyed
         this.backup()
         try {
+            console.log(this._fileName)
             fs.writeFileSync(this._fileName, sWallet, 'utf8')
         }
         catch (err) {
-            if(err) {
-                console.log(err)
-                return
-            }
+            console.log(err)
+            return
+        }
+    }
+
+    tryget(): string|null {
+        try {
+            return this.get()
+        }
+        catch {
+            return null
         }
     }
 
