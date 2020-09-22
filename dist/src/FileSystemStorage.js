@@ -13,13 +13,20 @@ var FileSystemStorage = /** @class */ (function () {
         // make a backup so that keys are no destroyed
         this.backup();
         try {
+            console.log(this._fileName);
             fs_1.default.writeFileSync(this._fileName, sWallet, 'utf8');
         }
         catch (err) {
-            if (err) {
-                console.log(err);
-                return;
-            }
+            console.log(err);
+            return;
+        }
+    };
+    FileSystemStorage.prototype.tryget = function () {
+        try {
+            return this.get();
+        }
+        catch (_a) {
+            return null;
         }
     };
     FileSystemStorage.prototype.get = function () {

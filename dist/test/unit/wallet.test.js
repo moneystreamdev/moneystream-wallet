@@ -56,6 +56,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var Wallet_1 = require("../../src/Wallet");
+var fs_1 = require("fs");
 var Long = __importStar(require("long"));
 var KeyPair_1 = require("../../src/KeyPair");
 var OutputCollection_1 = require("../../src/OutputCollection");
@@ -644,6 +645,26 @@ describe('Wallet tests', function () {
                     expect(w.getTxFund(w.lastTx)).toBe(100);
                     expect(w.getTxSummary(w.lastTx).output).toBe(1000);
                     expect(buildResult.tx.txOuts.length).toBe(4);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    it('should load json', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var w, w2;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    w = new Wallet_1.Wallet();
+                    w.loadWallet();
+                    w.fileName = 'wallet.test.json';
+                    return [4 /*yield*/, w.store(w.toJSON())];
+                case 1:
+                    _a.sent();
+                    expect(fs_1.existsSync(w.fileName)).toBe(true);
+                    w2 = new Wallet_1.Wallet();
+                    w2.loadWalletFromJSON(w.fileName);
+                    expect(w.keyPair.toWif()).toBe(w2.keyPair.toWif());
+                    fs_1.unlinkSync(w.fileName);
                     return [2 /*return*/];
             }
         });

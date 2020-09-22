@@ -127,6 +127,15 @@ var Wallet = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
+    Object.defineProperty(Wallet.prototype, "fileName", {
+        get: function () { return this._walletFileName; },
+        set: function (val) {
+            this._walletFileName = val;
+            this._storage = new FileSystemStorage_1.default(this._walletFileName);
+        },
+        enumerable: false,
+        configurable: true
+    });
     Wallet.prototype.clear = function () {
         this._selectedUtxos = null;
     };
@@ -241,6 +250,13 @@ var Wallet = /** @class */ (function () {
         };
         return walletjson;
     };
+    Wallet.prototype.loadWalletFromJSON = function (fileName) {
+        this._walletFileName = fileName;
+        this._storage = new FileSystemStorage_1.default(this._walletFileName);
+        var content = this._storage.tryget();
+        var jcontent = JSON.parse(content || '{}');
+        this.loadWallet(jcontent === null || jcontent === void 0 ? void 0 : jcontent.wif);
+    };
     Wallet.prototype.loadWallet = function (wif) {
         if (wif) {
             this._keypair = new KeyPair_1.KeyPair().fromWif(wif);
@@ -258,16 +274,11 @@ var Wallet = /** @class */ (function () {
     };
     Wallet.prototype.store = function (wallet) {
         return __awaiter(this, void 0, void 0, function () {
-            var sWallet, stored;
+            var sWallet;
             return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        sWallet = JSON.stringify(wallet, null, 2);
-                        return [4 /*yield*/, this._storage.put(sWallet)];
-                    case 1:
-                        stored = _a.sent();
-                        return [2 /*return*/, stored];
-                }
+                sWallet = JSON.stringify(wallet, null, 2);
+                this._storage.put(sWallet);
+                return [2 /*return*/, wallet];
             });
         });
     };

@@ -157,8 +157,8 @@
         "affectsGlobalScope": true
       },
       "../src/FileSystemStorage.ts": {
-        "version": "59a7bbc2f53cf6f9db949a245ca2c5bebc2f85c03ae921536d6dd5f2d96c796b",
-        "signature": "1dd664e062560a18cfff65b92743108ea8a7e157c59d2c696b06ca9e21406c1a",
+        "version": "0d809e86f722ed9ace34701d8f50c2476001a008a6de355ece45274e878f55ca",
+        "signature": "0ca8a61a01c372049dfadd674e8e4f8f48882b1d92d67f786e231baca841f18f",
         "affectsGlobalScope": false
       },
       "../src/utils/portableFetch.ts": {
@@ -482,8 +482,8 @@
         "affectsGlobalScope": false
       },
       "../src/Wallet.ts": {
-        "version": "717d05cc7ec4fd4547215374ce64a6918110f9dc85c9422829a1f3b0851aef33",
-        "signature": "4940a6288e8652b3a79d04b31fb12028f5983015c891b5021c8f9d987c71660c",
+        "version": "9bf9432b3f3c8a8606f1f2f67e539442b7b0142d0e0ab7fe771d91fc8f39f0f5",
+        "signature": "ad3a7d5c1cdbf5201a8018d066366945e15b2c7a6f75413d40bda3fb18c9d618",
         "affectsGlobalScope": false
       },
       "../src/index.ts": {
@@ -547,7 +547,7 @@
         "affectsGlobalScope": false
       },
       "../test/unit/wallet.test.ts": {
-        "version": "c0f0dba0c1d1845088c099d1e3ae02f3a43939cc39cbad496711e36aed4ccfcc",
+        "version": "fc80a0c49dcf799001e210e6b3978d4a9d07b87a5143e94524bf675344ed9409",
         "signature": "a747a591cf4e8c55cb44f079d82b31556e902fcea79ce8c49ded66ee039eaa11",
         "affectsGlobalScope": false
       },

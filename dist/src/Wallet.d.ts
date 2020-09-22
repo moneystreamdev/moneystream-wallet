@@ -34,6 +34,8 @@ export declare class Wallet {
     get senderOutputCount(): number | undefined;
     set allowZeroFunding(val: boolean);
     set allowFundingBelowRequested(val: boolean);
+    get fileName(): string;
+    set fileName(val: string);
     clear(): void;
     txInDescription(txIn: any, index: number): {
         value: number | undefined;
@@ -49,9 +51,10 @@ export declare class Wallet {
         xpub: string;
         address: any;
     };
+    loadWalletFromJSON(fileName: string): void;
     loadWallet(wif?: string): void;
     generateKey(): any;
-    store(wallet: any): Promise<void>;
+    store(wallet: any): Promise<any>;
     loadUnspent(): Promise<OutputCollection>;
     logUtxos(utxos: any): void;
     getAnUnspentOutput(force?: boolean): Promise<OutputCollection>;
