@@ -37,6 +37,7 @@ export declare class Wallet {
     get fileName(): string;
     set fileName(val: string);
     clear(): void;
+    pad(pad: string, str: string | undefined, padLeft: boolean): string;
     txInDescription(txIn: any, index: number): {
         value: number | undefined;
         desc: string;

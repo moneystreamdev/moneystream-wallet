@@ -139,6 +139,16 @@ var Wallet = /** @class */ (function () {
     Wallet.prototype.clear = function () {
         this._selectedUtxos = null;
     };
+    Wallet.prototype.pad = function (pad, str, padLeft) {
+        if (typeof str === 'undefined')
+            return pad;
+        if (padLeft) {
+            return (pad + str).slice(-pad.length);
+        }
+        else {
+            return (str + pad).substring(0, pad.length);
+        }
+    };
     Wallet.prototype.txInDescription = function (txIn, index) {
         var _a;
         var inputValue = (_a = this.getInputOutput(txIn, index)) === null || _a === void 0 ? void 0 : _a.satoshis;
@@ -146,9 +156,8 @@ var Wallet = /** @class */ (function () {
         var inputPrevHash = txIn.txHashBuf.toString('hex');
         var inputPrevIndex = txIn.txOutNum;
         var inputPrevHashCondensed = inputPrevHash.slice(0, 4) + "..." + inputPrevHash.slice(-4) + ":" + inputPrevIndex;
-        var signingText = (txIn.constructor.name === 'Input' ? "CANNOT SIGN ABSTRACT! " : '')
-            + txIn.constructor.name;
-        return { value: inputValue, desc: "[" + index + "]" + inputValue + ":" + (inputSeq === this.FINAL ? 'Final' : inputSeq.toString()) + " spends " + inputPrevHashCondensed + " Type:" + signingText };
+        var signingText = (txIn.constructor.name === 'Input' ? "CANNOT SIGN ABSTRACT! " : '');
+        return { value: inputValue, desc: txIn.constructor.name + "[" + index + "]" + this.pad('        ', inputValue === null || inputValue === void 0 ? void 0 : inputValue.toString(), true) + ":" + (inputSeq === this.FINAL ? 'Final' : inputSeq.toString()) + " spends " + inputPrevHashCondensed + " " + signingText };
     };
     //get the txout that the txin is spending
     Wallet.prototype.getInputOutput = function (txin, index) {
@@ -192,8 +201,6 @@ var Wallet = /** @class */ (function () {
     Wallet.prototype.logDetails = function (tx) {
         var _a, _b;
         var details = "";
-        details += "\n" + this._keypair.toWif();
-        details += "\n" + this._keypair.toXpub();
         details += "\n" + this._keypair.toAddress().toString();
         if (tx) {
             //TODO: translate locktime to date time
@@ -210,15 +217,12 @@ var Wallet = /** @class */ (function () {
             }
             if (inputTotal)
                 details += "\nTotal In:" + inputTotal;
-            if (tx.txOuts && tx.txOuts.length > 0) {
-                details += "\nOutputs " + tx.txOuts.length;
-            }
             var platformTotal = 0;
             var outputTotal = 0;
             for (var i = 0; i < tx.txOuts.length; i++) {
                 var txout = tx.txOuts[i];
                 var satoshis = txout.valueBn.toNumber();
-                details += "\n   [" + i + "]" + satoshis;
+                details += "\n   TxOut[" + i + "]" + this.pad('        ', satoshis.toString(), true);
                 if ((_a = txout.script) === null || _a === void 0 ? void 0 : _a.isSafeDataOut()) {
                     details += " " + txout.script.getData();
                 }
@@ -229,16 +233,18 @@ var Wallet = /** @class */ (function () {
                 if (i > 2)
                     platformTotal += satoshis;
             }
+            var lineTotal = "\n";
             if (outputTotal)
-                details += "\nTotal Out:" + outputTotal;
+                lineTotal += "Total Out:" + outputTotal;
             var fund = this.getTxFund(tx);
-            details += "\nFunding:" + fund;
+            lineTotal += "\tFunding:" + fund;
             platformTotal = fund;
-            details += "\nPlatform:" + platformTotal;
+            lineTotal += "\tPlatform:" + platformTotal;
             var minerFee = inputTotal - outputTotal - platformTotal;
-            details += "\nMiner Fee:" + minerFee;
+            lineTotal += "\tMiner Fee:" + minerFee;
             //TODO: add back to bsv2
             //details += `\nFullySigned?${tx.isFullySigned()}`
+            details += lineTotal;
         }
         console.log(details);
     };
