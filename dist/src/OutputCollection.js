@@ -56,7 +56,8 @@ var OutputCollection = /** @class */ (function () {
         configurable: true
     });
     OutputCollection.prototype.spendable = function () {
-        return new OutputCollection(this._outs.filter(function (o) { return o.status === 'available'; }));
+        return new OutputCollection(this._outs.filter(function (o) { return o.status === 'available'
+            && o.satoshis > 0; }));
     };
     OutputCollection.prototype.encumbered = function () {
         return new OutputCollection(this._outs.filter(function (o) { return o.status === 'hold'; }));

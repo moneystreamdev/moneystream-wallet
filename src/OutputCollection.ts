@@ -46,7 +46,10 @@ export class OutputCollection {
     get lastItem(): UnspentOutput { return this._outs[this.count-1]}    
 
     spendable(): OutputCollection {
-        return new OutputCollection(this._outs.filter( o => o.status === 'available'))
+        return new OutputCollection(this._outs.filter(
+            o => o.status === 'available'
+            && o.satoshis > 0
+        ))
     }
     encumbered(): OutputCollection {
         return new OutputCollection(this._outs.filter( o => o.status === 'hold'))
