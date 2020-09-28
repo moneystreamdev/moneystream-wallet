@@ -317,8 +317,8 @@ describe('Wallet tests', function () {
                     buildResult = _a.sent();
                     expect(buildResult === null || buildResult === void 0 ? void 0 : buildResult.tx.txIns.length).toBe(1);
                     expect(buildResult === null || buildResult === void 0 ? void 0 : buildResult.tx.txOuts.length).toBe(10);
-                    expect(buildResult === null || buildResult === void 0 ? void 0 : buildResult.tx.txOuts[0].valueBn.toNumber()).toBe(986);
-                    expect(buildResult === null || buildResult === void 0 ? void 0 : buildResult.tx.txOuts[9].valueBn.toNumber()).toBe(986);
+                    expect(buildResult === null || buildResult === void 0 ? void 0 : buildResult.tx.txOuts[0].valueBn.toNumber()).toBe(974);
+                    expect(buildResult === null || buildResult === void 0 ? void 0 : buildResult.tx.txOuts[9].valueBn.toNumber()).toBe(974);
                     return [2 /*return*/];
             }
         });

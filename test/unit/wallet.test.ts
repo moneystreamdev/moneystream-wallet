@@ -211,8 +211,8 @@ describe('Wallet tests', () => {
     const buildResult = await w.split(utxos,10,1000)
     expect(buildResult?.tx.txIns.length).toBe(1)
     expect(buildResult?.tx.txOuts.length).toBe(10)
-    expect(buildResult?.tx.txOuts[0].valueBn.toNumber()).toBe(986)
-    expect(buildResult?.tx.txOuts[9].valueBn.toNumber()).toBe(986)
+    expect(buildResult?.tx.txOuts[0].valueBn.toNumber()).toBe(974)
+    expect(buildResult?.tx.txOuts[9].valueBn.toNumber()).toBe(974)
     // fee will be 10000 - 945*10
   })
   it('should create tx to split a utxo', async () => {
