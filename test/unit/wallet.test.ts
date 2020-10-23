@@ -71,10 +71,13 @@ describe('Wallet tests', () => {
   it('should spend to address', async () => {
     const w = new Wallet()
     w.loadWallet()
-    w.selectedUtxos = createUtxos(1,1000)
+    w.selectedUtxos = createUtxos(1,10000)
     const buildResult = await w.makeSimpleSpend(Long.fromNumber(600), undefined, '1SCVmCzdLaECeRkMq3egwJ6yJLwT1x3wu')
     expect(buildResult.hex).toBeDefined()
+    w.logDetailsLastTx()
     expect(buildResult.tx.txOuts[0].valueBn.toNumber()).toBe(600)
+    //must have change output
+    expect(buildResult.tx.txOuts[1].valueBn.toNumber()).toBe(9100)
   })
   it('should clear wallet', () => {
     const w = new Wallet()

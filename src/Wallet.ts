@@ -281,11 +281,16 @@ export class Wallet {
         if (changeSatoshis < 0) {
             throw Error(`the utxo ran out of money ${changeSatoshis}`)
         }
-        const txb = new TransactionBuilder()
+        // TODO: estimate fee
+        const fee = 300
+        let txb = new TransactionBuilder()
             .from(filteredUtxos.items, this._keypair.pubKey)
-            //satoshis is the desired output amount
             .toAddress(satoshis.toNumber(), toAddress ? Address.fromString(toAddress) : this._keypair.toAddress())
-            .change(this._keypair.toAddress())
+        if (changeSatoshis-fee>0) {
+            txb = txb.toAddress(changeSatoshis-fee, this._keypair.toAddress())
+        }
+        // change not working
+        // .change(this._keypair.toAddress())
         this.lastTx = txb.buildAndSign(this._keypair)
         return {
             hex: this.lastTx.toHex(),

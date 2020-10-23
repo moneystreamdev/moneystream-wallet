@@ -335,7 +335,7 @@ var Wallet = /** @class */ (function () {
     // legacy p2pkh spend
     Wallet.prototype.makeSimpleSpend = function (satoshis, utxos, toAddress) {
         return __awaiter(this, void 0, void 0, function () {
-            var filteredUtxos, _a, utxoSatoshis, changeSatoshis, txb;
+            var filteredUtxos, _a, utxoSatoshis, changeSatoshis, fee, txb;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -358,11 +358,15 @@ var Wallet = /** @class */ (function () {
                         if (changeSatoshis < 0) {
                             throw Error("the utxo ran out of money " + changeSatoshis);
                         }
+                        fee = 300;
                         txb = new TransactionBuilder_1.TransactionBuilder()
                             .from(filteredUtxos.items, this._keypair.pubKey)
-                            //satoshis is the desired output amount
-                            .toAddress(satoshis.toNumber(), toAddress ? bsv_1.Address.fromString(toAddress) : this._keypair.toAddress())
-                            .change(this._keypair.toAddress());
+                            .toAddress(satoshis.toNumber(), toAddress ? bsv_1.Address.fromString(toAddress) : this._keypair.toAddress());
+                        if (changeSatoshis - fee > 0) {
+                            txb = txb.toAddress(changeSatoshis - fee, this._keypair.toAddress());
+                        }
+                        // change not working
+                        // .change(this._keypair.toAddress())
                         this.lastTx = txb.buildAndSign(this._keypair);
                         return [2 /*return*/, {
                                 hex: this.lastTx.toHex(),

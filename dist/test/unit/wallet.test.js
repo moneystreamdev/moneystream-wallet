@@ -109,12 +109,15 @@ describe('Wallet tests', function () {
                 case 0:
                     w = new Wallet_1.Wallet();
                     w.loadWallet();
-                    w.selectedUtxos = createUtxos(1, 1000);
+                    w.selectedUtxos = createUtxos(1, 10000);
                     return [4 /*yield*/, w.makeSimpleSpend(Long.fromNumber(600), undefined, '1SCVmCzdLaECeRkMq3egwJ6yJLwT1x3wu')];
                 case 1:
                     buildResult = _a.sent();
                     expect(buildResult.hex).toBeDefined();
+                    w.logDetailsLastTx();
                     expect(buildResult.tx.txOuts[0].valueBn.toNumber()).toBe(600);
+                    //must have change output
+                    expect(buildResult.tx.txOuts[1].valueBn.toNumber()).toBe(9100);
                     return [2 /*return*/];
             }
         });
