@@ -97,6 +97,19 @@ var OutputCollection = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
+    Object.defineProperty(OutputCollection.prototype, "balance", {
+        get: function () {
+            if (this._outs.length === 0)
+                return 0;
+            var sum = 0;
+            for (var i = 0; i < this._outs.length; i++) {
+                sum += this._outs[i].balance;
+            }
+            return sum;
+        },
+        enumerable: false,
+        configurable: true
+    });
     //create a collection from json
     OutputCollection.fromJSON = function (json) {
         var result = new OutputCollection();

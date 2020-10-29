@@ -156,23 +156,23 @@
         "signature": "89bf2b7a601b73ea4311eda9c41f86a58994fec1bee3b87c4a14d68d9adcdcbd",
         "affectsGlobalScope": true
       },
-      "../src/FileSystemStorage.ts": {
-        "version": "0d809e86f722ed9ace34701d8f50c2476001a008a6de355ece45274e878f55ca",
-        "signature": "0ca8a61a01c372049dfadd674e8e4f8f48882b1d92d67f786e231baca841f18f",
+      "../src/filesystemstorage.ts": {
+        "version": "b69c7f83b33e25f3abfa1c5a3ec9cd9b1ca93b4a8daf87e6e54e55803374851d",
+        "signature": "546d4090cef61c2bced543fce75185a1f222251c84de85f82cc16d8b8d5052f7",
         "affectsGlobalScope": false
       },
-      "../src/utils/portableFetch.ts": {
-        "version": "65a4108cd01f948e090279fb63c1ddfa731ae5057eee36198a57d6087f1ad0e8",
-        "signature": "f031e7644650c2d3a867fb7d4fd3f6c98e42ebd3106e68b396e12e8592ed6b8e",
+      "../src/utils/portablefetch.ts": {
+        "version": "d0fda669dd3af82d5cc4b6341881d2c35039942426d446f256adb2799bf4fd18",
+        "signature": "7838632f65653c3a8d85d826ee8e7c8f774d1a3743eade46dfa330c797fdd2a3",
         "affectsGlobalScope": false
       },
-      "../src/IndexingService.ts": {
-        "version": "e8adbb12bd50fcd8a1c7f48ca0ad9a0d29a9a08c42ff6cc2ce76bf1d8288a952",
-        "signature": "e5ceba6a10030cf776924e09ea8756650f6bb14e98d95ecc29500ed138be2fcd",
+      "../src/indexingservice.ts": {
+        "version": "e19911cc8ffcfa961b8b841b12364105617ffc65ac3168cfd5497c1f58c9f1cb",
+        "signature": "a6e4fe4b407eb8e668a1bb115fe5986e36b846b10190d8db543eed592fd2bf0c",
         "affectsGlobalScope": false
       },
-      "../src/InputCollection.ts": {
-        "version": "b3d4c4d91c74c00a568111afe0dfec82075205172b835b6a8eb97a8012737cb7",
+      "../src/inputcollection.ts": {
+        "version": "734e3b16e6f7033900fa3540d65ae2894148ffead8a8eec6a262e89146bd40f4",
         "signature": "e110cfdb7a2e61058c5eee5613982360d8ea780cee7047cec4c3d6a763be250c",
         "affectsGlobalScope": false
       },
@@ -181,9 +181,9 @@
         "signature": "e14fd31eb0e44f826b497c9dac6e0bd0b68d68a45e8153ea67b82b05132e014d",
         "affectsGlobalScope": false
       },
-      "../src/KeyPair.ts": {
-        "version": "b7cd63138c5a93b5cc29855e23e13eeb8d62a03ae5ca1a0c5d1cf718f22d68df",
-        "signature": "f298c9b4f5dfadb6b75e89b8ff61cc1972b9e058fc605590acacdfeb9a420da7",
+      "../src/keypair.ts": {
+        "version": "849fd075b4ed724a7ea3ef987d841d1611c28d8b058674a7c38a91b12c70b113",
+        "signature": "f05a3fb81e30ca67d196332eeea0cebacccdaf8b74f25c8c1bfac1850f9417ae",
         "affectsGlobalScope": false
       },
       "../node_modules/@types/node/globals.d.ts": {
@@ -456,39 +456,39 @@
         "signature": "7b84121ff8c312ebb371781e7baabce3730b2d68cd78dea1fa88b99c2841a235",
         "affectsGlobalScope": false
       },
-      "../src/Merkle.ts": {
-        "version": "23a2df21bce611a86ffa679868792f6db0917771415ce6fe5b8779905e2bfc6f",
-        "signature": "75f9014f5090277994bf124300fe3a102c679e0c71ab98f68ee51e233d3272b1",
+      "../src/merkle.ts": {
+        "version": "1ac36330c46e35c4f400539ae7ebb371034b0d47a7ce249d008944c96adc8348",
+        "signature": "f2850a454a5c36ea7288fac4cb3e56dd7856513bdb585a433c565e135d6e5e27",
         "affectsGlobalScope": false
       },
-      "../src/TxPointer.ts": {
-        "version": "b2bddef6a5e13b3d4c254912f033a57b39e509e50551669f53006e1e81ca19d5",
-        "signature": "e62f7d8c31ac41b04b9364b7965040dd9967962521c8c775d0212dfe907bb8c2",
+      "../src/txpointer.ts": {
+        "version": "46165d762d6b54aa44366d023d7f61b2dfd80748abbcc8a1ded31a697179d7f8",
+        "signature": "8354c78c2203f641deb9b395329e50e3de412b461a293fb3a59f3796e2b4e088",
         "affectsGlobalScope": false
       },
-      "../src/UnspentOutput.ts": {
-        "version": "7754db3dd4f49cea30656cf89f9ddb40f3505931908ac59cc14dda5ecb967138",
-        "signature": "deb45c4135e580adff77662ab72bb34db15e051c1ecb774b5d68f7234eaad307",
+      "../src/unspentoutput.ts": {
+        "version": "ff78b3800b82971801d24bed5fa1997d2655a5e4b3488170a43fe7f7677ad845",
+        "signature": "e015b4d330c7a4528ea4d1232f06d8783bf58e059246222cdf2f51f0b23c0c1f",
         "affectsGlobalScope": false
       },
-      "../src/OutputCollection.ts": {
-        "version": "1c02665d8f8b177d6fbb18c9689dc99d00adc493b55e617b77cc184d70f3137d",
-        "signature": "29e96e27e8720b56cbca60437c072cc78c592cc99198b78d0e8bff484ccdc6c6",
+      "../src/outputcollection.ts": {
+        "version": "e9d9d5ced353d1edcef29ae83a9e709ebb449ecc7562925284b056de02a71411",
+        "signature": "d7d663a30d615f7a6b3802282ed42e461e2425cedb8c569e0079823837c2180c",
         "affectsGlobalScope": false
       },
-      "../src/TransactionBuilder.ts": {
-        "version": "20ce966aa686c7d911efb1ec89fa6dd2cb0abbb0260d17ae9bb5db72f8e1f58d",
-        "signature": "214b7a2c414e1097b48b2b8b2fbb352865d6ed6c20b0c0088567fe709be336eb",
+      "../src/transactionbuilder.ts": {
+        "version": "6951ebea46226e98d79642cc4455a9f6ca92746120f91a5174215c9ce54b2081",
+        "signature": "f3f6ca40dc0b3c95468dfcf2e763eac8161ea5b5643d6c9531ef9a6832e9956d",
         "affectsGlobalScope": false
       },
-      "../src/Wallet.ts": {
-        "version": "33fb9743f10940e8edef227f85f2861f50563a35bc20f3cedb9cfcfbd52e39e2",
-        "signature": "74bad3f87c3cbc437d6ff55e51ec42bdf7dfa8c37f971423864238767c1e3069",
+      "../src/wallet.ts": {
+        "version": "d994bbdb1361a69418000a0295320fb48067df8d0963c24e000c46df1b4fb6d9",
+        "signature": "03970686e80c41dd45364a24042b36c1560893c26e1ef1f72ee81a3d8f37ecc3",
         "affectsGlobalScope": false
       },
       "../src/index.ts": {
-        "version": "d21972c83309de7dd7443fc785c906443c5b931ff1ccb440a636806518564363",
-        "signature": "eee471b51bfbf8298620eb84c68f078227440f76dd5fbc13f87aa56ad31b25f9",
+        "version": "8353e68145e9e4cf81aaabd971dbe27dadea7e7a0d7104ec48f9fa1634ec78b4",
+        "signature": "06505a08720c718142abb356bc4e46bd8441c494672ea5b4b27c156506ae7950",
         "affectsGlobalScope": false
       },
       "../node_modules/@types/long/index.d.ts": {
@@ -497,58 +497,58 @@
         "affectsGlobalScope": false
       },
       "../test/functional/browse.test.ts": {
-        "version": "a8c3c1bd7e1f959953c0f3453ca27c9a234e518ff99e5db4cb7df4c350b1bd66",
-        "signature": "5e176763d1c08fbf2fe4b8170ae281aee1ca687634bade878635ab5e920737b2",
+        "version": "4859a5b39fadfb7b46ca0eeb565f3f5518ebb0c114b4da694e5d6bb35b9da396",
+        "signature": "b0929b144c040bf58c018bc0a6d04d38f6193ffc959162b4fabb302e2580f914",
         "affectsGlobalScope": false
       },
       "../test/functional/simplespend.test.ts": {
-        "version": "52cadb514428a039247e51439620138bb8fb7f5b258883daef389c4375605f7a",
-        "signature": "e3080866f5da32f06e18e06d704f5760a9916d2bb09de5c9594731fdbac8bd98",
+        "version": "3ee455602fef91473f851d5d57e0aa32b7a6be4dafe0559da82994ba58b00876",
+        "signature": "a8c5ec03c6f1d0208b6d56720c18a87bbfecf51db29f4e8853501f02e63bafcc",
         "affectsGlobalScope": false
       },
       "../test/functional/walletindex.test.ts": {
-        "version": "f2632dea46410903559498057fd80b050a2247264e6634d5d3b26b9d4c020951",
-        "signature": "c662b385625bab2bbf31f48f7256bbb94cef840479496441567674035777a63d",
+        "version": "0ecf699317c2cb223f4f9afc5e15bd84c7ef425b209f92a301c582dd1f81b496",
+        "signature": "b8f51c925b47e15d8ea0dd54756a1c1777058ca134ba3731b7eff56f2714d797",
         "affectsGlobalScope": false
       },
       "../test/unit/keypair.test.ts": {
-        "version": "3a26532240dd65eb414132fad3eebf387864e915c5409d020c5607745ccee2fa",
-        "signature": "754d96912ed89fcbac9ecf3af75675715c5125c64859fca41a04310d7901465b",
+        "version": "9744e1d5b6daf1a197c20f218bebe4746f8564babb2bbea26befe01ecf34848f",
+        "signature": "448db4eec789c5d59fd493ebb1d543d70fcf2d0431a98442ce5410bfea43fb35",
         "affectsGlobalScope": false
       },
       "../test/unit/merkle.test.ts": {
-        "version": "5b0b541590d379b98d896af9ea9be6b02134545b9244f19c5a747a4811283b35",
-        "signature": "9c08a7b90ff955d2b46fc1ad99c1b6a1a57c2eb00cc93bf9f567b7df3652bca9",
+        "version": "cf537b903b2a673e58f1eb24e58af3174259f8316a795d12569d26efdffe635a",
+        "signature": "198fd2b684bb677f916d7301be518adc941d6da8ea3bb4dce7fc504b718053aa",
         "affectsGlobalScope": false
       },
       "../test/unit/outputcollection.test.ts": {
-        "version": "b757c5170d67e593177235a88f1d1010d6997a559f59012dea24b914b223a2f5",
-        "signature": "574938e762a716357d423e9ad8036f980b2f1a25d174a841e4744dde28b83601",
+        "version": "dc43e7fa8c56d2287fece1ccdb0b95556bd39f40dc3f1bbce479618f9fc2f146",
+        "signature": "54536111c105727636fa4da34a1063ec896000209938e9356dfd4fa0b83bf029",
         "affectsGlobalScope": false
       },
       "../test/util/testutils.ts": {
-        "version": "77d7064adaa55524696121bd9956c983d66cf401ad042b55e212c7a1fbcb189a",
-        "signature": "9be412977a7d84258f70ba79aa3fad33183075cd360fc0eae0b84eba0fae04aa",
+        "version": "6f0cbf6bb6330964b266d5760af0b47f69171b726dd8e99bad1aa61bc8973ca5",
+        "signature": "8107a51453b5518e3595221e0897b5d308477755adfc1a109decf00ee7b4d3f0",
         "affectsGlobalScope": false
       },
       "../test/unit/transactionbuilder.test.ts": {
-        "version": "5b21ebcea5730c9b49421e04c9ff79a74609bd584225e8a6055a3bbf2b6f3f13",
-        "signature": "0e6c9134154f700585b36e11b0516aae3ba11566b908838f33a2cb43c767e2d5",
+        "version": "1dd2770bf9ca495b5bb0500c0afe3ff48088dccf9d2c22ed0f6ba9858a1a7a54",
+        "signature": "15b4337ed131100296ed18ebbdeda278c17c01ffdd9f492a78f7e57d31099379",
         "affectsGlobalScope": false
       },
       "../test/unit/txpointer.test.ts": {
-        "version": "af620c9f87848459b63dbfb3b4603d3f0fd540c93186bf69873fb4f71a4e3c03",
-        "signature": "486cee24df7520805a9340f33c254b540ef11eb7a922503b3b6bb0a29284a06e",
+        "version": "6af1461a9e66c9c6a8a1acfacfad35951746411a237f688e4da462d4c2954a29",
+        "signature": "002712836c37d24730055af946b3eb969c6480c7d11e7500084f411b747f46da",
         "affectsGlobalScope": false
       },
       "../test/unit/unspentoutput.test.ts": {
-        "version": "265a0e98acfca54e018f28afcf03a62b5045912c1ced529fcb7bb18d59709996",
-        "signature": "ef32c940e94ab204652dd2ffc7ebb216ffc763d8ad7237f5a4db343dd40d6c2e",
+        "version": "25d9d25389c6d89d4209aeca56bf570096083ea37c7ce4712d3d62cbf9c878ca",
+        "signature": "1d78cebf3d8c41acbc984e9d4c2f44498103d1fd0ba9a99eed085ace59f50ead",
         "affectsGlobalScope": false
       },
       "../test/unit/wallet.test.ts": {
-        "version": "568cdada770ac4a5e11c70392d556faf3132df8ecbecc4c14a05e30b01627ca7",
-        "signature": "a747a591cf4e8c55cb44f079d82b31556e902fcea79ce8c49ded66ee039eaa11",
+        "version": "c1cd29a9f195cd4b79fd255f476078758bb93226545170008cbcf427f08949f5",
+        "signature": "5a3d7dbaa82f6a3b361a7a538fbfd6c166a33b8c92b5ae5bcc7d494e402d55db",
         "affectsGlobalScope": false
       },
       "../node_modules/@babel/types/lib/index.d.ts": {
@@ -606,7 +606,7 @@
         "signature": "029769d13d9917e3284cb2356ed28a6576e8b07ae6a06ee1e672518adf21a102",
         "affectsGlobalScope": false
       },
-      "../node_modules/@types/jest/node_modules/jest-diff/build/cleanupSemantic.d.ts": {
+      "../node_modules/@types/jest/node_modules/jest-diff/build/cleanupsemantic.d.ts": {
         "version": "e222104af6cb9415238ad358488b74d76eceeff238c1268ec6e85655b05341da",
         "signature": "e222104af6cb9415238ad358488b74d76eceeff238c1268ec6e85655b05341da",
         "affectsGlobalScope": false
@@ -616,12 +616,12 @@
         "signature": "69da61a7b5093dac77fa3bec8be95dcf9a74c95a0e9161edb98bb24e30e439d2",
         "affectsGlobalScope": false
       },
-      "../node_modules/@types/jest/node_modules/jest-diff/build/diffLines.d.ts": {
+      "../node_modules/@types/jest/node_modules/jest-diff/build/difflines.d.ts": {
         "version": "eba230221317c985ab1953ccc3edc517f248b37db4fef7875cb2c8d08aff7be7",
         "signature": "eba230221317c985ab1953ccc3edc517f248b37db4fef7875cb2c8d08aff7be7",
         "affectsGlobalScope": false
       },
-      "../node_modules/@types/jest/node_modules/jest-diff/build/printDiffs.d.ts": {
+      "../node_modules/@types/jest/node_modules/jest-diff/build/printdiffs.d.ts": {
         "version": "b83e796810e475da3564c6515bc0ae9577070596a33d89299b7d99f94ecfd921",
         "signature": "b83e796810e475da3564c6515bc0ae9577070596a33d89299b7d99f94ecfd921",
         "affectsGlobalScope": false
@@ -822,16 +822,16 @@
         "../node_modules/@types/node/ts3.2/util.d.ts",
         "../node_modules/@types/node/util.d.ts"
       ],
-      "../node_modules/@types/jest/node_modules/jest-diff/build/cleanupSemantic.d.ts": [
+      "../node_modules/@types/jest/node_modules/jest-diff/build/cleanupsemantic.d.ts": [
         "../node_modules/@types/graceful-fs/index.d.ts",
         "../node_modules/@types/node/fs.d.ts",
         "../node_modules/@types/node/ts3.2/fs.d.ts",
         "../node_modules/@types/node/ts3.2/util.d.ts",
         "../node_modules/@types/node/util.d.ts"
       ],
-      "../node_modules/@types/jest/node_modules/jest-diff/build/diffLines.d.ts": [
+      "../node_modules/@types/jest/node_modules/jest-diff/build/difflines.d.ts": [
         "../node_modules/@types/graceful-fs/index.d.ts",
-        "../node_modules/@types/jest/node_modules/jest-diff/build/cleanupSemantic.d.ts",
+        "../node_modules/@types/jest/node_modules/jest-diff/build/cleanupsemantic.d.ts",
         "../node_modules/@types/jest/node_modules/jest-diff/build/types.d.ts",
         "../node_modules/@types/node/fs.d.ts",
         "../node_modules/@types/node/ts3.2/fs.d.ts",
@@ -840,18 +840,18 @@
       ],
       "../node_modules/@types/jest/node_modules/jest-diff/build/index.d.ts": [
         "../node_modules/@types/graceful-fs/index.d.ts",
-        "../node_modules/@types/jest/node_modules/jest-diff/build/cleanupSemantic.d.ts",
-        "../node_modules/@types/jest/node_modules/jest-diff/build/diffLines.d.ts",
-        "../node_modules/@types/jest/node_modules/jest-diff/build/printDiffs.d.ts",
+        "../node_modules/@types/jest/node_modules/jest-diff/build/cleanupsemantic.d.ts",
+        "../node_modules/@types/jest/node_modules/jest-diff/build/difflines.d.ts",
+        "../node_modules/@types/jest/node_modules/jest-diff/build/printdiffs.d.ts",
         "../node_modules/@types/jest/node_modules/jest-diff/build/types.d.ts",
         "../node_modules/@types/node/fs.d.ts",
         "../node_modules/@types/node/ts3.2/fs.d.ts",
         "../node_modules/@types/node/ts3.2/util.d.ts",
         "../node_modules/@types/node/util.d.ts"
       ],
-      "../node_modules/@types/jest/node_modules/jest-diff/build/printDiffs.d.ts": [
+      "../node_modules/@types/jest/node_modules/jest-diff/build/printdiffs.d.ts": [
         "../node_modules/@types/graceful-fs/index.d.ts",
-        "../node_modules/@types/jest/node_modules/jest-diff/build/cleanupSemantic.d.ts",
+        "../node_modules/@types/jest/node_modules/jest-diff/build/cleanupsemantic.d.ts",
         "../node_modules/@types/jest/node_modules/jest-diff/build/types.d.ts",
         "../node_modules/@types/node/fs.d.ts",
         "../node_modules/@types/node/ts3.2/fs.d.ts",
@@ -1647,29 +1647,45 @@
         "../node_modules/@types/node/ts3.2/util.d.ts",
         "../node_modules/@types/node/util.d.ts"
       ],
-      "../src/FileSystemStorage.ts": [
+      "../src/filesystemstorage.ts": [
         "../node_modules/@types/graceful-fs/index.d.ts",
         "../node_modules/@types/node/fs.d.ts",
         "../node_modules/@types/node/ts3.2/fs.d.ts",
         "../node_modules/@types/node/ts3.2/util.d.ts",
         "../node_modules/@types/node/util.d.ts"
       ],
-      "../src/IndexingService.ts": [
+      "../src/index.ts": [
         "../node_modules/@types/graceful-fs/index.d.ts",
         "../node_modules/@types/node/fs.d.ts",
         "../node_modules/@types/node/ts3.2/fs.d.ts",
         "../node_modules/@types/node/ts3.2/util.d.ts",
         "../node_modules/@types/node/util.d.ts",
-        "../src/utils/portableFetch.ts"
+        "../src/filesystemstorage.ts",
+        "../src/indexingservice.ts",
+        "../src/keypair.ts",
+        "../src/merkle.ts",
+        "../src/outputcollection.ts",
+        "../src/transactionbuilder.ts",
+        "../src/txpointer.ts",
+        "../src/unspentoutput.ts",
+        "../src/wallet.ts"
       ],
-      "../src/InputCollection.ts": [
+      "../src/indexingservice.ts": [
+        "../node_modules/@types/graceful-fs/index.d.ts",
+        "../node_modules/@types/node/fs.d.ts",
+        "../node_modules/@types/node/ts3.2/fs.d.ts",
+        "../node_modules/@types/node/ts3.2/util.d.ts",
+        "../node_modules/@types/node/util.d.ts",
+        "../src/utils/portablefetch.ts"
+      ],
+      "../src/inputcollection.ts": [
         "../node_modules/@types/graceful-fs/index.d.ts",
         "../node_modules/@types/node/fs.d.ts",
         "../node_modules/@types/node/ts3.2/fs.d.ts",
         "../node_modules/@types/node/ts3.2/util.d.ts",
         "../node_modules/@types/node/util.d.ts"
       ],
-      "../src/KeyPair.ts": [
+      "../src/keypair.ts": [
         "../node_modules/@types/graceful-fs/index.d.ts",
         "../node_modules/@types/node/fs.d.ts",
         "../node_modules/@types/node/ts3.2/fs.d.ts",
@@ -1677,7 +1693,7 @@
         "../node_modules/@types/node/util.d.ts",
         "../node_modules/bsv/index.d.ts"
       ],
-      "../src/Merkle.ts": [
+      "../src/merkle.ts": [
         "../node_modules/@types/crypto-js/sha256/index.d.ts",
         "../node_modules/@types/graceful-fs/index.d.ts",
         "../node_modules/@types/node/fs.d.ts",
@@ -1686,77 +1702,61 @@
         "../node_modules/@types/node/util.d.ts",
         "../node_modules/merkletreejs/dist/index.d.ts"
       ],
-      "../src/OutputCollection.ts": [
+      "../src/outputcollection.ts": [
         "../node_modules/@types/graceful-fs/index.d.ts",
         "../node_modules/@types/node/fs.d.ts",
         "../node_modules/@types/node/ts3.2/fs.d.ts",
         "../node_modules/@types/node/ts3.2/util.d.ts",
         "../node_modules/@types/node/util.d.ts",
         "../node_modules/bsv/index.d.ts",
-        "../src/UnspentOutput.ts"
+        "../src/unspentoutput.ts"
       ],
-      "../src/TransactionBuilder.ts": [
+      "../src/transactionbuilder.ts": [
         "../node_modules/@types/graceful-fs/index.d.ts",
         "../node_modules/@types/node/fs.d.ts",
         "../node_modules/@types/node/ts3.2/fs.d.ts",
         "../node_modules/@types/node/ts3.2/util.d.ts",
         "../node_modules/@types/node/util.d.ts",
         "../node_modules/bsv/index.d.ts",
-        "../src/KeyPair.ts",
-        "../src/UnspentOutput.ts"
+        "../src/keypair.ts",
+        "../src/unspentoutput.ts"
       ],
-      "../src/TxPointer.ts": [
+      "../src/txpointer.ts": [
         "../node_modules/@types/graceful-fs/index.d.ts",
         "../node_modules/@types/node/fs.d.ts",
         "../node_modules/@types/node/ts3.2/fs.d.ts",
         "../node_modules/@types/node/ts3.2/util.d.ts",
         "../node_modules/@types/node/util.d.ts"
       ],
-      "../src/UnspentOutput.ts": [
+      "../src/unspentoutput.ts": [
         "../node_modules/@types/graceful-fs/index.d.ts",
         "../node_modules/@types/node/fs.d.ts",
         "../node_modules/@types/node/ts3.2/fs.d.ts",
         "../node_modules/@types/node/ts3.2/util.d.ts",
         "../node_modules/@types/node/util.d.ts",
         "../node_modules/bsv/index.d.ts",
-        "../src/TxPointer.ts"
+        "../src/txpointer.ts"
       ],
-      "../src/Wallet.ts": [
-        "../node_modules/@types/graceful-fs/index.d.ts",
-        "../node_modules/@types/node/fs.d.ts",
-        "../node_modules/@types/node/ts3.2/fs.d.ts",
-        "../node_modules/@types/node/ts3.2/util.d.ts",
-        "../node_modules/@types/node/util.d.ts",
-        "../node_modules/bsv/index.d.ts",
-        "../src/FileSystemStorage.ts",
-        "../src/IndexingService.ts",
-        "../src/KeyPair.ts",
-        "../src/OutputCollection.ts",
-        "../src/TransactionBuilder.ts",
-        "../src/UnspentOutput.ts"
-      ],
-      "../src/index.ts": [
-        "../node_modules/@types/graceful-fs/index.d.ts",
-        "../node_modules/@types/node/fs.d.ts",
-        "../node_modules/@types/node/ts3.2/fs.d.ts",
-        "../node_modules/@types/node/ts3.2/util.d.ts",
-        "../node_modules/@types/node/util.d.ts",
-        "../src/FileSystemStorage.ts",
-        "../src/IndexingService.ts",
-        "../src/KeyPair.ts",
-        "../src/Merkle.ts",
-        "../src/OutputCollection.ts",
-        "../src/TransactionBuilder.ts",
-        "../src/TxPointer.ts",
-        "../src/UnspentOutput.ts",
-        "../src/Wallet.ts"
-      ],
-      "../src/utils/portableFetch.ts": [
+      "../src/utils/portablefetch.ts": [
         "../node_modules/@types/graceful-fs/index.d.ts",
         "../node_modules/@types/node/fs.d.ts",
         "../node_modules/@types/node/ts3.2/fs.d.ts",
         "../node_modules/@types/node/ts3.2/util.d.ts",
         "../node_modules/@types/node/util.d.ts"
+      ],
+      "../src/wallet.ts": [
+        "../node_modules/@types/graceful-fs/index.d.ts",
+        "../node_modules/@types/node/fs.d.ts",
+        "../node_modules/@types/node/ts3.2/fs.d.ts",
+        "../node_modules/@types/node/ts3.2/util.d.ts",
+        "../node_modules/@types/node/util.d.ts",
+        "../node_modules/bsv/index.d.ts",
+        "../src/filesystemstorage.ts",
+        "../src/indexingservice.ts",
+        "../src/keypair.ts",
+        "../src/outputcollection.ts",
+        "../src/transactionbuilder.ts",
+        "../src/unspentoutput.ts"
       ],
       "../test/functional/browse.test.ts": [
         "../node_modules/@types/graceful-fs/index.d.ts",
@@ -1766,9 +1766,9 @@
         "../node_modules/@types/node/ts3.2/util.d.ts",
         "../node_modules/@types/node/util.d.ts",
         "../node_modules/bsv/index.d.ts",
-        "../src/KeyPair.ts",
-        "../src/OutputCollection.ts",
-        "../src/Wallet.ts"
+        "../src/keypair.ts",
+        "../src/outputcollection.ts",
+        "../src/wallet.ts"
       ],
       "../test/functional/simplespend.test.ts": [
         "../node_modules/@types/graceful-fs/index.d.ts",
@@ -1778,8 +1778,8 @@
         "../node_modules/@types/node/ts3.2/util.d.ts",
         "../node_modules/@types/node/util.d.ts",
         "../node_modules/bsv/index.d.ts",
-        "../src/OutputCollection.ts",
-        "../src/Wallet.ts"
+        "../src/outputcollection.ts",
+        "../src/wallet.ts"
       ],
       "../test/functional/walletindex.test.ts": [
         "../node_modules/@types/graceful-fs/index.d.ts",
@@ -1787,7 +1787,7 @@
         "../node_modules/@types/node/ts3.2/fs.d.ts",
         "../node_modules/@types/node/ts3.2/util.d.ts",
         "../node_modules/@types/node/util.d.ts",
-        "../src/Wallet.ts"
+        "../src/wallet.ts"
       ],
       "../test/unit/keypair.test.ts": [
         "../node_modules/@types/graceful-fs/index.d.ts",
@@ -1796,7 +1796,7 @@
         "../node_modules/@types/node/ts3.2/util.d.ts",
         "../node_modules/@types/node/util.d.ts",
         "../node_modules/bsv/index.d.ts",
-        "../src/KeyPair.ts"
+        "../src/keypair.ts"
       ],
       "../test/unit/merkle.test.ts": [
         "../node_modules/@types/graceful-fs/index.d.ts",
@@ -1804,7 +1804,7 @@
         "../node_modules/@types/node/ts3.2/fs.d.ts",
         "../node_modules/@types/node/ts3.2/util.d.ts",
         "../node_modules/@types/node/util.d.ts",
-        "../src/Merkle.ts"
+        "../src/merkle.ts"
       ],
       "../test/unit/outputcollection.test.ts": [
         "../node_modules/@types/graceful-fs/index.d.ts",
@@ -1813,8 +1813,8 @@
         "../node_modules/@types/node/ts3.2/fs.d.ts",
         "../node_modules/@types/node/ts3.2/util.d.ts",
         "../node_modules/@types/node/util.d.ts",
-        "../src/OutputCollection.ts",
-        "../src/index.ts"
+        "../src/index.ts",
+        "../src/outputcollection.ts"
       ],
       "../test/unit/transactionbuilder.test.ts": [
         "../node_modules/@types/graceful-fs/index.d.ts",
@@ -1831,7 +1831,7 @@
         "../node_modules/@types/node/ts3.2/fs.d.ts",
         "../node_modules/@types/node/ts3.2/util.d.ts",
         "../node_modules/@types/node/util.d.ts",
-        "../src/TxPointer.ts"
+        "../src/txpointer.ts"
       ],
       "../test/unit/unspentoutput.test.ts": [
         "../node_modules/@types/graceful-fs/index.d.ts",
@@ -1840,8 +1840,8 @@
         "../node_modules/@types/node/ts3.2/util.d.ts",
         "../node_modules/@types/node/util.d.ts",
         "../node_modules/bsv/index.d.ts",
-        "../src/TxPointer.ts",
-        "../src/index.ts"
+        "../src/index.ts",
+        "../src/txpointer.ts"
       ],
       "../test/unit/wallet.test.ts": [
         "../node_modules/@types/graceful-fs/index.d.ts",
@@ -1851,10 +1851,10 @@
         "../node_modules/@types/node/ts3.2/util.d.ts",
         "../node_modules/@types/node/util.d.ts",
         "../node_modules/bsv/index.d.ts",
-        "../src/KeyPair.ts",
-        "../src/OutputCollection.ts",
-        "../src/UnspentOutput.ts",
-        "../src/Wallet.ts"
+        "../src/keypair.ts",
+        "../src/outputcollection.ts",
+        "../src/unspentoutput.ts",
+        "../src/wallet.ts"
       ],
       "../test/util/testutils.ts": [
         "../node_modules/@types/graceful-fs/index.d.ts",
@@ -1862,9 +1862,9 @@
         "../node_modules/@types/node/ts3.2/fs.d.ts",
         "../node_modules/@types/node/ts3.2/util.d.ts",
         "../node_modules/@types/node/util.d.ts",
-        "../src/KeyPair.ts",
-        "../src/OutputCollection.ts",
-        "../src/UnspentOutput.ts"
+        "../src/keypair.ts",
+        "../src/outputcollection.ts",
+        "../src/unspentoutput.ts"
       ]
     },
     "exportedModulesMap": {
@@ -1982,16 +1982,16 @@
         "../node_modules/@types/node/ts3.2/util.d.ts",
         "../node_modules/@types/node/util.d.ts"
       ],
-      "../node_modules/@types/jest/node_modules/jest-diff/build/cleanupSemantic.d.ts": [
+      "../node_modules/@types/jest/node_modules/jest-diff/build/cleanupsemantic.d.ts": [
         "../node_modules/@types/graceful-fs/index.d.ts",
         "../node_modules/@types/node/fs.d.ts",
         "../node_modules/@types/node/ts3.2/fs.d.ts",
         "../node_modules/@types/node/ts3.2/util.d.ts",
         "../node_modules/@types/node/util.d.ts"
       ],
-      "../node_modules/@types/jest/node_modules/jest-diff/build/diffLines.d.ts": [
+      "../node_modules/@types/jest/node_modules/jest-diff/build/difflines.d.ts": [
         "../node_modules/@types/graceful-fs/index.d.ts",
-        "../node_modules/@types/jest/node_modules/jest-diff/build/cleanupSemantic.d.ts",
+        "../node_modules/@types/jest/node_modules/jest-diff/build/cleanupsemantic.d.ts",
         "../node_modules/@types/jest/node_modules/jest-diff/build/types.d.ts",
         "../node_modules/@types/node/fs.d.ts",
         "../node_modules/@types/node/ts3.2/fs.d.ts",
@@ -2009,9 +2009,9 @@
         "../node_modules/@types/node/ts3.2/util.d.ts",
         "../node_modules/@types/node/util.d.ts"
       ],
-      "../node_modules/@types/jest/node_modules/jest-diff/build/printDiffs.d.ts": [
+      "../node_modules/@types/jest/node_modules/jest-diff/build/printdiffs.d.ts": [
         "../node_modules/@types/graceful-fs/index.d.ts",
-        "../node_modules/@types/jest/node_modules/jest-diff/build/cleanupSemantic.d.ts",
+        "../node_modules/@types/jest/node_modules/jest-diff/build/cleanupsemantic.d.ts",
         "../node_modules/@types/jest/node_modules/jest-diff/build/types.d.ts",
         "../node_modules/@types/node/fs.d.ts",
         "../node_modules/@types/node/ts3.2/fs.d.ts",
@@ -2807,41 +2807,41 @@
         "../node_modules/@types/node/ts3.2/util.d.ts",
         "../node_modules/@types/node/util.d.ts"
       ],
-      "../src/OutputCollection.ts": [
-        "../src/UnspentOutput.ts"
-      ],
-      "../src/TransactionBuilder.ts": [
-        "../node_modules/bsv/index.d.ts",
-        "../src/KeyPair.ts",
-        "../src/UnspentOutput.ts"
-      ],
-      "../src/UnspentOutput.ts": [
-        "../node_modules/bsv/index.d.ts",
-        "../src/TxPointer.ts"
-      ],
-      "../src/Wallet.ts": [
-        "../node_modules/bsv/index.d.ts",
-        "../src/FileSystemStorage.ts",
-        "../src/IndexingService.ts",
-        "../src/KeyPair.ts",
-        "../src/OutputCollection.ts",
-        "../src/TransactionBuilder.ts",
-        "../src/UnspentOutput.ts"
-      ],
       "../src/index.ts": [
-        "../src/FileSystemStorage.ts",
-        "../src/IndexingService.ts",
-        "../src/KeyPair.ts",
-        "../src/Merkle.ts",
-        "../src/OutputCollection.ts",
-        "../src/TransactionBuilder.ts",
-        "../src/TxPointer.ts",
-        "../src/UnspentOutput.ts",
-        "../src/Wallet.ts"
+        "../src/filesystemstorage.ts",
+        "../src/indexingservice.ts",
+        "../src/keypair.ts",
+        "../src/merkle.ts",
+        "../src/outputcollection.ts",
+        "../src/transactionbuilder.ts",
+        "../src/txpointer.ts",
+        "../src/unspentoutput.ts",
+        "../src/wallet.ts"
+      ],
+      "../src/outputcollection.ts": [
+        "../src/unspentoutput.ts"
+      ],
+      "../src/transactionbuilder.ts": [
+        "../node_modules/bsv/index.d.ts",
+        "../src/keypair.ts",
+        "../src/unspentoutput.ts"
+      ],
+      "../src/unspentoutput.ts": [
+        "../node_modules/bsv/index.d.ts",
+        "../src/txpointer.ts"
+      ],
+      "../src/wallet.ts": [
+        "../node_modules/bsv/index.d.ts",
+        "../src/filesystemstorage.ts",
+        "../src/indexingservice.ts",
+        "../src/keypair.ts",
+        "../src/outputcollection.ts",
+        "../src/transactionbuilder.ts",
+        "../src/unspentoutput.ts"
       ],
       "../test/util/testutils.ts": [
-        "../src/KeyPair.ts",
-        "../src/OutputCollection.ts"
+        "../src/keypair.ts",
+        "../src/outputcollection.ts"
       ]
     },
     "semanticDiagnosticsPerFile": [
@@ -2859,10 +2859,10 @@
       "../node_modules/@types/istanbul-lib-report/index.d.ts",
       "../node_modules/@types/istanbul-reports/index.d.ts",
       "../node_modules/@types/jest/index.d.ts",
-      "../node_modules/@types/jest/node_modules/jest-diff/build/cleanupSemantic.d.ts",
-      "../node_modules/@types/jest/node_modules/jest-diff/build/diffLines.d.ts",
+      "../node_modules/@types/jest/node_modules/jest-diff/build/cleanupsemantic.d.ts",
+      "../node_modules/@types/jest/node_modules/jest-diff/build/difflines.d.ts",
       "../node_modules/@types/jest/node_modules/jest-diff/build/index.d.ts",
-      "../node_modules/@types/jest/node_modules/jest-diff/build/printDiffs.d.ts",
+      "../node_modules/@types/jest/node_modules/jest-diff/build/printdiffs.d.ts",
       "../node_modules/@types/jest/node_modules/jest-diff/build/types.d.ts",
       "../node_modules/@types/jest/node_modules/pretty-format/build/index.d.ts",
       "../node_modules/@types/jest/node_modules/pretty-format/build/types.d.ts",
@@ -2960,18 +2960,18 @@
       "../node_modules/typescript/lib/lib.esnext.intl.d.ts",
       "../node_modules/typescript/lib/lib.scripthost.d.ts",
       "../node_modules/typescript/lib/lib.webworker.importscripts.d.ts",
-      "../src/FileSystemStorage.ts",
-      "../src/IndexingService.ts",
-      "../src/InputCollection.ts",
-      "../src/KeyPair.ts",
-      "../src/Merkle.ts",
-      "../src/OutputCollection.ts",
-      "../src/TransactionBuilder.ts",
-      "../src/TxPointer.ts",
-      "../src/UnspentOutput.ts",
-      "../src/Wallet.ts",
+      "../src/filesystemstorage.ts",
       "../src/index.ts",
-      "../src/utils/portableFetch.ts",
+      "../src/indexingservice.ts",
+      "../src/inputcollection.ts",
+      "../src/keypair.ts",
+      "../src/merkle.ts",
+      "../src/outputcollection.ts",
+      "../src/transactionbuilder.ts",
+      "../src/txpointer.ts",
+      "../src/unspentoutput.ts",
+      "../src/utils/portablefetch.ts",
+      "../src/wallet.ts",
       "../test/functional/browse.test.ts",
       "../test/functional/simplespend.test.ts",
       "../test/functional/walletindex.test.ts",

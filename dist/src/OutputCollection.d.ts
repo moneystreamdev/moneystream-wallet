@@ -19,6 +19,7 @@ export declare class OutputCollection {
     get largestItem(): UnspentOutput;
     get smallestItem(): UnspentOutput;
     get satoshis(): number;
+    get balance(): number;
     static fromJSON(json: any | null): OutputCollection;
     findTxOut(txout: UnspentOutput): UnspentOutput | null;
     find(txHashBuf: Buffer, txOutNum: number): UnspentOutput | null;

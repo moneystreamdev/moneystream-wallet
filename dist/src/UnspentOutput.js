@@ -12,6 +12,7 @@ var UnspentOutput = /** @class */ (function () {
         this.walletId = "";
         this.script = script;
         this.satoshis = satoshis;
+        this.amountSpent = 0;
         this.txId = txid || "";
         this.outputIndex = txoutindex;
         this._status = status || 'available';
@@ -24,6 +25,14 @@ var UnspentOutput = /** @class */ (function () {
     });
     Object.defineProperty(UnspentOutput.prototype, "txPointer", {
         get: function () { return new TxPointer_1.TxPointer(this.txId, this.outputIndex); },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(UnspentOutput.prototype, "balance", {
+        // current balance available to spend on this output
+        get: function () {
+            return this.satoshis - this.amountSpent;
+        },
         enumerable: false,
         configurable: true
     });

@@ -67,7 +67,7 @@ export class Wallet {
 
     get balance():number {
         if (!this._selectedUtxos) return 0
-        return this.selectedUtxos?.spendable().satoshis || 0
+        return this.selectedUtxos?.balance || 0
     }
     get fundingInputCount() { return this._fundingInputCount }
     get senderOutputCount() { return this._senderOutputCount }
@@ -364,9 +364,11 @@ export class Wallet {
         //TODO: for now, inputs have to be more than dust limit!
         const dustTotal = filteredUtxos.count * this._dustLimit
         //add range of utxos, change in first, others are dust
-        //TODO: could spread them out?
+        let runningSpent = satoshis.toNumber()
         for (let index = 0; index < this._fundingInputCount; index++) {
             const element = filteredUtxos.items[index]
+            element.amountSpent = Math.min(element.satoshis, runningSpent)
+            runningSpent -= element.amountSpent
             let outSatoshis = 0 //this._dustLimit
             if (index === 0) {
                 outSatoshis = Math.max(changeSatoshis,0)

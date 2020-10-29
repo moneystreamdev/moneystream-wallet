@@ -80,6 +80,15 @@ export class OutputCollection {
         return sum
     }
 
+    get balance(): number {
+        if (this._outs.length === 0) return 0
+        let sum = 0
+        for (let i:any=0; i<this._outs.length; i++ ) {
+            sum += this._outs[i].balance
+        }
+        return sum
+    }
+
     //create a collection from json
     static fromJSON(json:any|null) {
         const result = new OutputCollection()

@@ -107,6 +107,8 @@ describe('Wallet tests', () => {
     const buildResult = await w.makeStreamableCashTx(
       Long.fromNumber(1000)
     )
+    expect(w.selectedUtxos.items[0].amountSpent).toBe(1000)
+    expect(w.selectedUtxos.items[0].balance).toBe(0)
     expect (buildResult.hex.length).toBeGreaterThan(20)
     expect (buildResult.tx.nLockTime).toBeGreaterThan(0)
     expect (buildResult.tx.txIns.length).toBeGreaterThan(0)
@@ -116,6 +118,7 @@ describe('Wallet tests', () => {
     buildResult.tx.addTxOut(new Bn().fromNumber(1), new KeyPair().fromRandom().toOutputScript())
     // funding should not change
     expect(w.getTxFund(buildResult.tx)).toBe(1000)
+    expect(w.balance).toBe(0)
   })
   it('should create streamable tx with no lock time', async () => {
     const w = new Wallet()
@@ -124,21 +127,29 @@ describe('Wallet tests', () => {
     const buildResult = await w.makeStreamableCashTx(
       Long.fromNumber(1000), undefined, false
     )
+    expect(w.selectedUtxos.items[0].amountSpent).toBe(1000)
+    expect(w.selectedUtxos.items[0].balance).toBe(0)
     expect (buildResult.hex.length).toBeGreaterThan(20)
     expect (buildResult.tx.nLockTime).toBe(0)
     expect (buildResult.tx.txIns.length).toBeGreaterThan(0)
     expect (buildResult.tx.txOuts.length).toBe(0)
+    expect(w.balance).toBe(0)
   })
   it('should create streamable tx with one input', async () => {
     const w = new Wallet()
     w.loadWallet()
     w.selectedUtxos = makeDummyTwo()
     const buildResult = await w.makeStreamableCashTx(
-      Long.fromNumber(dummyOutput1.satoshis-dustLimit-1)
+      Long.fromNumber(1000-500-1)
     )
+    expect(w.selectedUtxos.items[0].amountSpent).toBe(0)
+    expect(w.selectedUtxos.items[0].balance).toBe(1000)
+    expect(w.selectedUtxos.items[1].amountSpent).toBe(499)
+    expect(w.selectedUtxos.items[1].balance).toBe(1501)
     expect (buildResult.hex.length).toBeGreaterThan(20)
     expect (buildResult.tx.txIns.length).toBe(1)
     expect (buildResult.tx.txOuts.length).toBe(1)
+    expect(w.balance).toBe(3000-499)
   })
   it('should create streamable tx with exact input', async () => {
     const w = new Wallet()
@@ -149,9 +160,14 @@ describe('Wallet tests', () => {
       Long.fromNumber(tokensLessDust),
       new KeyPair().fromRandom().toOutputScript()
     )
+    expect(w.selectedUtxos.items[0].amountSpent).toBe(0)
+    expect(w.selectedUtxos.items[0].balance).toBe(1000)
+    expect(w.selectedUtxos.items[1].amountSpent).toBe(500)
+    expect(w.selectedUtxos.items[1].balance).toBe(1500)
     expect (buildResult.hex.length).toBeGreaterThan(20)
     expect (buildResult.tx.txIns.length).toBe(1)
     expect (buildResult.tx.txOuts.length).toBe(2)
+    expect(w.balance).toBe(2500)
   })
 
   it('should create streamable tx with multiple inputs', async () => {
@@ -160,6 +176,10 @@ describe('Wallet tests', () => {
     w.selectedUtxos = makeDummyTwo()
     //wallet will sort utxo by sats, use biggest first
     const buildResult = await w.makeStreamableCashTx(Long.fromNumber(2500))
+    expect(w.selectedUtxos.items[0].amountSpent).toBe(500)
+    expect(w.selectedUtxos.items[0].balance).toBe(500)
+    expect(w.selectedUtxos.items[1].amountSpent).toBe(2000)
+    expect(w.selectedUtxos.items[1].balance).toBe(0)
     expect(buildResult.hex.length).toBeGreaterThan(20)
     expect(buildResult.tx.txIns.length).toBe(2)
     expect(buildResult.tx.txOuts.length).toBe(1)
@@ -168,6 +188,7 @@ describe('Wallet tests', () => {
     // add an output, funding doesnt change
     buildResult.tx.addTxOut(new Bn().fromNumber(100), w.keyPair.toOutputScript()) 
     expect(w.getTxFund(w.lastTx)).toBe(2500)
+    expect(w.balance).toBe(500)
   })
   it('should create streamable tx with increasing', async () => {
     const w = new Wallet()
@@ -175,30 +196,42 @@ describe('Wallet tests', () => {
     w.selectedUtxos = makeDummyTwo()
     //wallet will sort utxo by sats, use biggest first
     const buildResult = await w.makeStreamableCashTx(Long.fromNumber(100))
+    expect(w.selectedUtxos.items[0].amountSpent).toBe(0)
+    expect(w.selectedUtxos.items[0].balance).toBe(1000)
+    expect(w.selectedUtxos.items[1].amountSpent).toBe(100)
+    expect(w.selectedUtxos.items[1].balance).toBe(1900)
     expect(buildResult.hex.length).toBeGreaterThan(20)
     expect(buildResult.tx.txIns.length).toBe(1)
     expect(buildResult.tx.txOuts.length).toBe(1)
     expect(buildResult.tx.txOuts[0].valueBn.toNumber()).toBe(1900)
     //expect(buildResult.tx.txOuts[1].valueBn.toNumber()).toBe(500)
     expect(w.getTxFund(w.lastTx)).toBe(100)
+    expect(w.balance).toBe(2900)
     const buildResult2 = await w.makeStreamableCashTx(
         Long.fromNumber(2100),null,true,buildResult.utxos
       )
+    expect(w.selectedUtxos.items[0].amountSpent).toBe(100)
+    expect(w.selectedUtxos.items[0].balance).toBe(900)
+    expect(w.selectedUtxos.items[1].amountSpent).toBe(2000)
+    expect(w.selectedUtxos.items[1].balance).toBe(0)
     expect(buildResult2.hex.length).toBeGreaterThan(20)
     expect(buildResult2.tx.txIns.length).toBe(2)
     w.logDetailsLastTx()
     expect(w.getTxFund(buildResult2.tx)).toBe(2100)
     expect(buildResult2.tx.txOuts.length).toBe(1)
     expect(buildResult2.tx.txOuts[0].valueBn.toNumber()).toBe(900)
-  
+    expect(w.balance).toBe(900)
   })
   it('funds tx with one input', async () => {
     const w = new Wallet()
     w.loadWallet()
     w.selectedUtxos = createUtxos(1,1000)
     const buildResult = await w.makeStreamableCashTx(Long.fromNumber(100))
+    expect(w.selectedUtxos.items[0].amountSpent).toBe(100)
+    expect(w.selectedUtxos.items[0].balance).toBe(900)
     expect(buildResult.tx).toBeDefined()
     expect(w.getTxFund(w.lastTx)).toBe(100)
+    expect(w.balance).toBe(900)
   })
   it ('should log utxos', () => {
     const w = new Wallet()
@@ -258,10 +291,15 @@ describe('Wallet tests', () => {
     const buildResult = await w.makeStreamableCashTx(
       Long.fromNumber(size*1000)
     )
+    expect(w.selectedUtxos.items[0].amountSpent).toBe(1000)
+    expect(w.selectedUtxos.items[0].balance).toBe(0)
+    expect(w.selectedUtxos.items[size-1].amountSpent).toBe(1000)
+    expect(w.selectedUtxos.items[size-1].balance).toBe(0)
     expect (buildResult.hex.length).toBeGreaterThan(20)
     expect (buildResult?.tx.nLockTime).toBeGreaterThan(0)
     expect (buildResult?.tx.txIns.length).toBe(size)
     expect (buildResult?.tx.txOuts.length).toBe(0)
+    expect(w.balance).toBe(0)
   })
   it('encumbers utxo', async () => {
     const w = new Wallet()
@@ -269,8 +307,11 @@ describe('Wallet tests', () => {
     w.selectedUtxos = createUtxos(1,1000)
     const buildResult = await w.makeStreamableCashTx(Long.fromNumber(100))
     expect(buildResult?.tx).toBeDefined()
+    expect(w.selectedUtxos.items[0].amountSpent).toBe(100)
+    expect(w.selectedUtxos.items[0].balance).toBe(900)
     expect(w.getTxFund(w.lastTx)).toBe(100)
     expect(w.selectedUtxos.firstItem.status).toBe('hold')
+    expect(w.balance).toBe(900)
   })
   it('errors multiple streams one utxo', async () => {
     const w = new Wallet()
@@ -278,6 +319,8 @@ describe('Wallet tests', () => {
     w.selectedUtxos = createUtxos(1,1000)
     const stream1 = await w.makeStreamableCashTx(Long.fromNumber(100))
     expect(stream1.tx).toBeDefined()
+    expect(w.selectedUtxos.items[0].amountSpent).toBe(100)
+    expect(w.selectedUtxos.items[0].balance).toBe(900)
     expect(w.getTxFund(w.lastTx)).toBe(100)
     expect(w.selectedUtxos.firstItem.status).toBe('hold')
     //this should error because single utxo already encumbered
@@ -323,6 +366,7 @@ describe('Wallet tests', () => {
     const txinout = w.getInputOutput(buildResult.tx.txIns[0],0)
     expect(txinout).toBeInstanceOf(UnspentOutput)
     expect(w.getTxFund(buildResult.tx)).toBe(0)
+    expect(w.balance).toBe(999)
   })
   it('tests funding more', async () => {
     // what to do if user wants to make tx with 0 funding?
@@ -331,9 +375,12 @@ describe('Wallet tests', () => {
     w.selectedUtxos = createUtxos(1,1000)
     const buildResult = await w.makeStreamableCashTx(Long.fromNumber(0))
     expect(buildResult?.tx).toBeDefined()
+    expect(w.selectedUtxos.items[0].amountSpent).toBe(0)
+    expect(w.selectedUtxos.items[0].balance).toBe(1000)
     expect(w.fundingInputCount).toBe(1)
     expect(w.senderOutputCount).toBe(1)
     expect(w.getTxFund(buildResult.tx)).toBe(0)
+    expect(w.balance).toBe(1000)
     // add more inputs and outputs, not part of funding
     buildResult.tx.addTxIn(someHashBufString,0, new Script()) 
     buildResult.tx.addTxOut(new Bn().fromNumber(100), w.keyPair.toOutputScript()) 
@@ -341,6 +388,7 @@ describe('Wallet tests', () => {
     expect(w.fundingInputCount).toBe(1)
     w.logDetailsLastTx()
     expect(w.getTxFund(buildResult.tx)).toBe(0)
+    expect(w.balance).toBe(1000)
   })
   it('adds data output', async () => {
     const w = new Wallet()
@@ -353,9 +401,12 @@ describe('Wallet tests', () => {
       )
     w.logDetailsLastTx()
     expect(buildResult?.tx).toBeDefined()
+    expect(w.selectedUtxos.items[0].amountSpent).toBe(100)
+    expect(w.selectedUtxos.items[0].balance).toBe(900)
     expect(w.getTxFund(w.lastTx)).toBe(100)
     expect(buildResult.tx.txOuts.length).toBe(2)
     expect(buildResult.tx.txOuts[1].script.isSafeDataOut()).toBeTruthy()
+    expect(w.balance).toBe(900)
   })
   it('adds payto', async () => {
     const w = new Wallet()
@@ -368,8 +419,11 @@ describe('Wallet tests', () => {
       )
     w.logDetailsLastTx()
     expect(buildResult?.tx).toBeDefined()
+    expect(w.selectedUtxos.items[0].amountSpent).toBe(100)
+    expect(w.selectedUtxos.items[0].balance).toBe(900)
     expect(w.getTxFund(w.lastTx)).toBe(100)
     expect(buildResult.tx.txOuts.length).toBe(2)
+    expect(w.balance).toBe(900)
   })
   it('adds payto array single', async () => {
     const w = new Wallet()
@@ -382,9 +436,12 @@ describe('Wallet tests', () => {
       )
     w.logDetailsLastTx()
     expect(buildResult?.tx).toBeDefined()
+    expect(w.selectedUtxos.items[0].amountSpent).toBe(100)
+    expect(w.selectedUtxos.items[0].balance).toBe(900)
     expect(w.getTxFund(w.lastTx)).toBe(100)
     expect(w.getTxSummary(w.lastTx).output).toBe(1000)
     expect(buildResult.tx.txOuts.length).toBe(2)
+    expect(w.balance).toBe(900)
   })
   it('adds payto array double', async () => {
     const w = new Wallet()
@@ -400,9 +457,12 @@ describe('Wallet tests', () => {
       )
     w.logDetailsLastTx()
     expect(buildResult?.tx).toBeDefined()
+    expect(w.selectedUtxos.items[0].amountSpent).toBe(100)
+    expect(w.selectedUtxos.items[0].balance).toBe(900)
     expect(w.getTxFund(w.lastTx)).toBe(100)
     expect(w.getTxSummary(w.lastTx).output).toBe(1000)
     expect(buildResult.tx.txOuts.length).toBe(3)
+    expect(w.balance).toBe(900)
   })
   it('adds payto array tripple', async () => {
     const w = new Wallet()
@@ -419,9 +479,12 @@ describe('Wallet tests', () => {
       )
     w.logDetailsLastTx()
     expect(buildResult?.tx).toBeDefined()
+    expect(w.selectedUtxos.items[0].amountSpent).toBe(1000)
+    expect(w.selectedUtxos.items[0].balance).toBe(1000)
     expect(w.getTxFund(w.lastTx)).toBe(1000)
     expect(w.getTxSummary(w.lastTx).output).toBe(2000)
     expect(buildResult.tx.txOuts.length).toBe(4)
+    expect(w.balance).toBe(1000)
   })
   it('adds payto array tripple', async () => {
     const w = new Wallet()
@@ -438,9 +501,12 @@ describe('Wallet tests', () => {
       )
     w.logDetailsLastTx()
     expect(buildResult?.tx).toBeDefined()
+    expect(w.selectedUtxos.items[0].amountSpent).toBe(100)
+    expect(w.selectedUtxos.items[0].balance).toBe(900)
     expect(w.getTxFund(w.lastTx)).toBe(100)
     expect(w.getTxSummary(w.lastTx).output).toBe(1000)
     expect(buildResult.tx.txOuts.length).toBe(4)
+    expect(w.balance).toBe(900)
   })
   it('adds payto array tripple', async () => {
     const w = new Wallet()
@@ -457,9 +523,12 @@ describe('Wallet tests', () => {
       )
     w.logDetailsLastTx()
     expect(buildResult?.tx).toBeDefined()
+    expect(w.selectedUtxos.items[0].amountSpent).toBe(100)
+    expect(w.selectedUtxos.items[0].balance).toBe(900)
     expect(w.getTxFund(w.lastTx)).toBe(100)
     expect(w.getTxSummary(w.lastTx).output).toBe(1000)
     expect(buildResult.tx.txOuts.length).toBe(4)
+    expect(w.balance).toBe(900)
   })
   it('should load json', async () => {
     //TODO: mock the file system

@@ -102,7 +102,7 @@ var Wallet = /** @class */ (function () {
             var _a;
             if (!this._selectedUtxos)
                 return 0;
-            return ((_a = this.selectedUtxos) === null || _a === void 0 ? void 0 : _a.spendable().satoshis) || 0;
+            return ((_a = this.selectedUtxos) === null || _a === void 0 ? void 0 : _a.balance) || 0;
         },
         enumerable: false,
         configurable: true
@@ -423,7 +423,7 @@ var Wallet = /** @class */ (function () {
     Wallet.prototype.makeStreamableCashTx = function (satoshis, payTo, makeFuture, utxos, data) {
         if (makeFuture === void 0) { makeFuture = true; }
         return __awaiter(this, void 0, void 0, function () {
-            var filteredUtxos, utxoSatoshis, changeSatoshis, txb, dustTotal, index, element, outSatoshis, inputCount;
+            var filteredUtxos, utxoSatoshis, changeSatoshis, txb, dustTotal, runningSpent, index, element, outSatoshis, inputCount;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -454,10 +454,11 @@ var Wallet = /** @class */ (function () {
                         txb = new TransactionBuilder_1.TransactionBuilder();
                         txb.setChangeAddress(this._keypair.toAddress());
                         dustTotal = filteredUtxos.count * this._dustLimit;
-                        //add range of utxos, change in first, others are dust
-                        //TODO: could spread them out?
+                        runningSpent = satoshis.toNumber();
                         for (index = 0; index < this._fundingInputCount; index++) {
                             element = filteredUtxos.items[index];
+                            element.amountSpent = Math.min(element.satoshis, runningSpent);
+                            runningSpent -= element.amountSpent;
                             outSatoshis = 0 //this._dustLimit
                             ;
                             if (index === 0) {

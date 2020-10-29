@@ -9,6 +9,9 @@ export class UnspentOutput {
     txId:string = ""
     outputIndex:number|undefined = 0
     walletId: string = ""
+    // the amount of utxo that has been signed away
+    // should always be less than satoshis
+    amountSpent: number
 
     constructor(satoshis:number,script:typeof Script,
         txid?:string,txoutindex?:number,
@@ -16,6 +19,7 @@ export class UnspentOutput {
         walletId?: string) {
         this.script = script
         this.satoshis = satoshis
+        this.amountSpent = 0
         this.txId = txid || ""
         this.outputIndex = txoutindex
         this._status = status || 'available'
@@ -24,6 +28,10 @@ export class UnspentOutput {
 
     get status() { return this._status}
     get txPointer() { return new TxPointer(this.txId, this.outputIndex as number) }
+    // current balance available to spend on this output
+    get balance() {
+        return this.satoshis - this.amountSpent
+    }
 
     static fromTxOut(txOut: typeof TxOut, txid:string, txoutindex:number ) {
         const output = new UnspentOutput(

@@ -162,6 +162,8 @@ describe('Wallet tests', function () {
                     return [4 /*yield*/, w.makeStreamableCashTx(Long.fromNumber(1000))];
                 case 1:
                     buildResult = _a.sent();
+                    expect(w.selectedUtxos.items[0].amountSpent).toBe(1000);
+                    expect(w.selectedUtxos.items[0].balance).toBe(0);
                     expect(buildResult.hex.length).toBeGreaterThan(20);
                     expect(buildResult.tx.nLockTime).toBeGreaterThan(0);
                     expect(buildResult.tx.txIns.length).toBeGreaterThan(0);
@@ -171,6 +173,7 @@ describe('Wallet tests', function () {
                     buildResult.tx.addTxOut(new bsv_1.Bn().fromNumber(1), new KeyPair_1.KeyPair().fromRandom().toOutputScript());
                     // funding should not change
                     expect(w.getTxFund(buildResult.tx)).toBe(1000);
+                    expect(w.balance).toBe(0);
                     return [2 /*return*/];
             }
         });
@@ -186,10 +189,13 @@ describe('Wallet tests', function () {
                     return [4 /*yield*/, w.makeStreamableCashTx(Long.fromNumber(1000), undefined, false)];
                 case 1:
                     buildResult = _a.sent();
+                    expect(w.selectedUtxos.items[0].amountSpent).toBe(1000);
+                    expect(w.selectedUtxos.items[0].balance).toBe(0);
                     expect(buildResult.hex.length).toBeGreaterThan(20);
                     expect(buildResult.tx.nLockTime).toBe(0);
                     expect(buildResult.tx.txIns.length).toBeGreaterThan(0);
                     expect(buildResult.tx.txOuts.length).toBe(0);
+                    expect(w.balance).toBe(0);
                     return [2 /*return*/];
             }
         });
@@ -202,12 +208,17 @@ describe('Wallet tests', function () {
                     w = new Wallet_1.Wallet();
                     w.loadWallet();
                     w.selectedUtxos = makeDummyTwo();
-                    return [4 /*yield*/, w.makeStreamableCashTx(Long.fromNumber(dummyOutput1.satoshis - dustLimit - 1))];
+                    return [4 /*yield*/, w.makeStreamableCashTx(Long.fromNumber(1000 - 500 - 1))];
                 case 1:
                     buildResult = _a.sent();
+                    expect(w.selectedUtxos.items[0].amountSpent).toBe(0);
+                    expect(w.selectedUtxos.items[0].balance).toBe(1000);
+                    expect(w.selectedUtxos.items[1].amountSpent).toBe(499);
+                    expect(w.selectedUtxos.items[1].balance).toBe(1501);
                     expect(buildResult.hex.length).toBeGreaterThan(20);
                     expect(buildResult.tx.txIns.length).toBe(1);
                     expect(buildResult.tx.txOuts.length).toBe(1);
+                    expect(w.balance).toBe(3000 - 499);
                     return [2 /*return*/];
             }
         });
@@ -224,9 +235,14 @@ describe('Wallet tests', function () {
                     return [4 /*yield*/, w.makeStreamableCashTx(Long.fromNumber(tokensLessDust), new KeyPair_1.KeyPair().fromRandom().toOutputScript())];
                 case 1:
                     buildResult = _a.sent();
+                    expect(w.selectedUtxos.items[0].amountSpent).toBe(0);
+                    expect(w.selectedUtxos.items[0].balance).toBe(1000);
+                    expect(w.selectedUtxos.items[1].amountSpent).toBe(500);
+                    expect(w.selectedUtxos.items[1].balance).toBe(1500);
                     expect(buildResult.hex.length).toBeGreaterThan(20);
                     expect(buildResult.tx.txIns.length).toBe(1);
                     expect(buildResult.tx.txOuts.length).toBe(2);
+                    expect(w.balance).toBe(2500);
                     return [2 /*return*/];
             }
         });
@@ -242,6 +258,10 @@ describe('Wallet tests', function () {
                     return [4 /*yield*/, w.makeStreamableCashTx(Long.fromNumber(2500))];
                 case 1:
                     buildResult = _a.sent();
+                    expect(w.selectedUtxos.items[0].amountSpent).toBe(500);
+                    expect(w.selectedUtxos.items[0].balance).toBe(500);
+                    expect(w.selectedUtxos.items[1].amountSpent).toBe(2000);
+                    expect(w.selectedUtxos.items[1].balance).toBe(0);
                     expect(buildResult.hex.length).toBeGreaterThan(20);
                     expect(buildResult.tx.txIns.length).toBe(2);
                     expect(buildResult.tx.txOuts.length).toBe(1);
@@ -250,6 +270,7 @@ describe('Wallet tests', function () {
                     // add an output, funding doesnt change
                     buildResult.tx.addTxOut(new bsv_1.Bn().fromNumber(100), w.keyPair.toOutputScript());
                     expect(w.getTxFund(w.lastTx)).toBe(2500);
+                    expect(w.balance).toBe(500);
                     return [2 /*return*/];
             }
         });
@@ -265,21 +286,31 @@ describe('Wallet tests', function () {
                     return [4 /*yield*/, w.makeStreamableCashTx(Long.fromNumber(100))];
                 case 1:
                     buildResult = _a.sent();
+                    expect(w.selectedUtxos.items[0].amountSpent).toBe(0);
+                    expect(w.selectedUtxos.items[0].balance).toBe(1000);
+                    expect(w.selectedUtxos.items[1].amountSpent).toBe(100);
+                    expect(w.selectedUtxos.items[1].balance).toBe(1900);
                     expect(buildResult.hex.length).toBeGreaterThan(20);
                     expect(buildResult.tx.txIns.length).toBe(1);
                     expect(buildResult.tx.txOuts.length).toBe(1);
                     expect(buildResult.tx.txOuts[0].valueBn.toNumber()).toBe(1900);
                     //expect(buildResult.tx.txOuts[1].valueBn.toNumber()).toBe(500)
                     expect(w.getTxFund(w.lastTx)).toBe(100);
+                    expect(w.balance).toBe(2900);
                     return [4 /*yield*/, w.makeStreamableCashTx(Long.fromNumber(2100), null, true, buildResult.utxos)];
                 case 2:
                     buildResult2 = _a.sent();
+                    expect(w.selectedUtxos.items[0].amountSpent).toBe(100);
+                    expect(w.selectedUtxos.items[0].balance).toBe(900);
+                    expect(w.selectedUtxos.items[1].amountSpent).toBe(2000);
+                    expect(w.selectedUtxos.items[1].balance).toBe(0);
                     expect(buildResult2.hex.length).toBeGreaterThan(20);
                     expect(buildResult2.tx.txIns.length).toBe(2);
                     w.logDetailsLastTx();
                     expect(w.getTxFund(buildResult2.tx)).toBe(2100);
                     expect(buildResult2.tx.txOuts.length).toBe(1);
                     expect(buildResult2.tx.txOuts[0].valueBn.toNumber()).toBe(900);
+                    expect(w.balance).toBe(900);
                     return [2 /*return*/];
             }
         });
@@ -295,8 +326,11 @@ describe('Wallet tests', function () {
                     return [4 /*yield*/, w.makeStreamableCashTx(Long.fromNumber(100))];
                 case 1:
                     buildResult = _a.sent();
+                    expect(w.selectedUtxos.items[0].amountSpent).toBe(100);
+                    expect(w.selectedUtxos.items[0].balance).toBe(900);
                     expect(buildResult.tx).toBeDefined();
                     expect(w.getTxFund(w.lastTx)).toBe(100);
+                    expect(w.balance).toBe(900);
                     return [2 /*return*/];
             }
         });
@@ -384,10 +418,15 @@ describe('Wallet tests', function () {
                     return [4 /*yield*/, w.makeStreamableCashTx(Long.fromNumber(size * 1000))];
                 case 1:
                     buildResult = _a.sent();
+                    expect(w.selectedUtxos.items[0].amountSpent).toBe(1000);
+                    expect(w.selectedUtxos.items[0].balance).toBe(0);
+                    expect(w.selectedUtxos.items[size - 1].amountSpent).toBe(1000);
+                    expect(w.selectedUtxos.items[size - 1].balance).toBe(0);
                     expect(buildResult.hex.length).toBeGreaterThan(20);
                     expect(buildResult === null || buildResult === void 0 ? void 0 : buildResult.tx.nLockTime).toBeGreaterThan(0);
                     expect(buildResult === null || buildResult === void 0 ? void 0 : buildResult.tx.txIns.length).toBe(size);
                     expect(buildResult === null || buildResult === void 0 ? void 0 : buildResult.tx.txOuts.length).toBe(0);
+                    expect(w.balance).toBe(0);
                     return [2 /*return*/];
             }
         });
@@ -404,8 +443,11 @@ describe('Wallet tests', function () {
                 case 1:
                     buildResult = _a.sent();
                     expect(buildResult === null || buildResult === void 0 ? void 0 : buildResult.tx).toBeDefined();
+                    expect(w.selectedUtxos.items[0].amountSpent).toBe(100);
+                    expect(w.selectedUtxos.items[0].balance).toBe(900);
                     expect(w.getTxFund(w.lastTx)).toBe(100);
                     expect(w.selectedUtxos.firstItem.status).toBe('hold');
+                    expect(w.balance).toBe(900);
                     return [2 /*return*/];
             }
         });
@@ -422,6 +464,8 @@ describe('Wallet tests', function () {
                 case 1:
                     stream1 = _a.sent();
                     expect(stream1.tx).toBeDefined();
+                    expect(w.selectedUtxos.items[0].amountSpent).toBe(100);
+                    expect(w.selectedUtxos.items[0].balance).toBe(900);
                     expect(w.getTxFund(w.lastTx)).toBe(100);
                     expect(w.selectedUtxos.firstItem.status).toBe('hold');
                     //this should error because single utxo already encumbered
@@ -468,6 +512,7 @@ describe('Wallet tests', function () {
                     txinout = w.getInputOutput(buildResult.tx.txIns[0], 0);
                     expect(txinout).toBeInstanceOf(UnspentOutput_1.UnspentOutput);
                     expect(w.getTxFund(buildResult.tx)).toBe(0);
+                    expect(w.balance).toBe(999);
                     return [2 /*return*/];
             }
         });
@@ -484,9 +529,12 @@ describe('Wallet tests', function () {
                 case 1:
                     buildResult = _a.sent();
                     expect(buildResult === null || buildResult === void 0 ? void 0 : buildResult.tx).toBeDefined();
+                    expect(w.selectedUtxos.items[0].amountSpent).toBe(0);
+                    expect(w.selectedUtxos.items[0].balance).toBe(1000);
                     expect(w.fundingInputCount).toBe(1);
                     expect(w.senderOutputCount).toBe(1);
                     expect(w.getTxFund(buildResult.tx)).toBe(0);
+                    expect(w.balance).toBe(1000);
                     // add more inputs and outputs, not part of funding
                     buildResult.tx.addTxIn(someHashBufString, 0, new bsv_1.Script());
                     buildResult.tx.addTxOut(new bsv_1.Bn().fromNumber(100), w.keyPair.toOutputScript());
@@ -494,6 +542,7 @@ describe('Wallet tests', function () {
                     expect(w.fundingInputCount).toBe(1);
                     w.logDetailsLastTx();
                     expect(w.getTxFund(buildResult.tx)).toBe(0);
+                    expect(w.balance).toBe(1000);
                     return [2 /*return*/];
             }
         });
@@ -511,9 +560,12 @@ describe('Wallet tests', function () {
                     buildResult = _a.sent();
                     w.logDetailsLastTx();
                     expect(buildResult === null || buildResult === void 0 ? void 0 : buildResult.tx).toBeDefined();
+                    expect(w.selectedUtxos.items[0].amountSpent).toBe(100);
+                    expect(w.selectedUtxos.items[0].balance).toBe(900);
                     expect(w.getTxFund(w.lastTx)).toBe(100);
                     expect(buildResult.tx.txOuts.length).toBe(2);
                     expect(buildResult.tx.txOuts[1].script.isSafeDataOut()).toBeTruthy();
+                    expect(w.balance).toBe(900);
                     return [2 /*return*/];
             }
         });
@@ -531,8 +583,11 @@ describe('Wallet tests', function () {
                     buildResult = _a.sent();
                     w.logDetailsLastTx();
                     expect(buildResult === null || buildResult === void 0 ? void 0 : buildResult.tx).toBeDefined();
+                    expect(w.selectedUtxos.items[0].amountSpent).toBe(100);
+                    expect(w.selectedUtxos.items[0].balance).toBe(900);
                     expect(w.getTxFund(w.lastTx)).toBe(100);
                     expect(buildResult.tx.txOuts.length).toBe(2);
+                    expect(w.balance).toBe(900);
                     return [2 /*return*/];
             }
         });
@@ -550,9 +605,12 @@ describe('Wallet tests', function () {
                     buildResult = _a.sent();
                     w.logDetailsLastTx();
                     expect(buildResult === null || buildResult === void 0 ? void 0 : buildResult.tx).toBeDefined();
+                    expect(w.selectedUtxos.items[0].amountSpent).toBe(100);
+                    expect(w.selectedUtxos.items[0].balance).toBe(900);
                     expect(w.getTxFund(w.lastTx)).toBe(100);
                     expect(w.getTxSummary(w.lastTx).output).toBe(1000);
                     expect(buildResult.tx.txOuts.length).toBe(2);
+                    expect(w.balance).toBe(900);
                     return [2 /*return*/];
             }
         });
@@ -573,9 +631,12 @@ describe('Wallet tests', function () {
                     buildResult = _a.sent();
                     w.logDetailsLastTx();
                     expect(buildResult === null || buildResult === void 0 ? void 0 : buildResult.tx).toBeDefined();
+                    expect(w.selectedUtxos.items[0].amountSpent).toBe(100);
+                    expect(w.selectedUtxos.items[0].balance).toBe(900);
                     expect(w.getTxFund(w.lastTx)).toBe(100);
                     expect(w.getTxSummary(w.lastTx).output).toBe(1000);
                     expect(buildResult.tx.txOuts.length).toBe(3);
+                    expect(w.balance).toBe(900);
                     return [2 /*return*/];
             }
         });
@@ -597,9 +658,12 @@ describe('Wallet tests', function () {
                     buildResult = _a.sent();
                     w.logDetailsLastTx();
                     expect(buildResult === null || buildResult === void 0 ? void 0 : buildResult.tx).toBeDefined();
+                    expect(w.selectedUtxos.items[0].amountSpent).toBe(1000);
+                    expect(w.selectedUtxos.items[0].balance).toBe(1000);
                     expect(w.getTxFund(w.lastTx)).toBe(1000);
                     expect(w.getTxSummary(w.lastTx).output).toBe(2000);
                     expect(buildResult.tx.txOuts.length).toBe(4);
+                    expect(w.balance).toBe(1000);
                     return [2 /*return*/];
             }
         });
@@ -621,9 +685,12 @@ describe('Wallet tests', function () {
                     buildResult = _a.sent();
                     w.logDetailsLastTx();
                     expect(buildResult === null || buildResult === void 0 ? void 0 : buildResult.tx).toBeDefined();
+                    expect(w.selectedUtxos.items[0].amountSpent).toBe(100);
+                    expect(w.selectedUtxos.items[0].balance).toBe(900);
                     expect(w.getTxFund(w.lastTx)).toBe(100);
                     expect(w.getTxSummary(w.lastTx).output).toBe(1000);
                     expect(buildResult.tx.txOuts.length).toBe(4);
+                    expect(w.balance).toBe(900);
                     return [2 /*return*/];
             }
         });
@@ -645,9 +712,12 @@ describe('Wallet tests', function () {
                     buildResult = _a.sent();
                     w.logDetailsLastTx();
                     expect(buildResult === null || buildResult === void 0 ? void 0 : buildResult.tx).toBeDefined();
+                    expect(w.selectedUtxos.items[0].amountSpent).toBe(100);
+                    expect(w.selectedUtxos.items[0].balance).toBe(900);
                     expect(w.getTxFund(w.lastTx)).toBe(100);
                     expect(w.getTxSummary(w.lastTx).output).toBe(1000);
                     expect(buildResult.tx.txOuts.length).toBe(4);
+                    expect(w.balance).toBe(900);
                     return [2 /*return*/];
             }
         });
