@@ -24,8 +24,8 @@ export declare class Wallet {
     protected SIGN_INPUT_CHANGE: number;
     protected SIGN_INPUT_NOCHANGE: number;
     protected _storage: IStorage;
-    protected _index: IIndexingService;
-    constructor(storage?: IStorage, index?: IIndexingService);
+    protected _index?: IIndexingService;
+    constructor(storage: IStorage, index?: IIndexingService);
     get keyPair(): KeyPair;
     get selectedUtxos(): OutputCollection;
     set selectedUtxos(val: OutputCollection);

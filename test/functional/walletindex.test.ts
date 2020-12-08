@@ -1,14 +1,15 @@
 import { Wallet } from '../../src/Wallet'
+import FileSystemStorage from '../../src/FileSystemStorage'
 // const demo_wif = 'Kyy7baVyD24NHQVJZrap3s5CvaLPUvFfEQ74eYwsBigbjEJu3HBg'
 
 describe('real wallet works with WOC', () => {
     it ('should create transaction', () => {
-        const w = new Wallet()
+        const w = new Wallet(new FileSystemStorage())
         expect(w).toBeInstanceOf(Wallet)
     })
 
 //     it ('should load wallet balance', async () => {
-//         const w = new Wallet()
+//         const w = new Wallet(new FileSystemStorage())
 //         expect(w).toBeInstanceOf(Wallet)
 //         w.loadWallet(demo_wif)
 //         const utxos = await w.loadUnspent()

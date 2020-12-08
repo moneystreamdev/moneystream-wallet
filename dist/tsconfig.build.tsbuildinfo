@@ -157,8 +157,8 @@
         "affectsGlobalScope": true
       },
       "../src/filesystemstorage.ts": {
-        "version": "b69c7f83b33e25f3abfa1c5a3ec9cd9b1ca93b4a8daf87e6e54e55803374851d",
-        "signature": "546d4090cef61c2bced543fce75185a1f222251c84de85f82cc16d8b8d5052f7",
+        "version": "96fe3c3d4ee89996f01e36941040a6fd0c51c8fc5cd08caf678cd22f4b9d3bb8",
+        "signature": "161a4e4685c24ad121d1ea712f078e89a8abb2e97bf972cb7f355b687199e40b",
         "affectsGlobalScope": false
       },
       "../src/utils/portablefetch.ts": {
@@ -482,13 +482,13 @@
         "affectsGlobalScope": false
       },
       "../src/wallet.ts": {
-        "version": "d994bbdb1361a69418000a0295320fb48067df8d0963c24e000c46df1b4fb6d9",
-        "signature": "03970686e80c41dd45364a24042b36c1560893c26e1ef1f72ee81a3d8f37ecc3",
+        "version": "18b1c6239f6ff0b001719b4c775c3daaf33a997176ccb0db8608d544a2a8441d",
+        "signature": "a9ff189fc6204a8bce038c16942ebdb70158e34223119a551afa6f36a2a119df",
         "affectsGlobalScope": false
       },
       "../src/index.ts": {
-        "version": "8353e68145e9e4cf81aaabd971dbe27dadea7e7a0d7104ec48f9fa1634ec78b4",
-        "signature": "06505a08720c718142abb356bc4e46bd8441c494672ea5b4b27c156506ae7950",
+        "version": "e8136ddc2643fd7fbeb0c73ae4f9a1b421541f01c87567d9db019bb5134aa980",
+        "signature": "5783410ea07e27d18bdf457dac4420ba6d8406e92a41ba994ac31441bce2d449",
         "affectsGlobalScope": false
       },
       "../node_modules/@types/long/index.d.ts": {
@@ -497,17 +497,17 @@
         "affectsGlobalScope": false
       },
       "../test/functional/browse.test.ts": {
-        "version": "4859a5b39fadfb7b46ca0eeb565f3f5518ebb0c114b4da694e5d6bb35b9da396",
+        "version": "a92c93d35c775eb17bb95c8cfb1743535adaaf79dce43d7fd224468d513a8206",
         "signature": "b0929b144c040bf58c018bc0a6d04d38f6193ffc959162b4fabb302e2580f914",
         "affectsGlobalScope": false
       },
       "../test/functional/simplespend.test.ts": {
-        "version": "3ee455602fef91473f851d5d57e0aa32b7a6be4dafe0559da82994ba58b00876",
+        "version": "4fae0a2846aaad5a101ecd02095b6e7d859af271818b0b724f518973fa2776cd",
         "signature": "a8c5ec03c6f1d0208b6d56720c18a87bbfecf51db29f4e8853501f02e63bafcc",
         "affectsGlobalScope": false
       },
       "../test/functional/walletindex.test.ts": {
-        "version": "0ecf699317c2cb223f4f9afc5e15bd84c7ef425b209f92a301c582dd1f81b496",
+        "version": "699cff41a508d3a55530593dc8a86e9d30fb1f8834226dbcfb0daaca4817282a",
         "signature": "b8f51c925b47e15d8ea0dd54756a1c1777058ca134ba3731b7eff56f2714d797",
         "affectsGlobalScope": false
       },
@@ -547,7 +547,7 @@
         "affectsGlobalScope": false
       },
       "../test/unit/wallet.test.ts": {
-        "version": "c1cd29a9f195cd4b79fd255f476078758bb93226545170008cbcf427f08949f5",
+        "version": "eddd8f44d57d8cd1bad1c0a43769d191cb7d013f4b2fa76ba491ab0d1adca37d",
         "signature": "5a3d7dbaa82f6a3b361a7a538fbfd6c166a33b8c92b5ae5bcc7d494e402d55db",
         "affectsGlobalScope": false
       },
@@ -674,6 +674,11 @@
       "../node_modules/@types/prettier/index.d.ts": {
         "version": "9f648f662bddda1b68b01992edd275c214838124a43c8d9210e4a61b974ff82d",
         "signature": "9f648f662bddda1b68b01992edd275c214838124a43c8d9210e4a61b974ff82d",
+        "affectsGlobalScope": false
+      },
+      "../node_modules/@types/q/index.d.ts": {
+        "version": "f9a2dd6a6084665f093ed0e9664b8e673be2a45e342a59dd4e0e4e552e68a9ad",
+        "signature": "f9a2dd6a6084665f093ed0e9664b8e673be2a45e342a59dd4e0e4e552e68a9ad",
         "affectsGlobalScope": false
       },
       "../node_modules/@types/stack-utils/index.d.ts": {
@@ -1383,6 +1388,13 @@
         "../node_modules/@types/node/ts3.2/util.d.ts",
         "../node_modules/@types/node/util.d.ts"
       ],
+      "../node_modules/@types/q/index.d.ts": [
+        "../node_modules/@types/graceful-fs/index.d.ts",
+        "../node_modules/@types/node/fs.d.ts",
+        "../node_modules/@types/node/ts3.2/fs.d.ts",
+        "../node_modules/@types/node/ts3.2/util.d.ts",
+        "../node_modules/@types/node/util.d.ts"
+      ],
       "../node_modules/@types/stack-utils/index.d.ts": [
         "../node_modules/@types/graceful-fs/index.d.ts",
         "../node_modules/@types/node/fs.d.ts",
@@ -1766,6 +1778,7 @@
         "../node_modules/@types/node/ts3.2/util.d.ts",
         "../node_modules/@types/node/util.d.ts",
         "../node_modules/bsv/index.d.ts",
+        "../src/filesystemstorage.ts",
         "../src/keypair.ts",
         "../src/outputcollection.ts",
         "../src/wallet.ts"
@@ -1778,6 +1791,7 @@
         "../node_modules/@types/node/ts3.2/util.d.ts",
         "../node_modules/@types/node/util.d.ts",
         "../node_modules/bsv/index.d.ts",
+        "../src/filesystemstorage.ts",
         "../src/outputcollection.ts",
         "../src/wallet.ts"
       ],
@@ -1787,6 +1801,7 @@
         "../node_modules/@types/node/ts3.2/fs.d.ts",
         "../node_modules/@types/node/ts3.2/util.d.ts",
         "../node_modules/@types/node/util.d.ts",
+        "../src/filesystemstorage.ts",
         "../src/wallet.ts"
       ],
       "../test/unit/keypair.test.ts": [
@@ -1851,6 +1866,7 @@
         "../node_modules/@types/node/ts3.2/util.d.ts",
         "../node_modules/@types/node/util.d.ts",
         "../node_modules/bsv/index.d.ts",
+        "../src/filesystemstorage.ts",
         "../src/keypair.ts",
         "../src/outputcollection.ts",
         "../src/unspentoutput.ts",
@@ -2543,6 +2559,13 @@
         "../node_modules/@types/node/ts3.2/util.d.ts",
         "../node_modules/@types/node/util.d.ts"
       ],
+      "../node_modules/@types/q/index.d.ts": [
+        "../node_modules/@types/graceful-fs/index.d.ts",
+        "../node_modules/@types/node/fs.d.ts",
+        "../node_modules/@types/node/ts3.2/fs.d.ts",
+        "../node_modules/@types/node/ts3.2/util.d.ts",
+        "../node_modules/@types/node/util.d.ts"
+      ],
       "../node_modules/@types/stack-utils/index.d.ts": [
         "../node_modules/@types/graceful-fs/index.d.ts",
         "../node_modules/@types/node/fs.d.ts",
@@ -2923,6 +2946,7 @@
       "../node_modules/@types/node/zlib.d.ts",
       "../node_modules/@types/normalize-package-data/index.d.ts",
       "../node_modules/@types/prettier/index.d.ts",
+      "../node_modules/@types/q/index.d.ts",
       "../node_modules/@types/stack-utils/index.d.ts",
       "../node_modules/@types/yargs-parser/index.d.ts",
       "../node_modules/@types/yargs/index.d.ts",

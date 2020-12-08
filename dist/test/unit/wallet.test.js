@@ -54,6 +54,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var Wallet_1 = require("../../src/Wallet");
 var fs_1 = require("fs");
@@ -62,6 +65,7 @@ var KeyPair_1 = require("../../src/KeyPair");
 var OutputCollection_1 = require("../../src/OutputCollection");
 var UnspentOutput_1 = require("../../src/UnspentOutput");
 var bsv_1 = require("bsv");
+var FileSystemStorage_1 = __importDefault(require("../../src/FileSystemStorage"));
 var dustLimit = 500;
 var someHashBufString = '1aebb7d0776cec663cbbdd87f200bf15406adb0ef91916d102bcd7f86c86934e';
 var dummyOutput1 = new UnspentOutput_1.UnspentOutput(1000, new KeyPair_1.KeyPair().fromRandom().toOutputScript(), someHashBufString, 0);
@@ -85,7 +89,7 @@ function createUtxos(count, satoshis) {
 var nofundinghex = '0100000000000d1b345f';
 describe('Wallet tests', function () {
     it('should instantiate a wallet object', function () {
-        var w = new Wallet_1.Wallet();
+        var w = new Wallet_1.Wallet(new FileSystemStorage_1.default());
         expect(w).toBeInstanceOf(Wallet_1.Wallet);
     });
     it('should error if wallet not loaded', function () { return __awaiter(void 0, void 0, void 0, function () {
@@ -93,7 +97,7 @@ describe('Wallet tests', function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    w = new Wallet_1.Wallet();
+                    w = new Wallet_1.Wallet(new FileSystemStorage_1.default());
                     w.selectedUtxos = createUtxos(1, 1000);
                     return [4 /*yield*/, expect(w.makeSimpleSpend(Long.fromNumber(600))).rejects.toThrow(Error)];
                 case 1:
@@ -107,7 +111,7 @@ describe('Wallet tests', function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    w = new Wallet_1.Wallet();
+                    w = new Wallet_1.Wallet(new FileSystemStorage_1.default());
                     w.loadWallet();
                     w.selectedUtxos = createUtxos(1, 10000);
                     return [4 /*yield*/, w.makeSimpleSpend(Long.fromNumber(600), undefined, '1SCVmCzdLaECeRkMq3egwJ6yJLwT1x3wu')];
@@ -123,7 +127,7 @@ describe('Wallet tests', function () {
         });
     }); });
     it('should clear wallet', function () {
-        var w = new Wallet_1.Wallet();
+        var w = new Wallet_1.Wallet(new FileSystemStorage_1.default());
         w.selectedUtxos = createUtxos(1, 1000);
         expect(w.balance).toBe(1000);
         w.clear();
@@ -135,7 +139,7 @@ describe('Wallet tests', function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    w = new Wallet_1.Wallet();
+                    w = new Wallet_1.Wallet(new FileSystemStorage_1.default());
                     w.loadWallet();
                     w.selectedUtxos = createUtxos(1, 1000);
                     return [4 /*yield*/, w.makeSimpleSpend(Long.fromNumber(600))];
@@ -156,7 +160,7 @@ describe('Wallet tests', function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    w = new Wallet_1.Wallet();
+                    w = new Wallet_1.Wallet(new FileSystemStorage_1.default());
                     w.loadWallet();
                     w.selectedUtxos = createUtxos(1, 1000);
                     return [4 /*yield*/, w.makeStreamableCashTx(Long.fromNumber(1000))];
@@ -183,7 +187,7 @@ describe('Wallet tests', function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    w = new Wallet_1.Wallet();
+                    w = new Wallet_1.Wallet(new FileSystemStorage_1.default());
                     w.loadWallet();
                     w.selectedUtxos = createUtxos(1, 1000);
                     return [4 /*yield*/, w.makeStreamableCashTx(Long.fromNumber(1000), undefined, false)];
@@ -205,7 +209,7 @@ describe('Wallet tests', function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    w = new Wallet_1.Wallet();
+                    w = new Wallet_1.Wallet(new FileSystemStorage_1.default());
                     w.loadWallet();
                     w.selectedUtxos = makeDummyTwo();
                     return [4 /*yield*/, w.makeStreamableCashTx(Long.fromNumber(1000 - 500 - 1))];
@@ -228,7 +232,7 @@ describe('Wallet tests', function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    w = new Wallet_1.Wallet();
+                    w = new Wallet_1.Wallet(new FileSystemStorage_1.default());
                     w.loadWallet();
                     w.selectedUtxos = makeDummyTwo();
                     tokensLessDust = 1000 - 500;
@@ -252,7 +256,7 @@ describe('Wallet tests', function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    w = new Wallet_1.Wallet();
+                    w = new Wallet_1.Wallet(new FileSystemStorage_1.default());
                     w.loadWallet();
                     w.selectedUtxos = makeDummyTwo();
                     return [4 /*yield*/, w.makeStreamableCashTx(Long.fromNumber(2500))];
@@ -280,7 +284,7 @@ describe('Wallet tests', function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    w = new Wallet_1.Wallet();
+                    w = new Wallet_1.Wallet(new FileSystemStorage_1.default());
                     w.loadWallet();
                     w.selectedUtxos = makeDummyTwo();
                     return [4 /*yield*/, w.makeStreamableCashTx(Long.fromNumber(100))];
@@ -320,7 +324,7 @@ describe('Wallet tests', function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    w = new Wallet_1.Wallet();
+                    w = new Wallet_1.Wallet(new FileSystemStorage_1.default());
                     w.loadWallet();
                     w.selectedUtxos = createUtxos(1, 1000);
                     return [4 /*yield*/, w.makeStreamableCashTx(Long.fromNumber(100))];
@@ -336,7 +340,7 @@ describe('Wallet tests', function () {
         });
     }); });
     it('should log utxos', function () {
-        var w = new Wallet_1.Wallet();
+        var w = new Wallet_1.Wallet(new FileSystemStorage_1.default());
         w.selectedUtxos = makeDummyTwo();
         w.logUtxos(w.selectedUtxos.items);
     });
@@ -345,7 +349,7 @@ describe('Wallet tests', function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    w = new Wallet_1.Wallet();
+                    w = new Wallet_1.Wallet(new FileSystemStorage_1.default());
                     w.loadWallet();
                     utxos = new OutputCollection_1.OutputCollection();
                     utxos.add(new UnspentOutput_1.UnspentOutput(10000, w.keyPair.toOutputScript(), someHashBufString, 0));
@@ -365,7 +369,7 @@ describe('Wallet tests', function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    w = new Wallet_1.Wallet();
+                    w = new Wallet_1.Wallet(new FileSystemStorage_1.default());
                     w.loadWallet();
                     utxos = new OutputCollection_1.OutputCollection();
                     utxos.add(new UnspentOutput_1.UnspentOutput(3611, w.keyPair.toOutputScript(), someHashBufString, 0));
@@ -395,7 +399,7 @@ describe('Wallet tests', function () {
     it('should get wallet balance', function () { return __awaiter(void 0, void 0, void 0, function () {
         var w, lotsOfUtxos;
         return __generator(this, function (_a) {
-            w = new Wallet_1.Wallet();
+            w = new Wallet_1.Wallet(new FileSystemStorage_1.default());
             w.loadWallet();
             lotsOfUtxos = createUtxos(9, 1);
             expect(lotsOfUtxos.count).toBe(9);
@@ -410,7 +414,7 @@ describe('Wallet tests', function () {
             switch (_a.label) {
                 case 0:
                     size = 258;
-                    w = new Wallet_1.Wallet();
+                    w = new Wallet_1.Wallet(new FileSystemStorage_1.default());
                     w.loadWallet();
                     lotsOfUtxos = createUtxos(size, 1000);
                     expect(lotsOfUtxos.count).toBe(size);
@@ -436,7 +440,7 @@ describe('Wallet tests', function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    w = new Wallet_1.Wallet();
+                    w = new Wallet_1.Wallet(new FileSystemStorage_1.default());
                     w.loadWallet();
                     w.selectedUtxos = createUtxos(1, 1000);
                     return [4 /*yield*/, w.makeStreamableCashTx(Long.fromNumber(100))];
@@ -457,7 +461,7 @@ describe('Wallet tests', function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    w = new Wallet_1.Wallet();
+                    w = new Wallet_1.Wallet(new FileSystemStorage_1.default());
                     w.loadWallet();
                     w.selectedUtxos = createUtxos(1, 1000);
                     return [4 /*yield*/, w.makeStreamableCashTx(Long.fromNumber(100))];
@@ -477,7 +481,7 @@ describe('Wallet tests', function () {
     it('should error making empty transaction', function () { return __awaiter(void 0, void 0, void 0, function () {
         var w;
         return __generator(this, function (_a) {
-            w = new Wallet_1.Wallet();
+            w = new Wallet_1.Wallet(new FileSystemStorage_1.default());
             expect(w).toBeInstanceOf(Wallet_1.Wallet);
             w.loadWallet();
             // should error because stream cannot be funded
@@ -491,7 +495,7 @@ describe('Wallet tests', function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    w = new Wallet_1.Wallet();
+                    w = new Wallet_1.Wallet(new FileSystemStorage_1.default());
                     w.allowZeroFunding = true;
                     w.loadWallet();
                     w.selectedUtxos = new OutputCollection_1.OutputCollection();
@@ -522,7 +526,7 @@ describe('Wallet tests', function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    w = new Wallet_1.Wallet();
+                    w = new Wallet_1.Wallet(new FileSystemStorage_1.default());
                     w.loadWallet();
                     w.selectedUtxos = createUtxos(1, 1000);
                     return [4 /*yield*/, w.makeStreamableCashTx(Long.fromNumber(0))];
@@ -552,7 +556,7 @@ describe('Wallet tests', function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    w = new Wallet_1.Wallet();
+                    w = new Wallet_1.Wallet(new FileSystemStorage_1.default());
                     w.loadWallet();
                     w.selectedUtxos = createUtxos(1, 1000);
                     return [4 /*yield*/, w.makeStreamableCashTx(Long.fromNumber(100), null, true, undefined, Buffer.from('moneystream'))];
@@ -575,7 +579,7 @@ describe('Wallet tests', function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    w = new Wallet_1.Wallet();
+                    w = new Wallet_1.Wallet(new FileSystemStorage_1.default());
                     w.loadWallet();
                     w.selectedUtxos = createUtxos(1, 1000);
                     return [4 /*yield*/, w.makeStreamableCashTx(Long.fromNumber(100), w.keyPair.toOutputScript(), true, undefined)];
@@ -597,7 +601,7 @@ describe('Wallet tests', function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    w = new Wallet_1.Wallet();
+                    w = new Wallet_1.Wallet(new FileSystemStorage_1.default());
                     w.loadWallet();
                     w.selectedUtxos = createUtxos(1, 1000);
                     return [4 /*yield*/, w.makeStreamableCashTx(Long.fromNumber(100), [{ to: w.keyPair.toOutputScript(), percent: 100 }], true, undefined)];
@@ -620,7 +624,7 @@ describe('Wallet tests', function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    w = new Wallet_1.Wallet();
+                    w = new Wallet_1.Wallet(new FileSystemStorage_1.default());
                     w.loadWallet();
                     w.selectedUtxos = createUtxos(1, 1000);
                     return [4 /*yield*/, w.makeStreamableCashTx(Long.fromNumber(100), [
@@ -646,7 +650,7 @@ describe('Wallet tests', function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    w = new Wallet_1.Wallet();
+                    w = new Wallet_1.Wallet(new FileSystemStorage_1.default());
                     w.loadWallet();
                     w.selectedUtxos = createUtxos(1, 2000);
                     return [4 /*yield*/, w.makeStreamableCashTx(Long.fromNumber(1000), [
@@ -673,7 +677,7 @@ describe('Wallet tests', function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    w = new Wallet_1.Wallet();
+                    w = new Wallet_1.Wallet(new FileSystemStorage_1.default());
                     w.loadWallet();
                     w.selectedUtxos = createUtxos(1, 1000);
                     return [4 /*yield*/, w.makeStreamableCashTx(Long.fromNumber(100), [
@@ -700,7 +704,7 @@ describe('Wallet tests', function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    w = new Wallet_1.Wallet();
+                    w = new Wallet_1.Wallet(new FileSystemStorage_1.default());
                     w.loadWallet();
                     w.selectedUtxos = createUtxos(1, 1000);
                     return [4 /*yield*/, w.makeStreamableCashTx(Long.fromNumber(100), [
@@ -727,14 +731,14 @@ describe('Wallet tests', function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    w = new Wallet_1.Wallet();
+                    w = new Wallet_1.Wallet(new FileSystemStorage_1.default());
                     w.loadWallet();
                     w.fileName = 'wallet.test.json';
                     return [4 /*yield*/, w.store(w.toJSON())];
                 case 1:
                     _a.sent();
                     expect(fs_1.existsSync(w.fileName)).toBe(true);
-                    w2 = new Wallet_1.Wallet();
+                    w2 = new Wallet_1.Wallet(new FileSystemStorage_1.default());
                     w2.loadWalletFromJSON(w.fileName);
                     expect(w.keyPair.toWif()).toBe(w2.keyPair.toWif());
                     fs_1.unlinkSync(w.fileName);

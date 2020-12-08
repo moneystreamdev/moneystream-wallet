@@ -1,15 +1,19 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var Wallet_1 = require("../../src/Wallet");
+var FileSystemStorage_1 = __importDefault(require("../../src/FileSystemStorage"));
 var demo_wif = 'L5bxi2ef2R8LuTvQbGwkY9w6KJzpPckqRQMnjtD8D2EFqjGeJnSq';
 //const demo_wif = 'L5o1VbLNhELT6uCu8v7KdZpvVocHWnHBqaHe686ZkMkyszyU6D7n'
 describe('wallet broadcasts simple spend', function () {
     it('should create transaction', function () {
-        var w = new Wallet_1.Wallet();
+        var w = new Wallet_1.Wallet(new FileSystemStorage_1.default());
         expect(w).toBeInstanceOf(Wallet_1.Wallet);
     });
     // it ('should create transaction', async () => {
-    //     const w = new Wallet()
+    //     const w = new Wallet(new FileSystemStorage())
     //     expect(w).toBeInstanceOf(Wallet)
     //     w.loadWallet(demo_wif)
     //     const utxos = await w.loadUnspent()
@@ -26,7 +30,7 @@ describe('wallet broadcasts simple spend', function () {
     //     expect(buildResult.utxos.firstItem.satoshis).toBeGreaterThan(0)
     // })
     //     it('broadcasts', async () => {
-    //         const sender = new Wallet()
+    //         const sender = new Wallet(new FileSystemStorage())
     //         sender.loadWallet(demo_wif)
     //         //sender.logDetails()
     //         let sent

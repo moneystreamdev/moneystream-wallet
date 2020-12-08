@@ -1,6 +1,7 @@
 import fs from 'fs'
 
 export interface IStorage {
+    setFileName(filename: string): void
     put(item: string): void
     get(): string
     tryget(): string|null
@@ -9,16 +10,19 @@ export interface IStorage {
 
 //currently sync but should be async
 export default class FileSystemStorage implements IStorage {
-    protected _fileName:string
-    constructor(fileName:string) {
-        this._fileName = fileName
+    protected _fileName:string = 'wallet.json'
+    constructor(fileName?:string) {
+        if (fileName) this._fileName = fileName
+    }
+
+    setFileName(filename: string) {
+        this._fileName = filename
     }
 
     put(sWallet:string) {
         // make a backup so that keys are no destroyed
         this.backup()
         try {
-            console.log(this._fileName)
             fs.writeFileSync(this._fileName, sWallet, 'utf8')
         }
         catch (err) {

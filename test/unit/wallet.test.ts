@@ -5,6 +5,7 @@ import { KeyPair } from '../../src/KeyPair'
 import { OutputCollection } from '../../src/OutputCollection'
 import { UnspentOutput } from '../../src/UnspentOutput'
 import { Bn, Script, TxOut } from 'bsv'
+import FileSystemStorage from '../../src/FileSystemStorage'
 
 const dustLimit = 500
 const someHashBufString = '1aebb7d0776cec663cbbdd87f200bf15406adb0ef91916d102bcd7f86c86934e'
@@ -58,18 +59,18 @@ const dummyOutput1 = new UnspentOutput(
 
 describe('Wallet tests', () => {
   it('should instantiate a wallet object', () => {
-    const w = new Wallet()
+    const w = new Wallet(new FileSystemStorage())
     expect(w).toBeInstanceOf(Wallet)
   })
   it('should error if wallet not loaded', async () => {
-    const w = new Wallet()
+    const w = new Wallet(new FileSystemStorage())
     w.selectedUtxos = createUtxos(1,1000)
     await expect(
       w.makeSimpleSpend(Long.fromNumber(600))
     ).rejects.toThrow(Error)
   })
   it('should spend to address', async () => {
-    const w = new Wallet()
+    const w = new Wallet(new FileSystemStorage())
     w.loadWallet()
     w.selectedUtxos = createUtxos(1,10000)
     const buildResult = await w.makeSimpleSpend(Long.fromNumber(600), undefined, '1SCVmCzdLaECeRkMq3egwJ6yJLwT1x3wu')
@@ -80,7 +81,7 @@ describe('Wallet tests', () => {
     expect(buildResult.tx.txOuts[1].valueBn.toNumber()).toBe(9100)
   })
   it('should clear wallet', () => {
-    const w = new Wallet()
+    const w = new Wallet(new FileSystemStorage())
     w.selectedUtxos = createUtxos(1,1000)
     expect(w.balance).toBe(1000)
     w.clear()
@@ -88,7 +89,7 @@ describe('Wallet tests', () => {
     expect(w.selectedUtxos.hasAny()).toBeFalsy()
   })
   it('should create simple tx with no lock time', async () => {
-    const w = new Wallet()
+    const w = new Wallet(new FileSystemStorage())
     w.loadWallet()
     w.selectedUtxos = createUtxos(1,1000)
 
@@ -101,7 +102,7 @@ describe('Wallet tests', () => {
     w.logDetailsLastTx()
   })
   it('should create streamable tx with lock time', async () => {
-    const w = new Wallet()
+    const w = new Wallet(new FileSystemStorage())
     w.loadWallet()
     w.selectedUtxos = createUtxos(1,1000)
     const buildResult = await w.makeStreamableCashTx(
@@ -121,7 +122,7 @@ describe('Wallet tests', () => {
     expect(w.balance).toBe(0)
   })
   it('should create streamable tx with no lock time', async () => {
-    const w = new Wallet()
+    const w = new Wallet(new FileSystemStorage())
     w.loadWallet()
     w.selectedUtxos = createUtxos(1,1000)
     const buildResult = await w.makeStreamableCashTx(
@@ -136,7 +137,7 @@ describe('Wallet tests', () => {
     expect(w.balance).toBe(0)
   })
   it('should create streamable tx with one input', async () => {
-    const w = new Wallet()
+    const w = new Wallet(new FileSystemStorage())
     w.loadWallet()
     w.selectedUtxos = makeDummyTwo()
     const buildResult = await w.makeStreamableCashTx(
@@ -152,7 +153,7 @@ describe('Wallet tests', () => {
     expect(w.balance).toBe(3000-499)
   })
   it('should create streamable tx with exact input', async () => {
-    const w = new Wallet()
+    const w = new Wallet(new FileSystemStorage())
     w.loadWallet()
     w.selectedUtxos = makeDummyTwo()
     const tokensLessDust = 1000 - 500
@@ -171,7 +172,7 @@ describe('Wallet tests', () => {
   })
 
   it('should create streamable tx with multiple inputs', async () => {
-    const w = new Wallet()
+    const w = new Wallet(new FileSystemStorage())
     w.loadWallet()
     w.selectedUtxos = makeDummyTwo()
     //wallet will sort utxo by sats, use biggest first
@@ -191,7 +192,7 @@ describe('Wallet tests', () => {
     expect(w.balance).toBe(500)
   })
   it('should create streamable tx with increasing', async () => {
-    const w = new Wallet()
+    const w = new Wallet(new FileSystemStorage())
     w.loadWallet()
     w.selectedUtxos = makeDummyTwo()
     //wallet will sort utxo by sats, use biggest first
@@ -223,7 +224,7 @@ describe('Wallet tests', () => {
     expect(w.balance).toBe(900)
   })
   it('funds tx with one input', async () => {
-    const w = new Wallet()
+    const w = new Wallet(new FileSystemStorage())
     w.loadWallet()
     w.selectedUtxos = createUtxos(1,1000)
     const buildResult = await w.makeStreamableCashTx(Long.fromNumber(100))
@@ -234,12 +235,12 @@ describe('Wallet tests', () => {
     expect(w.balance).toBe(900)
   })
   it ('should log utxos', () => {
-    const w = new Wallet()
+    const w = new Wallet(new FileSystemStorage())
     w.selectedUtxos = makeDummyTwo()
     w.logUtxos(w.selectedUtxos.items)
   })
   it('should create tx to split a utxo', async () => {
-    const w = new Wallet()
+    const w = new Wallet(new FileSystemStorage())
     w.loadWallet()
     const utxos = new OutputCollection()
     utxos.add(new UnspentOutput(10000,w.keyPair.toOutputScript(),someHashBufString,0))
@@ -252,7 +253,7 @@ describe('Wallet tests', () => {
     // fee will be 10000 - 945*10
   })
   it('should create tx to split a utxo', async () => {
-    const w = new Wallet()
+    const w = new Wallet(new FileSystemStorage())
     w.loadWallet()
     const utxos = new OutputCollection()
     utxos.add(new UnspentOutput(3611,w.keyPair.toOutputScript(),someHashBufString,0))
@@ -274,7 +275,7 @@ describe('Wallet tests', () => {
     w.logDetails(buildResult?.tx)
   })
   it('should get wallet balance', async () => {
-    const w = new Wallet()
+    const w = new Wallet(new FileSystemStorage())
     w.loadWallet()
     const lotsOfUtxos = createUtxos(9,1)
     expect(lotsOfUtxos.count).toBe(9)
@@ -283,7 +284,7 @@ describe('Wallet tests', () => {
   })
   it('should create streamable tx with more than 256 inputs', async () => {
     const size = 258
-    const w = new Wallet()
+    const w = new Wallet(new FileSystemStorage())
     w.loadWallet()
     const lotsOfUtxos = createUtxos(size,1000)
     expect(lotsOfUtxos.count).toBe(size)
@@ -302,7 +303,7 @@ describe('Wallet tests', () => {
     expect(w.balance).toBe(0)
   })
   it('encumbers utxo', async () => {
-    const w = new Wallet()
+    const w = new Wallet(new FileSystemStorage())
     w.loadWallet()
     w.selectedUtxos = createUtxos(1,1000)
     const buildResult = await w.makeStreamableCashTx(Long.fromNumber(100))
@@ -314,7 +315,7 @@ describe('Wallet tests', () => {
     expect(w.balance).toBe(900)
   })
   it('errors multiple streams one utxo', async () => {
-    const w = new Wallet()
+    const w = new Wallet(new FileSystemStorage())
     w.loadWallet()
     w.selectedUtxos = createUtxos(1,1000)
     const stream1 = await w.makeStreamableCashTx(Long.fromNumber(100))
@@ -329,7 +330,7 @@ describe('Wallet tests', () => {
     ).rejects.toThrow(Error)
   })
   it ('should error making empty transaction', async () => {
-    const w = new Wallet()
+    const w = new Wallet(new FileSystemStorage())
     expect(w).toBeInstanceOf(Wallet)
     w.loadWallet()
     // should error because stream cannot be funded
@@ -342,7 +343,7 @@ describe('Wallet tests', () => {
     ).rejects.toThrow(Error)
   })
   it('tests funding zero', async () => {
-    const w = new Wallet()
+    const w = new Wallet(new FileSystemStorage())
     w.allowZeroFunding = true
     w.loadWallet()
     w.selectedUtxos = new OutputCollection()
@@ -370,7 +371,7 @@ describe('Wallet tests', () => {
   })
   it('tests funding more', async () => {
     // what to do if user wants to make tx with 0 funding?
-    const w = new Wallet()
+    const w = new Wallet(new FileSystemStorage())
     w.loadWallet()
     w.selectedUtxos = createUtxos(1,1000)
     const buildResult = await w.makeStreamableCashTx(Long.fromNumber(0))
@@ -391,7 +392,7 @@ describe('Wallet tests', () => {
     expect(w.balance).toBe(1000)
   })
   it('adds data output', async () => {
-    const w = new Wallet()
+    const w = new Wallet(new FileSystemStorage())
     w.loadWallet()
     w.selectedUtxos = createUtxos(1,1000)
     const buildResult = await w.makeStreamableCashTx(
@@ -409,7 +410,7 @@ describe('Wallet tests', () => {
     expect(w.balance).toBe(900)
   })
   it('adds payto', async () => {
-    const w = new Wallet()
+    const w = new Wallet(new FileSystemStorage())
     w.loadWallet()
     w.selectedUtxos = createUtxos(1,1000)
     const buildResult = await w.makeStreamableCashTx(
@@ -426,7 +427,7 @@ describe('Wallet tests', () => {
     expect(w.balance).toBe(900)
   })
   it('adds payto array single', async () => {
-    const w = new Wallet()
+    const w = new Wallet(new FileSystemStorage())
     w.loadWallet()
     w.selectedUtxos = createUtxos(1,1000)
     const buildResult = await w.makeStreamableCashTx(
@@ -444,7 +445,7 @@ describe('Wallet tests', () => {
     expect(w.balance).toBe(900)
   })
   it('adds payto array double', async () => {
-    const w = new Wallet()
+    const w = new Wallet(new FileSystemStorage())
     w.loadWallet()
     w.selectedUtxos = createUtxos(1,1000)
     const buildResult = await w.makeStreamableCashTx(
@@ -465,7 +466,7 @@ describe('Wallet tests', () => {
     expect(w.balance).toBe(900)
   })
   it('adds payto array tripple', async () => {
-    const w = new Wallet()
+    const w = new Wallet(new FileSystemStorage())
     w.loadWallet()
     w.selectedUtxos = createUtxos(1,2000)
     const buildResult = await w.makeStreamableCashTx(
@@ -487,7 +488,7 @@ describe('Wallet tests', () => {
     expect(w.balance).toBe(1000)
   })
   it('adds payto array tripple', async () => {
-    const w = new Wallet()
+    const w = new Wallet(new FileSystemStorage())
     w.loadWallet()
     w.selectedUtxos = createUtxos(1,1000)
     const buildResult = await w.makeStreamableCashTx(
@@ -509,7 +510,7 @@ describe('Wallet tests', () => {
     expect(w.balance).toBe(900)
   })
   it('adds payto array tripple', async () => {
-    const w = new Wallet()
+    const w = new Wallet(new FileSystemStorage())
     w.loadWallet()
     w.selectedUtxos = createUtxos(1,1000)
     const buildResult = await w.makeStreamableCashTx(
@@ -532,12 +533,12 @@ describe('Wallet tests', () => {
   })
   it('should load json', async () => {
     //TODO: mock the file system
-    const w = new Wallet()
+    const w = new Wallet(new FileSystemStorage())
     w.loadWallet()
     w.fileName='wallet.test.json'
     await w.store(w.toJSON())
     expect(existsSync(w.fileName)).toBe(true)
-    const w2 = new Wallet()
+    const w2 = new Wallet(new FileSystemStorage())
     w2.loadWalletFromJSON(w.fileName)
     expect(w.keyPair.toWif()).toBe(w2.keyPair.toWif())
     unlinkSync(w.fileName)

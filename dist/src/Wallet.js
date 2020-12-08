@@ -35,13 +35,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Wallet = void 0;
-var FileSystemStorage_1 = __importDefault(require("./FileSystemStorage"));
-var IndexingService_1 = __importDefault(require("./IndexingService"));
 var bsv_1 = require("bsv");
 var KeyPair_1 = require("./KeyPair");
 var TransactionBuilder_1 = require("./TransactionBuilder");
@@ -79,8 +74,8 @@ var Wallet = /** @class */ (function () {
         this._isDebug = true;
         this._walletFileName = 'wallet.json';
         this._dustLimit = 140;
-        this._storage = storage || new FileSystemStorage_1.default(this._walletFileName);
-        this._index = index || new IndexingService_1.default();
+        this._storage = storage; //|| new FileSystemStorage(this._walletFileName)
+        this._index = index; //|| new IndexingService()
     }
     Object.defineProperty(Wallet.prototype, "keyPair", {
         get: function () { return this._keypair; },
@@ -131,7 +126,7 @@ var Wallet = /** @class */ (function () {
         get: function () { return this._walletFileName; },
         set: function (val) {
             this._walletFileName = val;
-            this._storage = new FileSystemStorage_1.default(this._walletFileName);
+            this._storage.setFileName(this._walletFileName);
         },
         enumerable: false,
         configurable: true
@@ -258,7 +253,7 @@ var Wallet = /** @class */ (function () {
     };
     Wallet.prototype.loadWalletFromJSON = function (fileName) {
         this._walletFileName = fileName;
-        this._storage = new FileSystemStorage_1.default(this._walletFileName);
+        this._storage.setFileName(this._walletFileName);
         var content = this._storage.tryget();
         var jcontent = JSON.parse(content || '{}');
         this.loadWallet(jcontent === null || jcontent === void 0 ? void 0 : jcontent.wif);
@@ -316,6 +311,7 @@ var Wallet = /** @class */ (function () {
                 switch (_b.label) {
                     case 0:
                         if (!(force || !((_a = this._selectedUtxos) === null || _a === void 0 ? void 0 : _a.hasAny()))) return [3 /*break*/, 2];
+                        if (!this._index) return [3 /*break*/, 2];
                         return [4 /*yield*/, this._index.getUtxosAPI(this._keypair.toAddress())];
                     case 1:
                         utxos = _b.sent();

@@ -1,4 +1,5 @@
 import { Wallet } from '../../src/Wallet'
+import FileSystemStorage from '../../src/FileSystemStorage'
 import { OutputCollection } from '../../src/OutputCollection'
 import * as Long from 'long'
 import { Address } from 'bsv'
@@ -8,11 +9,11 @@ const demo_wif = 'L5bxi2ef2R8LuTvQbGwkY9w6KJzpPckqRQMnjtD8D2EFqjGeJnSq'
 
 describe('wallet broadcasts simple spend', () => {
     it ('should create transaction', () => {
-        const w = new Wallet()
+        const w = new Wallet(new FileSystemStorage())
         expect(w).toBeInstanceOf(Wallet)
     })
     // it ('should create transaction', async () => {
-    //     const w = new Wallet()
+    //     const w = new Wallet(new FileSystemStorage())
     //     expect(w).toBeInstanceOf(Wallet)
     //     w.loadWallet(demo_wif)
     //     const utxos = await w.loadUnspent()
@@ -30,7 +31,7 @@ describe('wallet broadcasts simple spend', () => {
     // })
 
 //     it('broadcasts', async () => {
-//         const sender = new Wallet()
+//         const sender = new Wallet(new FileSystemStorage())
 //         sender.loadWallet(demo_wif)
 //         //sender.logDetails()
 //         let sent

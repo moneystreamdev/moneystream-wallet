@@ -20,7 +20,8 @@
     "debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "bsv2": "yarn remove bsv && yarn add https://github.com/moneystreamdev/bsv",
-    "bsvlegacy": "yarn remove bsv && yarn add https://github.com/moneystreamdev/bsv#bsv-legacy"
+    "bsvlegacy": "yarn remove bsv && yarn add https://github.com/moneystreamdev/bsv#bsv-legacy",
+    "browserify": "browserify web/browser.ts -p [ tsify --noImplicitAny ] > dist/moneystream.js"
   },
   "repository": {
     "type": "git",
@@ -48,6 +49,7 @@
     "long": "^4.0.0",
     "merkletreejs": "^0.2.9",
     "node-fetch": "^2.6.0",
+    "parcel-bundler": "^1.12.4",
     "typescript": "^3.9.5"
   },
   "devDependencies": {

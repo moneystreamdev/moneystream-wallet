@@ -1,4 +1,5 @@
 import { Wallet } from '../../src/Wallet'
+import FileSystemStorage from '../../src/FileSystemStorage'
 import { KeyPair } from '../../src/KeyPair'
 import { OutputCollection } from '../../src/OutputCollection'
 import { TxVerifier, TxOutMap } from 'bsv'
@@ -13,7 +14,7 @@ const keyPair = new KeyPair().fromRandom()
 // with max inputs 1 the last hex tx is the max spendable tx
 describe('browse stream', () => {
     it ('should browse session', async () => {
-        const w = new Wallet()
+        const w = new Wallet(new FileSystemStorage())
         expect(w).toBeInstanceOf(Wallet)
         w.loadWallet(demo_wif)
         await w.loadUnspent()

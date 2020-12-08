@@ -7,13 +7,17 @@ var fs_1 = __importDefault(require("fs"));
 //currently sync but should be async
 var FileSystemStorage = /** @class */ (function () {
     function FileSystemStorage(fileName) {
-        this._fileName = fileName;
+        this._fileName = 'wallet.json';
+        if (fileName)
+            this._fileName = fileName;
     }
+    FileSystemStorage.prototype.setFileName = function (filename) {
+        this._fileName = filename;
+    };
     FileSystemStorage.prototype.put = function (sWallet) {
         // make a backup so that keys are no destroyed
         this.backup();
         try {
-            console.log(this._fileName);
             fs_1.default.writeFileSync(this._fileName, sWallet, 'utf8');
         }
         catch (err) {
