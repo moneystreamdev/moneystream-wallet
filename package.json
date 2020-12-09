@@ -51,7 +51,7 @@
     "crypto-js": "^4.0.0",
     "long": "^4.0.0",
     "merkletreejs": "^0.2.9",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.1",
     "parcel-bundler": "^1.12.4",
     "typescript": "^3.9.5"
   },
