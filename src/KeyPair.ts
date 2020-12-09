@@ -1,7 +1,7 @@
 import {
     PrivKey as PrivateKey, 
     PubKey as PublicKey,
-    Address, Script} from 'bsv'
+    Address} from 'bsv'
 
 // a public and private pair of keys
 export class KeyPair {

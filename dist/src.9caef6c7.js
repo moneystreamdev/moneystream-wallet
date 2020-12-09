@@ -34410,15 +34410,15 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.Wallet = void 0;
 
-var bsv_1 = require("bsv");
-
 var KeyPair_1 = require("./KeyPair");
 
 var TransactionBuilder_1 = require("./TransactionBuilder");
 
 var OutputCollection_1 = require("./OutputCollection");
 
-var UnspentOutput_1 = require("./UnspentOutput"); // base class for streaming wallet
+var UnspentOutput_1 = require("./UnspentOutput");
+
+var bsv_1 = require("bsv"); // base class for streaming wallet
 // A wallet generates transactions
 // TODO: extract wallet storage into separate class
 // TODO: extract debugging formatting into separate class
@@ -35092,7 +35092,7 @@ function () {
 }();
 
 exports.Wallet = Wallet;
-},{"bsv":"../node_modules/bsv/dist/bsv.modern.js","./KeyPair":"../src/KeyPair.ts","./TransactionBuilder":"../src/TransactionBuilder.ts","./OutputCollection":"../src/OutputCollection.ts","./UnspentOutput":"../src/UnspentOutput.ts","buffer":"../node_modules/buffer/index.js"}],"../src/FileSystemStorage.ts":[function(require,module,exports) {
+},{"./KeyPair":"../src/KeyPair.ts","./TransactionBuilder":"../src/TransactionBuilder.ts","./OutputCollection":"../src/OutputCollection.ts","./UnspentOutput":"../src/UnspentOutput.ts","bsv":"../node_modules/bsv/dist/bsv.modern.js","buffer":"../node_modules/buffer/index.js"}],"../src/FileSystemStorage.ts":[function(require,module,exports) {
 "use strict";
 
 var __importDefault = this && this.__importDefault || function (mod) {
@@ -68614,7 +68614,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "32370" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "2405" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

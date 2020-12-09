@@ -1,11 +1,11 @@
 'use strict'
 import /*FileSystemStorage,*/ { IStorage } from './FileSystemStorage'
 import /*IndexingService,*/ {IIndexingService} from './IndexingService'
-import { Bn, Tx, Address, Sig, Script } from 'bsv'
 import { KeyPair } from './KeyPair'
 import { TransactionBuilder } from './TransactionBuilder'
 import { OutputCollection } from './OutputCollection'
 import { UnspentOutput } from './UnspentOutput'
+import { Bn, Tx, Address, Sig, Script } from 'bsv'
 
 // base class for streaming wallet
 // A wallet generates transactions

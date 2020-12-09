@@ -21,7 +21,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "bsv2": "yarn remove bsv && yarn add https://github.com/moneystreamdev/bsv",
     "bsvlegacy": "yarn remove bsv && yarn add https://github.com/moneystreamdev/bsv#bsv-legacy",
-    "browserify": "browserify web/browser.ts -p [ tsify --noImplicitAny ] > dist/moneystream.js"
+    "browserify": "browserify web/moneystream.ts -p [ tsify --noImplicitAny ] --standalone MoneyStream > dist/moneystream.js"
   },
   "repository": {
     "type": "git",
@@ -43,8 +43,11 @@
   "dependencies": {
     "@types/crypto-js": "^3.1.47",
     "@types/node-fetch": "^2.5.7",
+    "@types/regenerator-runtime": "^0.13.0",
     "babel-polyfill": "^6.26.0",
+    "browserify": "^17.0.0",
     "bsv": "https://github.com/moneystreamdev/bsv",
+    "core-js": "^3.8.1",
     "crypto-js": "^4.0.0",
     "long": "^4.0.0",
     "merkletreejs": "^0.2.9",
@@ -54,14 +57,17 @@
   },
   "devDependencies": {
     "@babel/core": "^7.10.2",
+    "@babel/plugin-transform-runtime": "^7.12.1",
     "@babel/preset-env": "^7.10.2",
     "@babel/preset-typescript": "^7.10.1",
+    "@babel/runtime": "^7.12.5",
     "@types/jest": "^26.0.0",
     "@types/long": "^4.0.1",
     "@types/node": "^14.0.14",
     "babel-jest": "^26.0.1",
     "jest": "^26.0.1",
     "ts-jest": "^26.1.0",
-    "ts-node": "^8.10.2"
+    "ts-node": "^8.10.2",
+    "tsify": "^5.0.2"
   }
 }

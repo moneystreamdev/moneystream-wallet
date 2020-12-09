@@ -2,11 +2,11 @@
 /// <reference types="node" />
 import { IStorage } from './FileSystemStorage';
 import { IIndexingService } from './IndexingService';
-import { Tx, Script } from 'bsv';
 import { KeyPair } from './KeyPair';
 import { TransactionBuilder } from './TransactionBuilder';
 import { OutputCollection } from './OutputCollection';
 import { UnspentOutput } from './UnspentOutput';
+import { Tx, Script } from 'bsv';
 export declare class Wallet {
     protected readonly FINAL: number;
     _isDebug: boolean;

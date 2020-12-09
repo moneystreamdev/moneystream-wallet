@@ -10,6 +10,7 @@ module.exports = {
     ['@babel/preset-env', { targets: { node: '12' } }],
     '@babel/preset-typescript'
   ],
+ plugins: ["@babel/plugin-transform-runtime"]
 }
 // plugins: [
 //   ['@babel/proposal-decorators', { legacy: true }],

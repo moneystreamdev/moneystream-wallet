@@ -37,11 +37,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Wallet = void 0;
-var bsv_1 = require("bsv");
 var KeyPair_1 = require("./KeyPair");
 var TransactionBuilder_1 = require("./TransactionBuilder");
 var OutputCollection_1 = require("./OutputCollection");
 var UnspentOutput_1 = require("./UnspentOutput");
+var bsv_1 = require("bsv");
 // base class for streaming wallet
 // A wallet generates transactions
 // TODO: extract wallet storage into separate class

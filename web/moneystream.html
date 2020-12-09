@@ -1,0 +1,20 @@
+<html>
+<body>
+  <script src="../dist/moneystream.js"></script>
+  <div>
+    Add moneystream.js bundle to any web page
+  </div>
+  <div>
+    classes exposed through window.MoneyStream.*
+  </div>
+  <script>
+    const moneystream = window.MoneyStream
+    const wallet = new moneystream.Wallet()
+    console.log(wallet.balance)
+
+    console.log(moneystream.Wallet)
+    console.log(moneystream.KeyPair)
+    console.log(moneystream.IndexingService)
+  </script>
+</body>
+</html>
