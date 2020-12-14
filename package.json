@@ -21,7 +21,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "bsv2": "yarn remove bsv && yarn add https://github.com/moneystreamdev/bsv",
     "bsvlegacy": "yarn remove bsv && yarn add https://github.com/moneystreamdev/bsv#bsv-legacy",
-    "browserify": "browserify web/moneystream.ts -p [ tsify --noImplicitAny ] --standalone MoneyStream > dist/moneystream.js"
+    "browserify": "browserify web/moneystream.ts -p [ tsify --noImplicitAny ] --standalone MoneyStream > dist/moneystream-wallet.js"
   },
   "repository": {
     "type": "git",
