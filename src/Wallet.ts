@@ -273,15 +273,19 @@ export class Wallet {
 
     // call this to spend a utxo
     // replaces a spent utxo with a new upspent
-    // tx is the built transaction that has been successfully broadcast
-    spendUtxos(utxos: OutputCollection,tx: typeof Tx, index: number) {
+    // tx is the built transaction
+    // txid is id that has been successfully broadcast
+    spendUtxos(utxos: OutputCollection,
+        txBuilt: typeof Tx, 
+        index: number,
+        txidBroadcast: string
+    ) {
         try {
             //TODO: loop and process all utxos that were spent
-            // gross assumption
+            // bad assumption, for now assume just one
             utxos.firstItem.spend()
-            // add broadcast success tx
-            const replacementOut = tx.txOuts[index]
-            const txid = Buffer.from(tx.id(),'hex').reverse().toString('hex')
+            const replacementOut = txBuilt.txOuts[index]
+            const txid = Buffer.from(txidBroadcast,'hex').reverse().toString('hex')
             const replacementUtxo = UnspentOutput.fromTxOut(
                 replacementOut, txid, index
             )

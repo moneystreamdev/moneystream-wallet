@@ -555,7 +555,7 @@ describe('Wallet tests', () => {
     expect(w.getTxFund(w.lastTx)).toBe(100)
     expect(w.selectedUtxos.firstItem.status).toBe('hold')
     expect(w.balance).toBe(900)
-    w.spendUtxos(buildResult.utxos, buildResult.tx, 0)
+    w.spendUtxos(buildResult.utxos, buildResult.tx, 0, buildResult.tx.id())
     expect(w.balance).toBe(900)
     expect(w.selectedUtxos.count).toBe(2)
     expect(w.selectedUtxos.spendable().count).toBe(1)

@@ -38079,15 +38079,15 @@ var Wallet = /** @class */ (function () {
     };
     // call this to spend a utxo
     // replaces a spent utxo with a new upspent
-    // tx is the built transaction that has been successfully broadcast
-    Wallet.prototype.spendUtxos = function (utxos, tx, index) {
+    // tx is the built transaction
+    // txid is id that has been successfully broadcast
+    Wallet.prototype.spendUtxos = function (utxos, txBuilt, index, txidBroadcast) {
         try {
             //TODO: loop and process all utxos that were spent
-            // gross assumption
+            // bad assumption, for now assume just one
             utxos.firstItem.spend();
-            // add broadcast success tx
-            var replacementOut = tx.txOuts[index];
-            var txid = Buffer.from(tx.id(), 'hex').reverse().toString('hex');
+            var replacementOut = txBuilt.txOuts[index];
+            var txid = Buffer.from(txidBroadcast, 'hex').reverse().toString('hex');
             var replacementUtxo = UnspentOutput_1.UnspentOutput.fromTxOut(replacementOut, txid, index);
             replacementUtxo.walletId = this.keyPair.toAddress().toString();
             var addResult = this.selectedUtxos.add(replacementUtxo);
