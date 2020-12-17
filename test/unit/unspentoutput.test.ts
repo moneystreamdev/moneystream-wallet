@@ -58,5 +58,14 @@ describe('unspentoutput tests', () => {
         )
         expect(utxo.walletId).toBe("userwallet")
     })
+    it('spent should have zero balance', () => {
+        const utxo = new UnspentOutput(
+            1111,
+            Script.fromString(''),
+            '123',99,undefined,"userwallet"
+        )
+        utxo.spend()
+        expect(utxo.balance).toBe(0)
+    })
 
 })

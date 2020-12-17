@@ -31,6 +31,8 @@ var UnspentOutput = /** @class */ (function () {
     Object.defineProperty(UnspentOutput.prototype, "balance", {
         // current balance available to spend on this output
         get: function () {
+            if (this.status == 'spent')
+                return 0;
             return this.satoshis - this.amountSpent;
         },
         enumerable: false,

@@ -30,6 +30,7 @@ export class UnspentOutput {
     get txPointer() { return new TxPointer(this.txId, this.outputIndex as number) }
     // current balance available to spend on this output
     get balance() {
+        if (this.status == 'spent') return 0
         return this.satoshis - this.amountSpent
     }
 

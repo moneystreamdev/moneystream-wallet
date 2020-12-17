@@ -23,3 +23,10 @@ See the tests for examples
 1. make a new wallet `const w = new Wallet()`
 2. view the address in wallet.json file
 3. send bitcoin to the wallet address to fund
+
+## deploy
+0. bump version
+1. yarn build
+2. yarn browserify
+3. npm login
+4. npm publish

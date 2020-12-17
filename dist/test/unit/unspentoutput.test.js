@@ -38,5 +38,10 @@ describe('unspentoutput tests', function () {
         var utxo = new src_1.UnspentOutput(1111, bsv_1.Script.fromString(''), '123', 99, undefined, "userwallet");
         expect(utxo.walletId).toBe("userwallet");
     });
+    it('spent should have zero balance', function () {
+        var utxo = new src_1.UnspentOutput(1111, bsv_1.Script.fromString(''), '123', 99, undefined, "userwallet");
+        utxo.spend();
+        expect(utxo.balance).toBe(0);
+    });
 });
 //# sourceMappingURL=unspentoutput.test.js.map

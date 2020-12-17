@@ -296,7 +296,7 @@ var Wallet = /** @class */ (function () {
         var tot = 0;
         for (var i = 0; i < utxos.length; i++) {
             var utxo = utxos[i];
-            logit += "\n" + utxo.satoshis + "x" + utxo.txId.slice(0, 4) + "..." + utxo.txId.slice(-4) + ":" + utxo.outputIndex;
+            logit += "\n" + utxo.satoshis + "sat " + utxo.txId.slice(0, 4) + "..." + utxo.txId.slice(-4) + ":" + utxo.outputIndex;
             tot += utxo.satoshis;
         }
         logit += "\nTotal:" + tot;

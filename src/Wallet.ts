@@ -239,7 +239,7 @@ export class Wallet {
         let tot = 0
         for (let i:number = 0; i<utxos.length; i++) {
             const utxo = utxos[i]
-            logit += `\n${utxo.satoshis}x${utxo.txId.slice(0,4)}...${utxo.txId.slice(-4)}:${utxo.outputIndex}`
+            logit += `\n${utxo.satoshis}sat ${utxo.txId.slice(0,4)}...${utxo.txId.slice(-4)}:${utxo.outputIndex}`
             tot += utxo.satoshis
         }
         logit += `\nTotal:${tot}`
