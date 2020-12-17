@@ -543,4 +543,23 @@ describe('Wallet tests', () => {
     expect(w.keyPair.toWif()).toBe(w2.keyPair.toWif())
     unlinkSync(w.fileName)
   })
+
+  it('replaces utxo', async () => {
+    const w = new Wallet(new FileSystemStorage())
+    w.loadWallet()
+    w.selectedUtxos = createUtxos(1,1000)
+    const buildResult = await w.makeStreamableCashTx(Long.fromNumber(100))
+    expect(buildResult?.tx).toBeDefined()
+    expect(w.selectedUtxos.items[0].amountSpent).toBe(100)
+    expect(w.selectedUtxos.items[0].balance).toBe(900)
+    expect(w.getTxFund(w.lastTx)).toBe(100)
+    expect(w.selectedUtxos.firstItem.status).toBe('hold')
+    expect(w.balance).toBe(900)
+    w.spendUtxos(buildResult.utxos, buildResult.tx, 0)
+    expect(w.balance).toBe(900)
+    expect(w.selectedUtxos.count).toBe(2)
+    expect(w.selectedUtxos.spendable().count).toBe(1)
+    expect(w.selectedUtxos.spent().count).toBe(1)
+  })
+
 })

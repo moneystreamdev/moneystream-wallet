@@ -746,5 +746,31 @@ describe('Wallet tests', function () {
             }
         });
     }); });
+    it('replaces utxo', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var w, buildResult;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    w = new Wallet_1.Wallet(new FileSystemStorage_1.default());
+                    w.loadWallet();
+                    w.selectedUtxos = createUtxos(1, 1000);
+                    return [4 /*yield*/, w.makeStreamableCashTx(Long.fromNumber(100))];
+                case 1:
+                    buildResult = _a.sent();
+                    expect(buildResult === null || buildResult === void 0 ? void 0 : buildResult.tx).toBeDefined();
+                    expect(w.selectedUtxos.items[0].amountSpent).toBe(100);
+                    expect(w.selectedUtxos.items[0].balance).toBe(900);
+                    expect(w.getTxFund(w.lastTx)).toBe(100);
+                    expect(w.selectedUtxos.firstItem.status).toBe('hold');
+                    expect(w.balance).toBe(900);
+                    w.spendUtxos(buildResult.utxos, buildResult.tx, 0);
+                    expect(w.balance).toBe(900);
+                    expect(w.selectedUtxos.count).toBe(2);
+                    expect(w.selectedUtxos.spendable().count).toBe(1);
+                    expect(w.selectedUtxos.spent().count).toBe(1);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
 });
 //# sourceMappingURL=wallet.test.js.map

@@ -38077,6 +38077,27 @@ var Wallet = /** @class */ (function () {
             });
         });
     };
+    // call this to spend a utxo
+    // replaces a spent utxo with a new upspent
+    // tx is the built transaction that has been successfully broadcast
+    Wallet.prototype.spendUtxos = function (utxos, tx, index) {
+        try {
+            //TODO: loop and process all utxos that were spent
+            // gross assumption
+            utxos.firstItem.spend();
+            // add broadcast success tx
+            var replacementOut = tx.txOuts[index];
+            var txid = Buffer.from(tx.id(), 'hex').reverse().toString('hex');
+            var replacementUtxo = UnspentOutput_1.UnspentOutput.fromTxOut(replacementOut, txid, index);
+            replacementUtxo.walletId = this.keyPair.toAddress().toString();
+            var addResult = this.selectedUtxos.add(replacementUtxo);
+            return addResult;
+        }
+        catch (err) {
+            console.log(err);
+            throw new Error("could not replace change output, you will have to refresh utxos");
+        }
+    };
     // legacy p2pkh spend
     Wallet.prototype.makeSimpleSpend = function (satoshis, utxos, toAddress) {
         return __awaiter(this, void 0, void 0, function () {
@@ -38381,16 +38402,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.IndexingService = exports.KeyPair = exports.Wallet = void 0;
+exports.IndexingService = exports.UnspentOutput = exports.KeyPair = exports.Wallet = void 0;
 require("core-js/stable");
 require("regenerator-runtime/runtime");
 var Wallet_1 = require("../src/Wallet");
 Object.defineProperty(exports, "Wallet", { enumerable: true, get: function () { return Wallet_1.Wallet; } });
 var KeyPair_1 = require("../src/KeyPair");
 Object.defineProperty(exports, "KeyPair", { enumerable: true, get: function () { return KeyPair_1.KeyPair; } });
+var UnspentOutput_1 = require("../src/UnspentOutput");
+Object.defineProperty(exports, "UnspentOutput", { enumerable: true, get: function () { return UnspentOutput_1.UnspentOutput; } });
 var IndexingService_1 = __importDefault(require("../src/IndexingService"));
 Object.defineProperty(exports, "IndexingService", { enumerable: true, get: function () { return IndexingService_1.default; } });
 window.MoneyStream = { Wallet: Wallet_1.Wallet, KeyPair: KeyPair_1.KeyPair, IndexingService: IndexingService_1.default };
 
-},{"../src/IndexingService":474,"../src/KeyPair":475,"../src/Wallet":480,"core-js/stable":401,"regenerator-runtime/runtime":446}]},{},[482])(482)
+},{"../src/IndexingService":474,"../src/KeyPair":475,"../src/UnspentOutput":479,"../src/Wallet":480,"core-js/stable":401,"regenerator-runtime/runtime":446}]},{},[482])(482)
 });

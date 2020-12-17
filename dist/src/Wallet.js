@@ -328,6 +328,27 @@ var Wallet = /** @class */ (function () {
             });
         });
     };
+    // call this to spend a utxo
+    // replaces a spent utxo with a new upspent
+    // tx is the built transaction that has been successfully broadcast
+    Wallet.prototype.spendUtxos = function (utxos, tx, index) {
+        try {
+            //TODO: loop and process all utxos that were spent
+            // gross assumption
+            utxos.firstItem.spend();
+            // add broadcast success tx
+            var replacementOut = tx.txOuts[index];
+            var txid = Buffer.from(tx.id(), 'hex').reverse().toString('hex');
+            var replacementUtxo = UnspentOutput_1.UnspentOutput.fromTxOut(replacementOut, txid, index);
+            replacementUtxo.walletId = this.keyPair.toAddress().toString();
+            var addResult = this.selectedUtxos.add(replacementUtxo);
+            return addResult;
+        }
+        catch (err) {
+            console.log(err);
+            throw new Error("could not replace change output, you will have to refresh utxos");
+        }
+    };
     // legacy p2pkh spend
     Wallet.prototype.makeSimpleSpend = function (satoshis, utxos, toAddress) {
         return __awaiter(this, void 0, void 0, function () {

@@ -271,6 +271,30 @@ export class Wallet {
         return this.selectedUtxos
     }
 
+    // call this to spend a utxo
+    // replaces a spent utxo with a new upspent
+    // tx is the built transaction that has been successfully broadcast
+    spendUtxos(utxos: OutputCollection,tx: typeof Tx, index: number) {
+        try {
+            //TODO: loop and process all utxos that were spent
+            // gross assumption
+            utxos.firstItem.spend()
+            // add broadcast success tx
+            const replacementOut = tx.txOuts[index]
+            const txid = Buffer.from(tx.id(),'hex').reverse().toString('hex')
+            const replacementUtxo = UnspentOutput.fromTxOut(
+                replacementOut, txid, index
+            )
+            replacementUtxo.walletId = this.keyPair.toAddress().toString()
+            const addResult = this.selectedUtxos.add(replacementUtxo)
+            return addResult
+        }
+        catch (err) {
+            console.log(err)
+            throw new Error(`could not replace change output, you will have to refresh utxos`)
+        }
+    }
+
     // legacy p2pkh spend
     async makeSimpleSpend(satoshis: Long, utxos?:OutputCollection, toAddress?:string): Promise<any> {
         if (!this._keypair) { throw new Error('Load wallet before spending') }
