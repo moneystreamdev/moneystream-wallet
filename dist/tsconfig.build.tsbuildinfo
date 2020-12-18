@@ -557,8 +557,8 @@
         "affectsGlobalScope": false
       },
       "../web/moneystream.ts": {
-        "version": "b054309ec1eeecf2242f2055cddf4adf0c731017992f341a1aa2ce0f7cabb299",
-        "signature": "1f160c35db74911462b33c54ff80764289500050eac6f76f50013de6c2124acf",
+        "version": "e3b0e54e957853522cf684fb0f019858433368bb15d13f310430c16e40293796",
+        "signature": "aa2d8ee9f1b95c35cf895b6fbd82453c68c25c01684f4f6d3b162a7e316817f0",
         "affectsGlobalScope": true
       },
       "../node_modules/@babel/types/lib/index.d.ts": {
@@ -1961,6 +1961,7 @@
         "../node_modules/@types/node/ts3.2/fs.d.ts",
         "../node_modules/@types/node/ts3.2/util.d.ts",
         "../node_modules/@types/node/util.d.ts",
+        "../node_modules/bsv/index.d.ts",
         "../src/IndexingService.ts",
         "../src/KeyPair.ts",
         "../src/UnspentOutput.ts",
@@ -2984,6 +2985,7 @@
         "../src/OutputCollection.ts"
       ],
       "../web/moneystream.ts": [
+        "../node_modules/bsv/index.d.ts",
         "../src/IndexingService.ts",
         "../src/KeyPair.ts",
         "../src/UnspentOutput.ts",

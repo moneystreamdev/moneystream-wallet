@@ -3,9 +3,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.IndexingService = exports.UnspentOutput = exports.KeyPair = exports.Wallet = void 0;
+exports.IndexingService = exports.UnspentOutput = exports.KeyPair = exports.Wallet = exports.Aescbc = exports.Hash = void 0;
 require("core-js/stable");
 require("regenerator-runtime/runtime");
+var bsv_1 = require("bsv");
+Object.defineProperty(exports, "Hash", { enumerable: true, get: function () { return bsv_1.Hash; } });
+Object.defineProperty(exports, "Aescbc", { enumerable: true, get: function () { return bsv_1.Aescbc; } });
 var Wallet_1 = require("../src/Wallet");
 Object.defineProperty(exports, "Wallet", { enumerable: true, get: function () { return Wallet_1.Wallet; } });
 var KeyPair_1 = require("../src/KeyPair");
