@@ -487,8 +487,8 @@
         "affectsGlobalScope": false
       },
       "../src/index.ts": {
-        "version": "ab95c6693c0382f492e8e550282d20eda2a593a86490e50ca2e77d31cb7d7fc6",
-        "signature": "0ad6f311b7dd7d35dc1bbe4124bf96f52af0e84bb050460c9b14bbe87f1e6b89",
+        "version": "c9100c32835ca454e66531fdd74d29aa5bc2a2ae93356ef757e9ffc57fc2f33e",
+        "signature": "08f9f73e2fb3fe3b6fa2e622ac36531e57d1e4a4a52098887617a478adf51547",
         "affectsGlobalScope": false
       },
       "../node_modules/@types/long/index.d.ts": {
@@ -557,8 +557,8 @@
         "affectsGlobalScope": false
       },
       "../web/moneystream.ts": {
-        "version": "e3b0e54e957853522cf684fb0f019858433368bb15d13f310430c16e40293796",
-        "signature": "aa2d8ee9f1b95c35cf895b6fbd82453c68c25c01684f4f6d3b162a7e316817f0",
+        "version": "b0a635de2f7ffd6f48685a4560562586fa91717accceb4ecf48db04648c022a3",
+        "signature": "ee84330e7a8c01ecf59d5688889b8897872f458e1b6d82ed7d9d01af03f3f730",
         "affectsGlobalScope": true
       },
       "../node_modules/@babel/types/lib/index.d.ts": {
@@ -1816,6 +1816,7 @@
         "../node_modules/@types/node/ts3.2/fs.d.ts",
         "../node_modules/@types/node/ts3.2/util.d.ts",
         "../node_modules/@types/node/util.d.ts",
+        "../node_modules/bsv/index.d.ts",
         "../src/FileSystemStorage.ts",
         "../src/IndexingService.ts",
         "../src/KeyPair.ts",
@@ -2970,6 +2971,7 @@
         "../src/UnspentOutput.ts"
       ],
       "../src/index.ts": [
+        "../node_modules/bsv/index.d.ts",
         "../src/FileSystemStorage.ts",
         "../src/IndexingService.ts",
         "../src/KeyPair.ts",

@@ -1,5 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var bsv_1 = require("bsv");
+Object.defineProperty(exports, "Hash", { enumerable: true, get: function () { return bsv_1.Hash; } });
+Object.defineProperty(exports, "Aescbc", { enumerable: true, get: function () { return bsv_1.Aescbc; } });
 var Wallet_1 = require("./Wallet");
 Object.defineProperty(exports, "Wallet", { enumerable: true, get: function () { return Wallet_1.Wallet; } });
 var TransactionBuilder_1 = require("./TransactionBuilder");

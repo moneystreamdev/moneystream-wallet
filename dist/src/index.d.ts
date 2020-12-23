@@ -1,3 +1,4 @@
+export { Hash, Aescbc } from 'bsv';
 export { Wallet } from './Wallet';
 export { TransactionBuilder } from './TransactionBuilder';
 export { KeyPair } from './KeyPair';

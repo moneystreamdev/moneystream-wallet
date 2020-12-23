@@ -38402,9 +38402,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.IndexingService = exports.UnspentOutput = exports.KeyPair = exports.Wallet = exports.Aescbc = exports.Hash = void 0;
+exports.IndexingService = exports.UnspentOutput = exports.KeyPair = exports.Wallet = exports.Aescbc = exports.Hash = exports.Buffer = void 0;
 require("core-js/stable");
 require("regenerator-runtime/runtime");
+var Buffer = require('safe-buffer').Buffer;
+exports.Buffer = Buffer;
 var bsv_1 = require("bsv");
 Object.defineProperty(exports, "Hash", { enumerable: true, get: function () { return bsv_1.Hash; } });
 Object.defineProperty(exports, "Aescbc", { enumerable: true, get: function () { return bsv_1.Aescbc; } });
@@ -38416,7 +38418,11 @@ var UnspentOutput_1 = require("../src/UnspentOutput");
 Object.defineProperty(exports, "UnspentOutput", { enumerable: true, get: function () { return UnspentOutput_1.UnspentOutput; } });
 var IndexingService_1 = __importDefault(require("../src/IndexingService"));
 Object.defineProperty(exports, "IndexingService", { enumerable: true, get: function () { return IndexingService_1.default; } });
-window.MoneyStream = { Wallet: Wallet_1.Wallet, KeyPair: KeyPair_1.KeyPair, IndexingService: IndexingService_1.default };
+window.MoneyStream = {
+    Buffer: Buffer, Hash: bsv_1.Hash, Aescbc: bsv_1.Aescbc,
+    Wallet: Wallet_1.Wallet, KeyPair: KeyPair_1.KeyPair, UnspentOutput: UnspentOutput_1.UnspentOutput,
+    IndexingService: IndexingService_1.default
+};
 
-},{"../src/IndexingService":474,"../src/KeyPair":475,"../src/UnspentOutput":479,"../src/Wallet":480,"bsv":19,"core-js/stable":401,"regenerator-runtime/runtime":446}]},{},[482])(482)
+},{"../src/IndexingService":474,"../src/KeyPair":475,"../src/UnspentOutput":479,"../src/Wallet":480,"bsv":19,"core-js/stable":401,"regenerator-runtime/runtime":446,"safe-buffer":448}]},{},[482])(482)
 });
