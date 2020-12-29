@@ -1,5 +1,6 @@
 import { UnspentOutput } from "./UnspentOutput"
 import { Script } from 'bsv'
+import * as Long from 'long'
 
 //a list of transaction outputs
 export class OutputCollection {

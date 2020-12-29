@@ -1,4 +1,3 @@
-/// <reference types="long" />
 /// <reference types="node" />
 import { IStorage } from './FileSystemStorage';
 import { IIndexingService } from './IndexingService';
@@ -7,6 +6,7 @@ import { TransactionBuilder } from './TransactionBuilder';
 import { OutputCollection } from './OutputCollection';
 import { UnspentOutput } from './UnspentOutput';
 import { Tx, Script } from 'bsv';
+import * as Long from 'long';
 export declare class Wallet {
     protected readonly FINAL: number;
     _isDebug: boolean;

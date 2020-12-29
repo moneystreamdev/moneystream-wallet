@@ -6,6 +6,7 @@ import { TransactionBuilder } from './TransactionBuilder'
 import { OutputCollection } from './OutputCollection'
 import { UnspentOutput } from './UnspentOutput'
 import { Bn, Tx, Address, Sig, Script } from 'bsv'
+import * as Long from 'long'
 
 // base class for streaming wallet
 // A wallet generates transactions

@@ -1,6 +1,6 @@
 /// <reference types="node" />
-/// <reference types="long" />
 import { UnspentOutput } from "./UnspentOutput";
+import * as Long from 'long';
 export declare class OutputCollection {
     private _outs;
     walletId: string;

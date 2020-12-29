@@ -456,9 +456,14 @@
         "signature": "2756ab946b9c5a375c564193424403a4896539df8de266befc53e9cbb33320f1",
         "affectsGlobalScope": false
       },
+      "../node_modules/@types/long/index.d.ts": {
+        "version": "e8465811693dfe4e96ef2b3dffda539d6edfe896961b7af37b44db2c0e48532b",
+        "signature": "e8465811693dfe4e96ef2b3dffda539d6edfe896961b7af37b44db2c0e48532b",
+        "affectsGlobalScope": false
+      },
       "../src/OutputCollection.ts": {
-        "version": "b4bb7411e606ec0d506b4da36eeb56e4298e1dff0e9bec491278c8a166be5044",
-        "signature": "eca947fbad3d01cb1d7178abd0fffb75b85f1e078a04ead32ef74f382f7d41e9",
+        "version": "8e86a83fac9e5b79786fa724a59fd0449da0297f9a397213c352e63d7b06ebfe",
+        "signature": "6c41820b0684cdc7a59f2a04912e0ae3554fc588444c5f34561516d20f20dc4e",
         "affectsGlobalScope": false
       },
       "../src/TransactionBuilder.ts": {
@@ -467,8 +472,8 @@
         "affectsGlobalScope": false
       },
       "../src/Wallet.ts": {
-        "version": "9f05398b203fd240be519d19de815efb8e9ae3b4bb8007fd47121dc1c8dbcb7e",
-        "signature": "bd859c7230f410b1b68a72dbcbf0093d7b0678290fdc79d79269eeaeaffabe78",
+        "version": "6199a9c66973b7263d207598782698a780c7a744d56450b971dedca889cfcda4",
+        "signature": "6f7c69667747e5c52563b29db14b83d99a14dace991798f4c9ea629f37d46fa2",
         "affectsGlobalScope": false
       },
       "../src/index.ts": {
@@ -575,11 +580,6 @@
         "version": "08c4a97a324b82f7dbc02b9e2bb278b7bb13c160e04e23a16dd04f9d732da20a",
         "signature": "08c4a97a324b82f7dbc02b9e2bb278b7bb13c160e04e23a16dd04f9d732da20a",
         "affectsGlobalScope": true
-      },
-      "../node_modules/@types/long/index.d.ts": {
-        "version": "e8465811693dfe4e96ef2b3dffda539d6edfe896961b7af37b44db2c0e48532b",
-        "signature": "e8465811693dfe4e96ef2b3dffda539d6edfe896961b7af37b44db2c0e48532b",
-        "affectsGlobalScope": false
       },
       "../node_modules/form-data/index.d.ts": {
         "version": "cbb7029e32a6a72178cda8baa9129b1ee6d1d779a35e46c780e38b4909d42a89",
@@ -931,6 +931,7 @@
         "../node_modules/merkletreejs/dist/index.d.ts"
       ],
       "../src/OutputCollection.ts": [
+        "../node_modules/@types/long/index.d.ts",
         "../node_modules/bsv/index.d.ts",
         "../src/UnspentOutput.ts"
       ],
@@ -944,6 +945,7 @@
         "../src/TxPointer.ts"
       ],
       "../src/Wallet.ts": [
+        "../node_modules/@types/long/index.d.ts",
         "../node_modules/bsv/index.d.ts",
         "../src/FileSystemStorage.ts",
         "../src/IndexingService.ts",
@@ -1231,6 +1233,7 @@
         "../node_modules/pretty-format/build/types.d.ts"
       ],
       "../src/OutputCollection.ts": [
+        "../node_modules/@types/long/index.d.ts",
         "../src/UnspentOutput.ts"
       ],
       "../src/TransactionBuilder.ts": [
@@ -1243,6 +1246,7 @@
         "../src/TxPointer.ts"
       ],
       "../src/Wallet.ts": [
+        "../node_modules/@types/long/index.d.ts",
         "../node_modules/bsv/index.d.ts",
         "../src/FileSystemStorage.ts",
         "../src/IndexingService.ts",
