@@ -421,13 +421,15 @@ export class Wallet {
         if (data) {
             this.addData(txb, data)
         }
-        this.lastTx = txb.buildAndSign(this._keypair, makeFuture)
+        const thistx = txb.buildAndSign(this._keypair, makeFuture)
+        this.lastTx = thistx
         this._senderOutputCount = this.lastTx.txOuts.length
         return {
             hex: this.lastTx.toHex(),
             tx: this.lastTx,
             utxos: filteredUtxos,
-            txOutMap: txb.txb.uTxOutMap
+            txOutMap: txb.txb.uTxOutMap,
+            funding: this.getTxFund(thistx)
         }
         // at this point, tx is spendable by anyone!
         // only pass it through secure channel to recipient

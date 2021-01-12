@@ -440,7 +440,7 @@ var Wallet = /** @class */ (function () {
     Wallet.prototype.makeStreamableCashTx = function (satoshis, payTo, makeFuture, utxos, data) {
         if (makeFuture === void 0) { makeFuture = true; }
         return __awaiter(this, void 0, void 0, function () {
-            var filteredUtxos, utxoSatoshis, changeSatoshis, txb, dustTotal, runningSpent, index, element, outSatoshis, inputCount;
+            var filteredUtxos, utxoSatoshis, changeSatoshis, txb, dustTotal, runningSpent, index, element, outSatoshis, inputCount, thistx;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -494,13 +494,15 @@ var Wallet = /** @class */ (function () {
                         if (data) {
                             this.addData(txb, data);
                         }
-                        this.lastTx = txb.buildAndSign(this._keypair, makeFuture);
+                        thistx = txb.buildAndSign(this._keypair, makeFuture);
+                        this.lastTx = thistx;
                         this._senderOutputCount = this.lastTx.txOuts.length;
                         return [2 /*return*/, {
                                 hex: this.lastTx.toHex(),
                                 tx: this.lastTx,
                                 utxos: filteredUtxos,
-                                txOutMap: txb.txb.uTxOutMap
+                                txOutMap: txb.txb.uTxOutMap,
+                                funding: this.getTxFund(thistx)
                             }
                             // at this point, tx is spendable by anyone!
                             // only pass it through secure channel to recipient

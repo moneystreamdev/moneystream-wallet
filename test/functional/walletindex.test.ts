@@ -28,6 +28,7 @@ describe('real wallet works with WOC', () => {
 
         // now spend something
         const buildResult = await w.makeStreamableCashTx(Long.fromNumber(100))
+        expect (buildResult.funding).toBe(100)
 
         const refreshUtxos = await w.loadUnspent()
         // it is actually 100 less

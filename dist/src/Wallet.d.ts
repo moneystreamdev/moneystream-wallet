@@ -69,6 +69,7 @@ export declare class Wallet {
         tx: any;
         utxos: OutputCollection;
         txOutMap: any;
+        funding: number;
     }>;
     handlePayTo(txb: TransactionBuilder, payTo: string | Array<any> | null | undefined, satoshis: Long): void;
     split(utxos: OutputCollection, targetCount: number, satoshis: number): Promise<{
