@@ -522,4 +522,24 @@ export class Wallet {
         return result
     }
 
+    //when you know wallet has received a new
+    //funding amount (i.e. moneybutton onPayment)
+    //then add utxo here so wallet can spend it
+    //saves time from having to get it from index service
+    //requires: satoshis, script, txid, index
+    //optional: payment.rawhex
+    addUnspent(payment: any) {
+        if (payment) {
+            // TODO: makes assumptions, buggy
+            // could get this info from payment.rawhex?
+            const unspent = new UnspentOutput(
+                payment.satoshis,
+                this.keyPair.toOutputScript(),
+                payment.txid, 
+                0 // assumption! TODO: decode rawhex and validate
+            )
+            this.selectedUtxos.add(unspent)
+        }
+    }
+
 }

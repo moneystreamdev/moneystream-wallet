@@ -582,5 +582,15 @@ describe('Wallet tests', () => {
     expect(w.selectedUtxos.spendable().count).toBe(1)
     expect(w.selectedUtxos.spent().count).toBe(1)
   })
+  it('adds wallet funding', () => {
+    const w = new Wallet(new FileSystemStorage())
+    w.loadWallet()
+    expect(w.balance).toBe(0)
+    w.addUnspent({
+      satoshis:999,
+      txid:'123'
+    })
+    expect(w.balance).toBe(999)
+  })
 
 })

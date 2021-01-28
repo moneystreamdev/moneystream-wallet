@@ -79,5 +79,6 @@ export declare class Wallet {
     } | undefined>;
     countOutputs(tx: typeof Tx): number;
     filteredOutputs(tx: typeof Tx): any[];
+    addUnspent(payment: any): void;
 }
 //# sourceMappingURL=Wallet.d.ts.map

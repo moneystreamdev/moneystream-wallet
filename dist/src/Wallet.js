@@ -587,6 +587,21 @@ var Wallet = /** @class */ (function () {
         }
         return result;
     };
+    //when you know wallet has received a new
+    //funding amount (i.e. moneybutton onPayment)
+    //then add utxo here so wallet can spend it
+    //saves time from having to get it from index service
+    //requires: satoshis, script, txid, index
+    //optional: payment.rawhex
+    Wallet.prototype.addUnspent = function (payment) {
+        if (payment) {
+            // TODO: makes assumptions, buggy
+            // could get this info from payment.rawhex?
+            var unspent = new UnspentOutput_1.UnspentOutput(payment.satoshis, this.keyPair.toOutputScript(), payment.txid, 0 // assumption! TODO: decode rawhex and validate
+            );
+            this.selectedUtxos.add(unspent);
+        }
+    };
     return Wallet;
 }());
 exports.Wallet = Wallet;
