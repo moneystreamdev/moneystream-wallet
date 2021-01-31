@@ -56,6 +56,7 @@ const dummyOutput1 = new UnspentOutput(
 
   // tx with no inputs and no outputs
   const nofundinghex = '0100000000000d1b345f'
+  const TEST_TXID='d538d5ac29f591104e6e84ad00c91fbcdeee7a94c1efb41f4ffe9b3dfe149765'
 
 describe('Wallet tests', () => {
   it('should instantiate a wallet object', () => {
@@ -588,7 +589,11 @@ describe('Wallet tests', () => {
     expect(w.balance).toBe(0)
     w.addUnspent({
       satoshis:999,
-      txid:'123'
+      txid:TEST_TXID
+    })
+    w.addUnspent({
+      satoshis:999,
+      txid:TEST_TXID
     })
     expect(w.balance).toBe(999)
   })

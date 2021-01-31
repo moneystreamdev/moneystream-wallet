@@ -13,6 +13,9 @@ var UnspentOutput = /** @class */ (function () {
         this.script = script;
         this.satoshis = satoshis;
         this.amountSpent = 0;
+        if (txid && txid.length != 64) {
+            throw new Error("Invalid TxId " + txid);
+        }
         this.txId = txid || "";
         this.outputIndex = txoutindex;
         this._status = status || 'available';

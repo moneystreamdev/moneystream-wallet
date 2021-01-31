@@ -599,7 +599,7 @@ var Wallet = /** @class */ (function () {
             // could get this info from payment.rawhex?
             var unspent = new UnspentOutput_1.UnspentOutput(payment.satoshis, this.keyPair.toOutputScript(), payment.txid, 0 // assumption! TODO: decode rawhex and validate
             );
-            this.selectedUtxos.add(unspent);
+            this.selectedUtxos.add_conditional(unspent);
         }
     };
     return Wallet;

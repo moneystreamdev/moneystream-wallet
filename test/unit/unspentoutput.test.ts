@@ -3,6 +3,7 @@ import { UnspentOutput } from "../../src"
 import { TxPointer } from '../../src/TxPointer'
 
 const someHashBufString = '1aebb7d0776cec663cbbdd87f200bf15406adb0ef91916d102bcd7f86c86934e'
+const TEST_TXID='d538d5ac29f591104e6e84ad00c91fbcdeee7a94c1efb41f4ffe9b3dfe149765'
 
 describe('unspentoutput tests', () => {
     it('should instantiate', () => {
@@ -34,12 +35,12 @@ describe('unspentoutput tests', () => {
         const utxo = new UnspentOutput(
             1111,
             Script.fromString(''),
-            '123',99
+            TEST_TXID,99
         )
         expect(utxo.txPointer).toBeInstanceOf(TxPointer)
-        expect(utxo.txPointer.toString()).toBe(`123.99`)
+        expect(utxo.txPointer.toString()).toBe(`${TEST_TXID}.99`)
     })
-    it('it should respond to session events', () => {
+    it('should respond to session events', () => {
         const utxo = new UnspentOutput(
             1111,
             Script.fromString('')
@@ -54,7 +55,7 @@ describe('unspentoutput tests', () => {
         const utxo = new UnspentOutput(
             1111,
             Script.fromString(''),
-            '123',99,undefined,"userwallet"
+            TEST_TXID,99,undefined,"userwallet"
         )
         expect(utxo.walletId).toBe("userwallet")
     })
@@ -62,7 +63,7 @@ describe('unspentoutput tests', () => {
         const utxo = new UnspentOutput(
             1111,
             Script.fromString(''),
-            '123',99,undefined,"userwallet"
+            TEST_TXID,99,undefined,"userwallet"
         )
         utxo.spend()
         expect(utxo.balance).toBe(0)

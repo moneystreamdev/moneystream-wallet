@@ -538,7 +538,7 @@ export class Wallet {
                 payment.txid, 
                 0 // assumption! TODO: decode rawhex and validate
             )
-            this.selectedUtxos.add(unspent)
+            this.selectedUtxos.add_conditional(unspent)
         }
     }
 
