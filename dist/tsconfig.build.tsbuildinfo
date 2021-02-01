@@ -477,8 +477,8 @@
         "affectsGlobalScope": false
       },
       "../src/index.ts": {
-        "version": "c9100c32835ca454e66531fdd74d29aa5bc2a2ae93356ef757e9ffc57fc2f33e",
-        "signature": "08f9f73e2fb3fe3b6fa2e622ac36531e57d1e4a4a52098887617a478adf51547",
+        "version": "46172ff79348bb285a79c93c42867587b9c6a41722d9c4753327cad67ba988fc",
+        "signature": "cf85826a59723f67e756814fc5d1fd3a9461c712e3f6a6322181c6f758629405",
         "affectsGlobalScope": false
       },
       "../web/browser.ts": {
