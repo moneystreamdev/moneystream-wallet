@@ -95,12 +95,27 @@ describe('Wallet tests', () => {
     w.selectedUtxos = createUtxos(1,1000)
 
     const buildResult = await w.makeSimpleSpend(Long.fromNumber(600))
-    expect (buildResult.hex.length).toBeGreaterThan(20)
-    expect (buildResult.tx.nLockTime).toBe(0)
-    expect (buildResult.tx.txIns.length).toBeGreaterThan(0)
-    expect (buildResult.tx.txOuts.length).toBeGreaterThan(0)
-    expect(buildResult.tx.txOuts[0].valueBn.toNumber()).toBe(600)
+    expect(buildResult.hex.length).toBeGreaterThan(20)
+    expect(buildResult.tx.nLockTime).toBe(0)
+    expect(buildResult.tx.txIns.length).toBeGreaterThan(0)
+    expect(buildResult.tx.txOuts.length).toBeGreaterThan(0)
     w.logDetailsLastTx()
+    expect(buildResult.tx.txOuts[0].valueBn.toNumber()).toBe(600)
+  })
+  it('should create simple tx with script payto', async () => {
+    const w = new Wallet(new FileSystemStorage())
+    w.loadWallet()
+    w.selectedUtxos = createUtxos(1,1000)
+    const buildResult = await w.makeSimpleSpend(
+      Long.fromNumber(600), undefined,
+      w.keyPair.toOutputScript()
+    )
+    expect(buildResult.hex.length).toBeGreaterThan(20)
+    expect(buildResult.tx.nLockTime).toBe(0)
+    expect(buildResult.tx.txIns.length).toBeGreaterThan(0)
+    expect(buildResult.tx.txOuts.length).toBeGreaterThan(0)
+    w.logDetailsLastTx()
+    expect(buildResult.tx.txOuts[0].valueBn.toNumber()).toBe(600)
   })
   it('should create streamable tx with lock time', async () => {
     const w = new Wallet(new FileSystemStorage())

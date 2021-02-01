@@ -301,7 +301,8 @@ export class Wallet {
     }
 
     // legacy p2pkh spend
-    async makeSimpleSpend(satoshis: Long, utxos?:OutputCollection, toAddress?:string): Promise<any> {
+    // support paymail script
+    async makeSimpleSpend(satoshis: Long, utxos?:OutputCollection, payTo?:typeof Script|string): Promise<any> {
         if (!this._keypair) { throw new Error('Load wallet before spending') }
         const filteredUtxos = utxos || await this.getAnUnspentOutput()
         if (!filteredUtxos || filteredUtxos.count < 1) {
@@ -316,7 +317,14 @@ export class Wallet {
         const fee = 300
         let txb = new TransactionBuilder()
             .from(filteredUtxos.items, this._keypair.pubKey)
-            .toAddress(satoshis.toNumber(), toAddress ? Address.fromString(toAddress) : this._keypair.toAddress())
+        if (payTo instanceof Script) {
+            txb.addOutputScript(
+                satoshis.toNumber(), payTo
+            )
+        } else {
+            console.log(`PAYTO`, payTo, satoshis)
+            txb.toAddress(satoshis.toNumber(), payTo ? Address.fromString(payTo) : this._keypair.toAddress())
+        }
         if (changeSatoshis-fee>0) {
             txb = txb.toAddress(changeSatoshis-fee, this._keypair.toAddress())
         }
@@ -455,7 +463,7 @@ export class Wallet {
                     txb.addOutputScript(calculatedAmount, pay.to)
                 }
             } else {
-                // just one, pay all to them
+                // just one, pay all to that one script
                 txb.addOutputScript(
                     satoshis.toNumber(), payTo
                 )

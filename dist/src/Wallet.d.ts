@@ -60,7 +60,7 @@ export declare class Wallet {
     logUtxos(utxos: any): void;
     getAnUnspentOutput(force?: boolean): Promise<OutputCollection>;
     spendUtxos(utxos: OutputCollection, txBuilt: typeof Tx, index: number, txidBroadcast: string): number;
-    makeSimpleSpend(satoshis: Long, utxos?: OutputCollection, toAddress?: string): Promise<any>;
+    makeSimpleSpend(satoshis: Long, utxos?: OutputCollection, payTo?: typeof Script | string): Promise<any>;
     tryLoadWalletUtxos(): Promise<void>;
     selectExpandableInputs(satoshis: Long, selected: OutputCollection, utxos?: OutputCollection): OutputCollection;
     addData(txb: TransactionBuilder, data: Buffer): void;

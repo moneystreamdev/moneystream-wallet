@@ -350,7 +350,8 @@ var Wallet = /** @class */ (function () {
         }
     };
     // legacy p2pkh spend
-    Wallet.prototype.makeSimpleSpend = function (satoshis, utxos, toAddress) {
+    // support paymail script
+    Wallet.prototype.makeSimpleSpend = function (satoshis, utxos, payTo) {
         return __awaiter(this, void 0, void 0, function () {
             var filteredUtxos, _a, utxoSatoshis, changeSatoshis, fee, txb;
             return __generator(this, function (_b) {
@@ -377,8 +378,14 @@ var Wallet = /** @class */ (function () {
                         }
                         fee = 300;
                         txb = new TransactionBuilder_1.TransactionBuilder()
-                            .from(filteredUtxos.items, this._keypair.pubKey)
-                            .toAddress(satoshis.toNumber(), toAddress ? bsv_1.Address.fromString(toAddress) : this._keypair.toAddress());
+                            .from(filteredUtxos.items, this._keypair.pubKey);
+                        if (payTo instanceof bsv_1.Script) {
+                            txb.addOutputScript(satoshis.toNumber(), payTo);
+                        }
+                        else {
+                            console.log("PAYTO", payTo, satoshis);
+                            txb.toAddress(satoshis.toNumber(), payTo ? bsv_1.Address.fromString(payTo) : this._keypair.toAddress());
+                        }
                         if (changeSatoshis - fee > 0) {
                             txb = txb.toAddress(changeSatoshis - fee, this._keypair.toAddress());
                         }
@@ -528,7 +535,7 @@ var Wallet = /** @class */ (function () {
                 }
             }
             else {
-                // just one, pay all to them
+                // just one, pay all to that one script
                 txb.addOutputScript(satoshis.toNumber(), payTo);
             }
         }

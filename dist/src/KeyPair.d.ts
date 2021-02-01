@@ -1,9 +1,10 @@
+import { Address, Script } from 'bsv';
 export declare class KeyPair {
     privKey: any;
     pubKey: any;
     constructor(privKey?: any, pubKey?: any);
-    toAddress(): any;
-    toOutputScript(): any;
+    toAddress(): typeof Address;
+    toOutputScript(): typeof Script;
     fromRandom(): KeyPair;
     fromPrivKey(privKey: any): KeyPair;
     fromWif(wif: string): KeyPair;

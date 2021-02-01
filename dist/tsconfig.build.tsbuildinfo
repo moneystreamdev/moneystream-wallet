@@ -182,8 +182,8 @@
         "affectsGlobalScope": false
       },
       "../src/KeyPair.ts": {
-        "version": "7ee6aa0a9d6ff8ce6277dd461400612e48362e511a38658acbed9d82f92872d0",
-        "signature": "f298c9b4f5dfadb6b75e89b8ff61cc1972b9e058fc605590acacdfeb9a420da7",
+        "version": "e72a12e23b29ca16dc21cad33ad89840ce56e60fd20e3619b8bb7189f85ea946",
+        "signature": "47a96ebd14497806c60fe495200c973cf107be221fef709027e926dafbf5ea94",
         "affectsGlobalScope": false
       },
       "../node_modules/@types/node/globals.d.ts": {
@@ -472,8 +472,8 @@
         "affectsGlobalScope": false
       },
       "../src/Wallet.ts": {
-        "version": "d26bc49b39f9191d0ccc7c9ce0c18a3466b2c1821d0bae2d526f09e3408b71cd",
-        "signature": "e9ba7bc243a79a9330153ac3d0a4e024531defa571b892402c00b37fa16c111b",
+        "version": "2a32cbf1276388a8c813bb4f13ad921055bf4be2e0444a70c3e89b1106be86e2",
+        "signature": "581e222fd23bfe799858661ae35af36dd445e4ae886ba159d6dd08abb9be6d72",
         "affectsGlobalScope": false
       },
       "../src/index.ts": {
@@ -1231,6 +1231,9 @@
       ],
       "../node_modules/pretty-format/build/index.d.ts": [
         "../node_modules/pretty-format/build/types.d.ts"
+      ],
+      "../src/KeyPair.ts": [
+        "../node_modules/bsv/index.d.ts"
       ],
       "../src/OutputCollection.ts": [
         "../node_modules/@types/long/index.d.ts",
