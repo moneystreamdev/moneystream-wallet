@@ -472,8 +472,8 @@
         "affectsGlobalScope": false
       },
       "../src/Wallet.ts": {
-        "version": "2a32cbf1276388a8c813bb4f13ad921055bf4be2e0444a70c3e89b1106be86e2",
-        "signature": "581e222fd23bfe799858661ae35af36dd445e4ae886ba159d6dd08abb9be6d72",
+        "version": "233765395ac781e1a56ccd084a5421ce1387e236bb4107ea1044991867a9ee6b",
+        "signature": "20c26ed132ae826d4fb3529ba89258297229de1b00271ec6e9f5853315d402ae",
         "affectsGlobalScope": false
       },
       "../src/index.ts": {
@@ -630,21 +630,6 @@
         "version": "19a1bd57c2b3dd10bc4ae33eaa9e88f0f067858e32b7765b7e9d38138cd07f30",
         "signature": "19a1bd57c2b3dd10bc4ae33eaa9e88f0f067858e32b7765b7e9d38138cd07f30",
         "affectsGlobalScope": false
-      },
-      "../../../../../node_modules/@types/fs-extra/index.d.ts": {
-        "version": "5171627120eeb3a7e8afb8ed04ea9be7f0b53ba09bb1fc95172483e0fbb0740c",
-        "signature": "5171627120eeb3a7e8afb8ed04ea9be7f0b53ba09bb1fc95172483e0fbb0740c",
-        "affectsGlobalScope": false
-      },
-      "../../../../../node_modules/@types/minimatch/index.d.ts": {
-        "version": "1d1e6bd176eee5970968423d7e215bfd66828b6db8d54d17afec05a831322633",
-        "signature": "1d1e6bd176eee5970968423d7e215bfd66828b6db8d54d17afec05a831322633",
-        "affectsGlobalScope": false
-      },
-      "../../../../../node_modules/@types/glob/index.d.ts": {
-        "version": "393137c76bd922ba70a2f8bf1ade4f59a16171a02fb25918c168d48875b0cfb0",
-        "signature": "393137c76bd922ba70a2f8bf1ade4f59a16171a02fb25918c168d48875b0cfb0",
-        "affectsGlobalScope": false
       }
     },
     "options": {
@@ -663,15 +648,6 @@
       "configFilePath": "../tsconfig.json"
     },
     "referencedMap": {
-      "../../../../../node_modules/@types/fs-extra/index.d.ts": [
-        "../node_modules/@types/node/fs.d.ts",
-        "../node_modules/@types/node/index.d.ts"
-      ],
-      "../../../../../node_modules/@types/glob/index.d.ts": [
-        "../../../../../node_modules/@types/minimatch/index.d.ts",
-        "../node_modules/@types/node/events.d.ts",
-        "../node_modules/@types/node/index.d.ts"
-      ],
       "../node_modules/@babel/parser/typings/babel-parser.d.ts": [
         "../node_modules/@babel/types/lib/index.d.ts"
       ],
@@ -978,15 +954,6 @@
       ]
     },
     "exportedModulesMap": {
-      "../../../../../node_modules/@types/fs-extra/index.d.ts": [
-        "../node_modules/@types/node/fs.d.ts",
-        "../node_modules/@types/node/index.d.ts"
-      ],
-      "../../../../../node_modules/@types/glob/index.d.ts": [
-        "../../../../../node_modules/@types/minimatch/index.d.ts",
-        "../node_modules/@types/node/events.d.ts",
-        "../node_modules/@types/node/index.d.ts"
-      ],
       "../node_modules/@babel/parser/typings/babel-parser.d.ts": [
         "../node_modules/@babel/types/lib/index.d.ts"
       ],
@@ -1279,9 +1246,6 @@
       ]
     },
     "semanticDiagnosticsPerFile": [
-      "../../../../../node_modules/@types/fs-extra/index.d.ts",
-      "../../../../../node_modules/@types/glob/index.d.ts",
-      "../../../../../node_modules/@types/minimatch/index.d.ts",
       "../node_modules/@babel/parser/typings/babel-parser.d.ts",
       "../node_modules/@babel/types/lib/index.d.ts",
       "../node_modules/@types/babel__core/index.d.ts",

@@ -117,6 +117,21 @@ describe('Wallet tests', () => {
     w.logDetailsLastTx()
     expect(buildResult.tx.txOuts[0].valueBn.toNumber()).toBe(600)
   })
+  it('should should override fee', async () => {
+    const w = new Wallet(new FileSystemStorage())
+    w.loadWallet()
+    w.selectedUtxos = createUtxos(1,1000)
+    const buildResult = await w.makeSimpleSpend(
+      Long.fromNumber(100), undefined,
+      w.keyPair.toOutputScript(),500
+    )
+    expect(buildResult.hex.length).toBeGreaterThan(20)
+    expect(buildResult.tx.txIns.length).toBeGreaterThan(0)
+    expect(buildResult.tx.txOuts.length).toBeGreaterThan(0)
+    w.logDetailsLastTx()
+    expect(buildResult.tx.txOuts[0].valueBn.toNumber()).toBe(100)
+    expect(buildResult.tx.txOuts[1].valueBn.toNumber()).toBe(400)
+  })
   it('should create streamable tx with lock time', async () => {
     const w = new Wallet(new FileSystemStorage())
     w.loadWallet()

@@ -351,9 +351,11 @@ var Wallet = /** @class */ (function () {
     };
     // legacy p2pkh spend
     // support paymail script
-    Wallet.prototype.makeSimpleSpend = function (satoshis, utxos, payTo) {
+    // TODO: estimate fee
+    Wallet.prototype.makeSimpleSpend = function (satoshis, utxos, payTo, fee) {
+        if (fee === void 0) { fee = 300; }
         return __awaiter(this, void 0, void 0, function () {
-            var filteredUtxos, _a, utxoSatoshis, changeSatoshis, fee, txb;
+            var filteredUtxos, _a, utxoSatoshis, changeSatoshis, txb;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -376,7 +378,6 @@ var Wallet = /** @class */ (function () {
                         if (changeSatoshis < 0) {
                             throw Error("the utxo ran out of money " + changeSatoshis);
                         }
-                        fee = 300;
                         txb = new TransactionBuilder_1.TransactionBuilder()
                             .from(filteredUtxos.items, this._keypair.pubKey);
                         if (payTo instanceof bsv_1.Script) {

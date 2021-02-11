@@ -302,7 +302,8 @@ export class Wallet {
 
     // legacy p2pkh spend
     // support paymail script
-    async makeSimpleSpend(satoshis: Long, utxos?:OutputCollection, payTo?:typeof Script|string): Promise<any> {
+    // TODO: estimate fee
+    async makeSimpleSpend(satoshis: Long, utxos?:OutputCollection, payTo?:typeof Script|string, fee:number=300): Promise<any> {
         if (!this._keypair) { throw new Error('Load wallet before spending') }
         const filteredUtxos = utxos || await this.getAnUnspentOutput()
         if (!filteredUtxos || filteredUtxos.count < 1) {
@@ -313,8 +314,6 @@ export class Wallet {
         if (changeSatoshis < 0) {
             throw Error(`the utxo ran out of money ${changeSatoshis}`)
         }
-        // TODO: estimate fee
-        const fee = 300
         let txb = new TransactionBuilder()
             .from(filteredUtxos.items, this._keypair.pubKey)
         if (payTo instanceof Script) {
