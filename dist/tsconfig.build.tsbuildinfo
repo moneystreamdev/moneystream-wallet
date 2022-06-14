@@ -467,13 +467,13 @@
         "affectsGlobalScope": false
       },
       "../src/TransactionBuilder.ts": {
-        "version": "20ce966aa686c7d911efb1ec89fa6dd2cb0abbb0260d17ae9bb5db72f8e1f58d",
-        "signature": "214b7a2c414e1097b48b2b8b2fbb352865d6ed6c20b0c0088567fe709be336eb",
+        "version": "c07d55cc7f1f01175ea74205a39fffa36455ccacc13788090960aa88f0116079",
+        "signature": "9a335cb13d5013b361262263fcc4bee432362035a31a003bbfa4edcbd38fe158",
         "affectsGlobalScope": false
       },
       "../src/Wallet.ts": {
-        "version": "233765395ac781e1a56ccd084a5421ce1387e236bb4107ea1044991867a9ee6b",
-        "signature": "20c26ed132ae826d4fb3529ba89258297229de1b00271ec6e9f5853315d402ae",
+        "version": "4864b296bf62334290d04927214303ed67048136512a26835d9ec540f215f499",
+        "signature": "07ee2867a6309f39604577a6de376fec594b68695dc325189ae05ed9ae5fd223",
         "affectsGlobalScope": false
       },
       "../src/index.ts": {

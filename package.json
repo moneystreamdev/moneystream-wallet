@@ -1,6 +1,6 @@
 {
   "name": "moneystream-wallet",
-  "version": "0.2.15",
+  "version": "0.2.16",
   "description": "A bitcoin wallet for streaming data",
   "main": "./dist/src/index.js",
   "types": "./dist/src/index.d.ts",

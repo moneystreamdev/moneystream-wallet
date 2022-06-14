@@ -74,12 +74,15 @@ describe('Wallet tests', () => {
     const w = new Wallet(new FileSystemStorage())
     w.loadWallet()
     w.selectedUtxos = createUtxos(1,10000)
-    const buildResult = await w.makeSimpleSpend(Long.fromNumber(600), undefined, '1SCVmCzdLaECeRkMq3egwJ6yJLwT1x3wu')
+    const fee = 100
+    const buildResult = await w.makeSimpleSpend(Long.fromNumber(600), undefined, '1SCVmCzdLaECeRkMq3egwJ6yJLwT1x3wu',fee)
     expect(buildResult.hex).toBeDefined()
     w.logDetailsLastTx()
     expect(buildResult.tx.txOuts[0].valueBn.toNumber()).toBe(600)
     //must have change output
-    expect(buildResult.tx.txOuts[1].valueBn.toNumber()).toBe(9100)
+    expect(buildResult.tx.txOuts[1].valueBn.toNumber()).toBe(10000-600-fee)
+    expect(buildResult.feeActual).toBe(fee)
+    expect(buildResult.feeExpected).toBeLessThan(fee)
   })
   it('should clear wallet', () => {
     const w = new Wallet(new FileSystemStorage())

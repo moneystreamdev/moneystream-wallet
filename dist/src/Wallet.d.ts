@@ -21,6 +21,7 @@ export declare class Wallet {
     _selectedUtxos: OutputCollection | null;
     _keypair: KeyPair;
     lastTx: any;
+    feePerKbNum: number;
     protected SIGN_INPUT_CHANGE: number;
     protected SIGN_INPUT_NOCHANGE: number;
     protected _storage: IStorage;
@@ -61,6 +62,7 @@ export declare class Wallet {
     getAnUnspentOutput(force?: boolean): Promise<OutputCollection>;
     spendUtxos(utxos: OutputCollection, txBuilt: typeof Tx, index: number, txidBroadcast: string): number;
     makeSimpleSpend(satoshis: Long, utxos?: OutputCollection, payTo?: typeof Script | string, fee?: number): Promise<any>;
+    miningFeeExpected(txb?: TransactionBuilder): number | null;
     tryLoadWalletUtxos(): Promise<void>;
     selectExpandableInputs(satoshis: Long, selected: OutputCollection, utxos?: OutputCollection): OutputCollection;
     addData(txb: TransactionBuilder, data: Buffer): void;

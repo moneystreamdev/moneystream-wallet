@@ -38334,6 +38334,13 @@ var TransactionBuilder = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
+    Object.defineProperty(TransactionBuilder.prototype, "miningFee", {
+        get: function () {
+            return this.inputAmountBuilt - this.outputAmountBuilt;
+        },
+        enumerable: false,
+        configurable: true
+    });
     TransactionBuilder.prototype.inTheFuture = function (tx) {
         var nowTimeStampInSeconds = parseInt((Date.now() / 1000).toFixed(0));
         tx.nLockTime = nowTimeStampInSeconds + this.futureSeconds;
@@ -38407,10 +38414,10 @@ var TransactionBuilder = /** @class */ (function () {
     //TODO: might be able to use txbuilder?
     TransactionBuilder.prototype.buildAndSign = function (keypair, makeFuture) {
         this.txb.tx = new bsv_1.Tx();
-        var outAmountBn = this.txb.buildOutputs();
+        this.outputAmountBuilt = this.txb.buildOutputs();
         //use all inputs so that user can spend dust if they want
         var extraInputsNum = this.txb.txIns.length - 1;
-        var inAmountBn = this.txb.buildInputs(outAmountBn, extraInputsNum);
+        this.inputAmountBuilt = this.txb.buildInputs(this.outputAmountBuilt, extraInputsNum);
         this.sign(keypair, makeFuture);
         return this.txb.tx;
     };
@@ -38460,6 +38467,9 @@ var UnspentOutput = /** @class */ (function () {
         this.script = script;
         this.satoshis = satoshis;
         this.amountSpent = 0;
+        if (txid && txid.length != 64) {
+            throw new Error("Invalid TxId " + txid);
+        }
         this.txId = txid || "";
         this.outputIndex = txoutindex;
         this._status = status || 'available';
@@ -38579,6 +38589,7 @@ var Wallet = /** @class */ (function () {
         //private _txOutMap:any
         // a previously encumbered utxo
         this._selectedUtxos = null;
+        this.feePerKbNum = 50;
         // certifies "I am signing for my input and output, 
         // anyone else can add inputs and outputs"
         this.SIGN_INPUT_CHANGE = bsv_1.Sig.SIGHASH_SINGLE
@@ -38866,9 +38877,12 @@ var Wallet = /** @class */ (function () {
         }
     };
     // legacy p2pkh spend
-    Wallet.prototype.makeSimpleSpend = function (satoshis, utxos, toAddress) {
+    // support paymail script
+    // TODO: estimate fee
+    Wallet.prototype.makeSimpleSpend = function (satoshis, utxos, payTo, fee) {
+        if (fee === void 0) { fee = 300; }
         return __awaiter(this, void 0, void 0, function () {
-            var filteredUtxos, _a, utxoSatoshis, changeSatoshis, fee, txb;
+            var filteredUtxos, _a, utxoSatoshis, changeSatoshis, txb;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -38891,10 +38905,15 @@ var Wallet = /** @class */ (function () {
                         if (changeSatoshis < 0) {
                             throw Error("the utxo ran out of money " + changeSatoshis);
                         }
-                        fee = 300;
                         txb = new TransactionBuilder_1.TransactionBuilder()
-                            .from(filteredUtxos.items, this._keypair.pubKey)
-                            .toAddress(satoshis.toNumber(), toAddress ? bsv_1.Address.fromString(toAddress) : this._keypair.toAddress());
+                            .from(filteredUtxos.items, this._keypair.pubKey);
+                        if (payTo instanceof bsv_1.Script) {
+                            txb.addOutputScript(satoshis.toNumber(), payTo);
+                        }
+                        else {
+                            console.log("PAYTO", payTo, satoshis);
+                            txb.toAddress(satoshis.toNumber(), payTo ? bsv_1.Address.fromString(payTo) : this._keypair.toAddress());
+                        }
                         if (changeSatoshis - fee > 0) {
                             txb = txb.toAddress(changeSatoshis - fee, this._keypair.toAddress());
                         }
@@ -38905,13 +38924,23 @@ var Wallet = /** @class */ (function () {
                                 hex: this.lastTx.toHex(),
                                 tx: this.lastTx,
                                 utxos: filteredUtxos,
-                                txOutMap: txb.txb.uTxOutMap
+                                txOutMap: txb.txb.uTxOutMap,
+                                feeExpected: this.miningFeeExpected(txb),
+                                feeActual: txb.miningFee
                             }
                             // tx can be broadcast and put on chain
                         ];
                 }
             });
         });
+    };
+    // the expected mining fee, based on size 
+    Wallet.prototype.miningFeeExpected = function (txb) {
+        if (!txb)
+            return null;
+        var size = txb.tx.toString().length;
+        //TODO: incorporate reduced fee for op_return
+        return Math.ceil(size / 1000 * this.feePerKbNum);
     };
     //tries to load utxos for wallet and
     //throws error if it cannot get any
@@ -38956,7 +38985,7 @@ var Wallet = /** @class */ (function () {
     Wallet.prototype.makeStreamableCashTx = function (satoshis, payTo, makeFuture, utxos, data) {
         if (makeFuture === void 0) { makeFuture = true; }
         return __awaiter(this, void 0, void 0, function () {
-            var filteredUtxos, utxoSatoshis, changeSatoshis, txb, dustTotal, runningSpent, index, element, outSatoshis, inputCount;
+            var filteredUtxos, utxoSatoshis, changeSatoshis, txb, dustTotal, runningSpent, index, element, outSatoshis, inputCount, thistx;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -39010,13 +39039,15 @@ var Wallet = /** @class */ (function () {
                         if (data) {
                             this.addData(txb, data);
                         }
-                        this.lastTx = txb.buildAndSign(this._keypair, makeFuture);
+                        thistx = txb.buildAndSign(this._keypair, makeFuture);
+                        this.lastTx = thistx;
                         this._senderOutputCount = this.lastTx.txOuts.length;
                         return [2 /*return*/, {
                                 hex: this.lastTx.toHex(),
                                 tx: this.lastTx,
                                 utxos: filteredUtxos,
-                                txOutMap: txb.txb.uTxOutMap
+                                txOutMap: txb.txb.uTxOutMap,
+                                funding: this.getTxFund(thistx)
                             }
                             // at this point, tx is spendable by anyone!
                             // only pass it through secure channel to recipient
@@ -39042,7 +39073,7 @@ var Wallet = /** @class */ (function () {
                 }
             }
             else {
-                // just one, pay all to them
+                // just one, pay all to that one script
                 txb.addOutputScript(satoshis.toNumber(), payTo);
             }
         }
@@ -39100,6 +39131,21 @@ var Wallet = /** @class */ (function () {
             }
         }
         return result;
+    };
+    //when you know wallet has received a new
+    //funding amount (i.e. moneybutton onPayment)
+    //then add utxo here so wallet can spend it
+    //saves time from having to get it from index service
+    //requires: satoshis, script, txid, index
+    //optional: payment.rawhex
+    Wallet.prototype.addUnspent = function (payment) {
+        if (payment) {
+            // TODO: makes assumptions, buggy
+            // could get this info from payment.rawhex?
+            var unspent = new UnspentOutput_1.UnspentOutput(payment.satoshis, this.keyPair.toOutputScript(), payment.txid, 0 // assumption! TODO: decode rawhex and validate
+            );
+            this.selectedUtxos.add_conditional(unspent);
+        }
     };
     return Wallet;
 }());

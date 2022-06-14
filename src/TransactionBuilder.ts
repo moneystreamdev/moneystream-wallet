@@ -9,6 +9,8 @@ export class TransactionBuilder {
     // build future transactions with locktime
     futureSeconds:number = 60
     private FINAL = 0xffffffff
+    inputAmountBuilt: typeof Bn|null
+    outputAmountBuilt: typeof Bn|null
     constructor() {
         //allow any dust output
         // let web site manage dust policy
@@ -16,6 +18,10 @@ export class TransactionBuilder {
     }
 
     get tx (): any { return this.txb.tx}
+
+    get miningFee():number {
+        return this.inputAmountBuilt - this.outputAmountBuilt
+    }
 
     inTheFuture(tx:any):any {
         let nowTimeStampInSeconds 
@@ -106,10 +112,10 @@ export class TransactionBuilder {
     //TODO: might be able to use txbuilder?
     buildAndSign(keypair:KeyPair, makeFuture?:boolean): any {
         this.txb.tx = new Tx()
-        const outAmountBn = this.txb.buildOutputs()
+        this.outputAmountBuilt = this.txb.buildOutputs()
         //use all inputs so that user can spend dust if they want
         let extraInputsNum = this.txb.txIns.length - 1
-        const inAmountBn = this.txb.buildInputs(outAmountBn, extraInputsNum)
+        this.inputAmountBuilt = this.txb.buildInputs(this.outputAmountBuilt, extraInputsNum)
         this.sign(keypair, makeFuture)
         return this.txb.tx
     }

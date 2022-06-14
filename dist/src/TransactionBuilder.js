@@ -19,6 +19,13 @@ var TransactionBuilder = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
+    Object.defineProperty(TransactionBuilder.prototype, "miningFee", {
+        get: function () {
+            return this.inputAmountBuilt - this.outputAmountBuilt;
+        },
+        enumerable: false,
+        configurable: true
+    });
     TransactionBuilder.prototype.inTheFuture = function (tx) {
         var nowTimeStampInSeconds = parseInt((Date.now() / 1000).toFixed(0));
         tx.nLockTime = nowTimeStampInSeconds + this.futureSeconds;
@@ -92,10 +99,10 @@ var TransactionBuilder = /** @class */ (function () {
     //TODO: might be able to use txbuilder?
     TransactionBuilder.prototype.buildAndSign = function (keypair, makeFuture) {
         this.txb.tx = new bsv_1.Tx();
-        var outAmountBn = this.txb.buildOutputs();
+        this.outputAmountBuilt = this.txb.buildOutputs();
         //use all inputs so that user can spend dust if they want
         var extraInputsNum = this.txb.txIns.length - 1;
-        var inAmountBn = this.txb.buildInputs(outAmountBn, extraInputsNum);
+        this.inputAmountBuilt = this.txb.buildInputs(this.outputAmountBuilt, extraInputsNum);
         this.sign(keypair, makeFuture);
         return this.txb.tx;
     };

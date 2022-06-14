@@ -63,6 +63,7 @@ var Wallet = /** @class */ (function () {
         //private _txOutMap:any
         // a previously encumbered utxo
         this._selectedUtxos = null;
+        this.feePerKbNum = 50;
         // certifies "I am signing for my input and output, 
         // anyone else can add inputs and outputs"
         this.SIGN_INPUT_CHANGE = bsv_1.Sig.SIGHASH_SINGLE
@@ -397,13 +398,23 @@ var Wallet = /** @class */ (function () {
                                 hex: this.lastTx.toHex(),
                                 tx: this.lastTx,
                                 utxos: filteredUtxos,
-                                txOutMap: txb.txb.uTxOutMap
+                                txOutMap: txb.txb.uTxOutMap,
+                                feeExpected: this.miningFeeExpected(txb),
+                                feeActual: txb.miningFee
                             }
                             // tx can be broadcast and put on chain
                         ];
                 }
             });
         });
+    };
+    // the expected mining fee, based on size 
+    Wallet.prototype.miningFeeExpected = function (txb) {
+        if (!txb)
+            return null;
+        var size = txb.tx.toString().length;
+        //TODO: incorporate reduced fee for op_return
+        return Math.ceil(size / 1000 * this.feePerKbNum);
     };
     //tries to load utxos for wallet and
     //throws error if it cannot get any
