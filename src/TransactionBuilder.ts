@@ -42,10 +42,12 @@ export class TransactionBuilder {
         // i.e. script.isPublicKeyHashOut()
     }
 
-    from(utxos:any[], pubKey:any, sigHash?:number):TransactionBuilder {
+    from(utxos:UnspentOutput[], pubKey:any, sigHash?:number):TransactionBuilder {
         for (let index = 0; index < utxos.length; index++) {
             const utxo = utxos[index]
-            this.addInput(utxo,pubKey,sigHash)
+            if (utxo.isSpendable) {
+                this.addInput(utxo,pubKey,sigHash)
+            }
         }
         return this
     }

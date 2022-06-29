@@ -26,6 +26,11 @@ var UnspentOutput = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
+    Object.defineProperty(UnspentOutput.prototype, "isSpendable", {
+        get: function () { return this._status === "available"; },
+        enumerable: false,
+        configurable: true
+    });
     Object.defineProperty(UnspentOutput.prototype, "txPointer", {
         get: function () { return new TxPointer_1.TxPointer(this.txId, this.outputIndex); },
         enumerable: false,

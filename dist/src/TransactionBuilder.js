@@ -44,7 +44,9 @@ var TransactionBuilder = /** @class */ (function () {
     TransactionBuilder.prototype.from = function (utxos, pubKey, sigHash) {
         for (var index = 0; index < utxos.length; index++) {
             var utxo = utxos[index];
-            this.addInput(utxo, pubKey, sigHash);
+            if (utxo.isSpendable) {
+                this.addInput(utxo, pubKey, sigHash);
+            }
         }
         return this;
     };

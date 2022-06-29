@@ -10,6 +10,7 @@ export declare class UnspentOutput {
     amountSpent: number;
     constructor(satoshis: number, script: typeof Script, txid?: string, txoutindex?: number, status?: string, walletId?: string);
     get status(): string;
+    get isSpendable(): boolean;
     get txPointer(): TxPointer;
     get balance(): number;
     static fromTxOut(txOut: typeof TxOut, txid: string, txoutindex: number): UnspentOutput;

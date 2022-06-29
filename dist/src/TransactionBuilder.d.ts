@@ -13,7 +13,7 @@ export declare class TransactionBuilder {
     inTheFuture(tx: any): any;
     setChangeAddress(address: any): void;
     importPartiallySignedTx(tx: any): void;
-    from(utxos: any[], pubKey: any, sigHash?: number): TransactionBuilder;
+    from(utxos: UnspentOutput[], pubKey: any, sigHash?: number): TransactionBuilder;
     toAddress(satoshis: number, address: string): TransactionBuilder;
     change(address: any): TransactionBuilder;
     hasInput(utxo: UnspentOutput): boolean;

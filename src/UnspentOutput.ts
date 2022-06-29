@@ -28,6 +28,7 @@ export class UnspentOutput {
     }
 
     get status() { return this._status}
+    get isSpendable() { return this._status === "available"}
     get txPointer() { return new TxPointer(this.txId, this.outputIndex as number) }
     // current balance available to spend on this output
     get balance() {

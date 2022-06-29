@@ -38359,7 +38359,9 @@ var TransactionBuilder = /** @class */ (function () {
     TransactionBuilder.prototype.from = function (utxos, pubKey, sigHash) {
         for (var index = 0; index < utxos.length; index++) {
             var utxo = utxos[index];
-            this.addInput(utxo, pubKey, sigHash);
+            if (utxo.isSpendable) {
+                this.addInput(utxo, pubKey, sigHash);
+            }
         }
         return this;
     };
@@ -38477,6 +38479,11 @@ var UnspentOutput = /** @class */ (function () {
     }
     Object.defineProperty(UnspentOutput.prototype, "status", {
         get: function () { return this._status; },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(UnspentOutput.prototype, "isSpendable", {
+        get: function () { return this._status === "available"; },
         enumerable: false,
         configurable: true
     });

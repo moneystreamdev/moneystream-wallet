@@ -20,4 +20,15 @@ describe('transactionbuilder tests', () => {
             txb.addInput(utxos.firstItem,testKeyPair.pubKey)
         }).toThrow(Error)
     })
+    it('only spends unspent utxo', () => {
+        const txb = new TransactionBuilder()
+        const utxos = createUtxos(2,1000)
+        utxos.items[0].encumber()
+        txb.from(utxos.items, testKeyPair.pubKey)
+
+        expect(txb.txb.txIns.length).toBe(1)
+        expect(utxos.firstItem.status).toBe('hold')
+        expect(utxos.items[1].status).toBe('hold')        
+    })
+
 })
