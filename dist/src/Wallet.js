@@ -334,10 +334,13 @@ var Wallet = /** @class */ (function () {
     // tx is the built transaction
     // txid is id that has been successfully broadcast
     Wallet.prototype.spendUtxos = function (utxos, txBuilt, index, txidBroadcast) {
+        if (utxos.encumbered().count === 0) {
+            throw new Error("wallet does not have any encumbered utxo");
+        }
         try {
             //TODO: loop and process all utxos that were spent
             // bad assumption, for now assume just one
-            utxos.firstItem.spend();
+            utxos.encumbered().firstItem.spend();
             var replacementOut = txBuilt.txOuts[index];
             var txid = Buffer.from(txidBroadcast, 'hex').reverse().toString('hex');
             var replacementUtxo = UnspentOutput_1.UnspentOutput.fromTxOut(replacementOut, txid, index);
