@@ -69,6 +69,7 @@ export declare class Wallet {
     makeStreamableCashTx(satoshis: Long, payTo?: typeof Script | Array<any> | null, makeFuture?: boolean, utxos?: OutputCollection, data?: Buffer): Promise<{
         hex: any;
         tx: any;
+        txid: any;
         utxos: OutputCollection;
         txOutMap: any;
         funding: number;

@@ -400,6 +400,7 @@ var Wallet = /** @class */ (function () {
                         return [2 /*return*/, {
                                 hex: this.lastTx.toHex(),
                                 tx: this.lastTx,
+                                txid: txb.txid,
                                 utxos: filteredUtxos,
                                 txOutMap: txb.txb.uTxOutMap,
                                 feeExpected: this.miningFeeExpected(txb),
@@ -522,6 +523,7 @@ var Wallet = /** @class */ (function () {
                         return [2 /*return*/, {
                                 hex: this.lastTx.toHex(),
                                 tx: this.lastTx,
+                                txid: txb.txid,
                                 utxos: filteredUtxos,
                                 txOutMap: txb.txb.uTxOutMap,
                                 funding: this.getTxFund(thistx)

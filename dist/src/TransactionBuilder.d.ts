@@ -9,6 +9,7 @@ export declare class TransactionBuilder {
     outputAmountBuilt: typeof Bn | null;
     constructor();
     get tx(): any;
+    get txid(): any;
     get miningFee(): number;
     inTheFuture(tx: any): any;
     setChangeAddress(address: any): void;

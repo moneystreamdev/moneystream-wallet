@@ -19,6 +19,16 @@ var TransactionBuilder = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
+    Object.defineProperty(TransactionBuilder.prototype, "txid", {
+        // this is the 'normal' txid as seen on woc
+        get: function () {
+            var _a;
+            return (_a = this.tx) === null || _a === void 0 ? void 0 : _a.id();
+            // return Buffer.from(this.tx.id(), 'hex').toString('hex')
+        },
+        enumerable: false,
+        configurable: true
+    });
     Object.defineProperty(TransactionBuilder.prototype, "miningFee", {
         get: function () {
             return this.inputAmountBuilt - this.outputAmountBuilt;

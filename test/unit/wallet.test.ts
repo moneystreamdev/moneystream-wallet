@@ -4,7 +4,7 @@ import * as Long from 'long'
 import { KeyPair } from '../../src/KeyPair'
 import { OutputCollection } from '../../src/OutputCollection'
 import { UnspentOutput } from '../../src/UnspentOutput'
-import { Bn, Script, TxOut } from 'bsv'
+import { Bn, Script, TxOut, Hash } from 'bsv'
 import FileSystemStorage from '../../src/FileSystemStorage'
 
 const dustLimit = 500
@@ -83,6 +83,8 @@ describe('Wallet tests', () => {
     expect(buildResult.tx.txOuts[1].valueBn.toNumber()).toBe(10000-600-fee)
     expect(buildResult.feeActual).toBe(fee)
     expect(buildResult.feeExpected).toBeLessThan(fee)
+    expect(buildResult.txid).toBeDefined()
+    expect(buildResult.txid).toBe(Hash.sha256Sha256(Buffer.from(buildResult.hex,'hex')).reverse().toString('hex'))
   })
   it('should clear wallet', () => {
     const w = new Wallet(new FileSystemStorage())

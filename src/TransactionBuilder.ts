@@ -1,4 +1,4 @@
-import { Bn, TxBuilder, Tx, Script } from 'bsv'
+import { Bn, TxBuilder, Tx, Script, Hash } from 'bsv'
 import { KeyPair } from './KeyPair'
 import { UnspentOutput } from './UnspentOutput'
 
@@ -18,6 +18,12 @@ export class TransactionBuilder {
     }
 
     get tx (): any { return this.txb.tx}
+    // this is the 'normal' txid as seen on woc
+    get txid() {
+        return this.tx?.id()
+        // return Buffer.from(this.tx.id(), 'hex').toString('hex')
+    }
+
 
     get miningFee():number {
         return this.inputAmountBuilt - this.outputAmountBuilt
@@ -131,4 +137,5 @@ export class TransactionBuilder {
         this.txb.signWithKeyPairs([keyPair])
         return this.txb.tx
     }
+
 }
