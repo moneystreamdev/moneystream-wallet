@@ -15,7 +15,7 @@ var Merkle = /** @class */ (function () {
         if (json === null)
             return null;
         var flat = this.flattenToArray(json);
-        var leaves = flat.map(function (x) { return sha256_1.default(x); });
+        var leaves = flat.map(function (x) { return (0, sha256_1.default)(x); });
         var tree = new merkletreejs_1.MerkleTree(leaves, sha256_1.default, { isBitcoinTree: true });
         return tree.getRoot();
     };

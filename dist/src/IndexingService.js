@@ -14,7 +14,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -47,8 +47,8 @@ var IndexingService = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        url = "https://api.whatsonchain.com/v1/bsv/main/tx/hash/" + txhash;
-                        return [4 /*yield*/, portableFetch_1.portableFetch(url)];
+                        url = "https://api.whatsonchain.com/v1/bsv/main/tx/hash/".concat(txhash);
+                        return [4 /*yield*/, (0, portableFetch_1.portableFetch)(url)];
                     case 1:
                         response = _a.sent();
                         return [2 /*return*/, response.json()];
@@ -63,8 +63,8 @@ var IndexingService = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        url = "https://api.whatsonchain.com/v1/bsv/main/address/" + address.toString() + "/unspent";
-                        return [4 /*yield*/, portableFetch_1.portableFetch(url)];
+                        url = "https://api.whatsonchain.com/v1/bsv/main/address/".concat(address.toString(), "/unspent");
+                        return [4 /*yield*/, (0, portableFetch_1.portableFetch)(url)];
                     case 1:
                         response = _a.sent();
                         return [2 /*return*/, response.json()];
@@ -83,7 +83,7 @@ var IndexingService = /** @class */ (function () {
                             "txhex": txhex
                         };
                         body = JSON.stringify(data);
-                        return [4 /*yield*/, portableFetch_1.portableFetch(url, {
+                        return [4 /*yield*/, (0, portableFetch_1.portableFetch)(url, {
                                 method: "POST",
                                 headers: { 'Content-Type': 'application/json' },
                                 body: body

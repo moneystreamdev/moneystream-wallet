@@ -1,5 +1,9 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Merkle = exports.IndexingService = exports.OutputCollection = exports.TxPointer = exports.UnspentOutput = exports.KeyPair = exports.TransactionBuilder = exports.Wallet = exports.Script = exports.Aescbc = exports.Hash = void 0;
 var bsv_1 = require("bsv");
 Object.defineProperty(exports, "Hash", { enumerable: true, get: function () { return bsv_1.Hash; } });
 Object.defineProperty(exports, "Aescbc", { enumerable: true, get: function () { return bsv_1.Aescbc; } });
@@ -17,7 +21,7 @@ Object.defineProperty(exports, "TxPointer", { enumerable: true, get: function ()
 var OutputCollection_1 = require("./OutputCollection");
 Object.defineProperty(exports, "OutputCollection", { enumerable: true, get: function () { return OutputCollection_1.OutputCollection; } });
 var IndexingService_1 = require("./IndexingService");
-Object.defineProperty(exports, "IndexingService", { enumerable: true, get: function () { return IndexingService_1.default; } });
+Object.defineProperty(exports, "IndexingService", { enumerable: true, get: function () { return __importDefault(IndexingService_1).default; } });
 var Merkle_1 = require("./Merkle");
 Object.defineProperty(exports, "Merkle", { enumerable: true, get: function () { return Merkle_1.Merkle; } });
 //# sourceMappingURL=index.js.map

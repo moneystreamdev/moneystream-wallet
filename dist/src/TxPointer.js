@@ -7,7 +7,7 @@ var TxPointer = /** @class */ (function () {
         this.index = index;
     }
     TxPointer.prototype.toString = function () {
-        return this.txhash + "." + this.index;
+        return "".concat(this.txhash, ".").concat(this.index);
     };
     return TxPointer;
 }());

@@ -14,7 +14,7 @@ var UnspentOutput = /** @class */ (function () {
         this.satoshis = satoshis;
         this.amountSpent = 0;
         if (txid && txid.length != 64) {
-            throw new Error("Invalid TxId " + txid);
+            throw new Error("Invalid TxId ".concat(txid));
         }
         this.txId = txid || "";
         this.outputIndex = txoutindex;

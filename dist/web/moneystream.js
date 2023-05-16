@@ -20,8 +20,12 @@ Object.defineProperty(exports, "UnspentOutput", { enumerable: true, get: functio
 var IndexingService_1 = __importDefault(require("../src/IndexingService"));
 Object.defineProperty(exports, "IndexingService", { enumerable: true, get: function () { return IndexingService_1.default; } });
 window.MoneyStream = {
-    Buffer: Buffer, Hash: bsv_1.Hash, Aescbc: bsv_1.Aescbc,
-    Wallet: Wallet_1.Wallet, KeyPair: KeyPair_1.KeyPair, UnspentOutput: UnspentOutput_1.UnspentOutput,
+    Buffer: Buffer,
+    Hash: bsv_1.Hash,
+    Aescbc: bsv_1.Aescbc,
+    Wallet: Wallet_1.Wallet,
+    KeyPair: KeyPair_1.KeyPair,
+    UnspentOutput: UnspentOutput_1.UnspentOutput,
     IndexingService: IndexingService_1.default
 };
 //# sourceMappingURL=moneystream.js.map

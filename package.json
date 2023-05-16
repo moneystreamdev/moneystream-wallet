@@ -1,6 +1,6 @@
 {
   "name": "moneystream-wallet",
-  "version": "0.2.19",
+  "version": "0.2.20",
   "description": "A bitcoin wallet for streaming data",
   "main": "./dist/src/index.js",
   "types": "./dist/src/index.d.ts",
@@ -50,7 +50,7 @@
     "merkletreejs": "^0.2.9",
     "node-fetch": "^2.6.0",
     "parcel-bundler": "^1.12.4",
-    "typescript": "^3.9.5"
+    "typescript": "^5.0.4"
   },
   "devDependencies": {
     "@babel/core": "^7.10.2",

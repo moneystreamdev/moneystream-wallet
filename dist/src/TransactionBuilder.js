@@ -84,7 +84,7 @@ var TransactionBuilder = /** @class */ (function () {
     TransactionBuilder.prototype.addInput = function (utxo, pubKey, sigHash) {
         //raise an error if this would be a duplicate input
         if (this.hasInput(utxo)) {
-            throw new Error("duplicate input " + utxo.txPointer.toString());
+            throw new Error("duplicate input ".concat(utxo.txPointer.toString()));
         }
         // make sure this utxo will not get chosen in another session
         utxo.encumber();

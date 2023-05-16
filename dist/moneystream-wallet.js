@@ -37987,7 +37987,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -38020,8 +38020,8 @@ var IndexingService = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        url = "https://api.whatsonchain.com/v1/bsv/main/tx/hash/" + txhash;
-                        return [4 /*yield*/, portableFetch_1.portableFetch(url)];
+                        url = "https://api.whatsonchain.com/v1/bsv/main/tx/hash/".concat(txhash);
+                        return [4 /*yield*/, (0, portableFetch_1.portableFetch)(url)];
                     case 1:
                         response = _a.sent();
                         return [2 /*return*/, response.json()];
@@ -38036,8 +38036,8 @@ var IndexingService = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        url = "https://api.whatsonchain.com/v1/bsv/main/address/" + address.toString() + "/unspent";
-                        return [4 /*yield*/, portableFetch_1.portableFetch(url)];
+                        url = "https://api.whatsonchain.com/v1/bsv/main/address/".concat(address.toString(), "/unspent");
+                        return [4 /*yield*/, (0, portableFetch_1.portableFetch)(url)];
                     case 1:
                         response = _a.sent();
                         return [2 /*return*/, response.json()];
@@ -38056,7 +38056,7 @@ var IndexingService = /** @class */ (function () {
                             "txhex": txhex
                         };
                         body = JSON.stringify(data);
-                        return [4 /*yield*/, portableFetch_1.portableFetch(url, {
+                        return [4 /*yield*/, (0, portableFetch_1.portableFetch)(url, {
                                 method: "POST",
                                 headers: { 'Content-Type': 'application/json' },
                                 body: body
@@ -38399,7 +38399,7 @@ var TransactionBuilder = /** @class */ (function () {
     TransactionBuilder.prototype.addInput = function (utxo, pubKey, sigHash) {
         //raise an error if this would be a duplicate input
         if (this.hasInput(utxo)) {
-            throw new Error("duplicate input " + utxo.txPointer.toString());
+            throw new Error("duplicate input ".concat(utxo.txPointer.toString()));
         }
         // make sure this utxo will not get chosen in another session
         utxo.encumber();
@@ -38457,7 +38457,7 @@ var TxPointer = /** @class */ (function () {
         this.index = index;
     }
     TxPointer.prototype.toString = function () {
-        return this.txhash + "." + this.index;
+        return "".concat(this.txhash, ".").concat(this.index);
     };
     return TxPointer;
 }());
@@ -38480,7 +38480,7 @@ var UnspentOutput = /** @class */ (function () {
         this.satoshis = satoshis;
         this.amountSpent = 0;
         if (txid && txid.length != 64) {
-            throw new Error("Invalid TxId " + txid);
+            throw new Error("Invalid TxId ".concat(txid));
         }
         this.txId = txid || "";
         this.outputIndex = txoutindex;
@@ -38557,7 +38557,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -38694,9 +38694,9 @@ var Wallet = /** @class */ (function () {
         var inputSeq = txIn.nSequence || this.FINAL;
         var inputPrevHash = txIn.txHashBuf.toString('hex');
         var inputPrevIndex = txIn.txOutNum;
-        var inputPrevHashCondensed = inputPrevHash.slice(0, 4) + "..." + inputPrevHash.slice(-4) + ":" + inputPrevIndex;
+        var inputPrevHashCondensed = "".concat(inputPrevHash.slice(0, 4), "...").concat(inputPrevHash.slice(-4), ":").concat(inputPrevIndex);
         var signingText = (txIn.constructor.name === 'Input' ? "CANNOT SIGN ABSTRACT! " : '');
-        return { value: inputValue, desc: txIn.constructor.name + "[" + index + "]" + this.pad('        ', inputValue === null || inputValue === void 0 ? void 0 : inputValue.toString(), true) + ":" + (inputSeq === this.FINAL ? 'Final' : inputSeq.toString()) + " spends " + inputPrevHashCondensed + " " + signingText };
+        return { value: inputValue, desc: "".concat(txIn.constructor.name, "[").concat(index, "]").concat(this.pad('        ', inputValue === null || inputValue === void 0 ? void 0 : inputValue.toString(), true), ":").concat(inputSeq === this.FINAL ? 'Final' : inputSeq.toString(), " spends ").concat(inputPrevHashCondensed, " ").concat(signingText) };
     };
     //get the txout that the txin is spending
     Wallet.prototype.getInputOutput = function (txin, index) {
@@ -38740,30 +38740,30 @@ var Wallet = /** @class */ (function () {
     Wallet.prototype.logDetails = function (tx) {
         var _a, _b;
         var details = "";
-        details += "\n" + this._keypair.toAddress().toString();
+        details += "\n".concat(this._keypair.toAddress().toString());
         if (tx) {
             //TODO: translate locktime to date time
-            details += "\nLocked until " + tx.nLockTime;
+            details += "\nLocked until ".concat(tx.nLockTime);
             if (tx.txIns && tx.txIns.length > 0) {
-                details += "\nInputs " + tx.txIns.length;
+                details += "\nInputs ".concat(tx.txIns.length);
             }
             var inputTotal = 0;
             for (var i = 0; i < tx.txIns.length; i++) {
                 var txIn = tx.txIns[i];
                 var _c = this.txInDescription(txIn, i), value = _c.value, desc = _c.desc;
-                details += "\n   " + desc;
+                details += "\n   ".concat(desc);
                 inputTotal += value ? value : 0;
             }
             if (inputTotal)
-                details += "\nTotal In:" + inputTotal;
+                details += "\nTotal In:".concat(inputTotal);
             var platformTotal = 0;
             var outputTotal = 0;
             for (var i = 0; i < tx.txOuts.length; i++) {
                 var txout = tx.txOuts[i];
                 var satoshis = txout.valueBn.toNumber();
-                details += "\n   TxOut[" + i + "]" + this.pad('        ', satoshis.toString(), true);
+                details += "\n   TxOut[".concat(i, "]").concat(this.pad('        ', satoshis.toString(), true));
                 if ((_a = txout.script) === null || _a === void 0 ? void 0 : _a.isSafeDataOut()) {
-                    details += " " + txout.script.getData();
+                    details += " ".concat(txout.script.getData());
                 }
                 if ((_b = txout.script) === null || _b === void 0 ? void 0 : _b.isPubKeyHashOut()) {
                     details += " P2PKH";
@@ -38774,13 +38774,13 @@ var Wallet = /** @class */ (function () {
             }
             var lineTotal = "\n";
             if (outputTotal)
-                lineTotal += "Total Out:" + outputTotal;
+                lineTotal += "Total Out:".concat(outputTotal);
             var fund = this.getTxFund(tx);
-            lineTotal += "\tFunding:" + fund;
+            lineTotal += "\tFunding:".concat(fund);
             platformTotal = fund;
-            lineTotal += "\tPlatform:" + platformTotal;
+            lineTotal += "\tPlatform:".concat(platformTotal);
             var minerFee = inputTotal - outputTotal - platformTotal;
-            lineTotal += "\tMiner Fee:" + minerFee;
+            lineTotal += "\tMiner Fee:".concat(minerFee);
             //TODO: add back to bsv2
             //details += `\nFullySigned?${tx.isFullySigned()}`
             details += lineTotal;
@@ -38836,14 +38836,14 @@ var Wallet = /** @class */ (function () {
     };
     // use OutputCollection.items
     Wallet.prototype.logUtxos = function (utxos) {
-        var logit = "In " + this.constructor.name + " " + utxos.length + " Unspent outputs";
+        var logit = "In ".concat(this.constructor.name, " ").concat(utxos.length, " Unspent outputs");
         var tot = 0;
         for (var i = 0; i < utxos.length; i++) {
             var utxo = utxos[i];
-            logit += "\n" + utxo.satoshis + "sat " + utxo.txId.slice(0, 4) + "..." + utxo.txId.slice(-4) + ":" + utxo.outputIndex;
+            logit += "\n".concat(utxo.satoshis, "sat ").concat(utxo.txId.slice(0, 4), "...").concat(utxo.txId.slice(-4), ":").concat(utxo.outputIndex);
             tot += utxo.satoshis;
         }
-        logit += "\nTotal:" + tot;
+        logit += "\nTotal:".concat(tot);
         console.log(logit);
     };
     //todo cache utxos
@@ -38918,12 +38918,12 @@ var Wallet = /** @class */ (function () {
                     case 2:
                         filteredUtxos = _a;
                         if (!filteredUtxos || filteredUtxos.count < 1) {
-                            throw Error("Insufficient wallet funds. Send funds to " + this.keyPair.toAddress().toString());
+                            throw Error("Insufficient wallet funds. Send funds to ".concat(this.keyPair.toAddress().toString()));
                         }
                         utxoSatoshis = filteredUtxos.spendable().satoshis;
                         changeSatoshis = utxoSatoshis - satoshis.toNumber();
                         if (changeSatoshis < 0) {
-                            throw Error("the utxo ran out of money " + changeSatoshis);
+                            throw Error("the utxo ran out of money ".concat(changeSatoshis));
                         }
                         txb = new TransactionBuilder_1.TransactionBuilder()
                             .from(filteredUtxos.items, this._keypair.pubKey);
@@ -38978,7 +38978,7 @@ var Wallet = /** @class */ (function () {
                         _b.label = 2;
                     case 2:
                         if (!this.selectedUtxos.hasAny() && !this._allowZeroFunding) {
-                            throw Error("Wallet " + ((_a = this._keypair) === null || _a === void 0 ? void 0 : _a.toAddress().toString()) + " does not have any unspent outputs!");
+                            throw Error("Wallet ".concat((_a = this._keypair) === null || _a === void 0 ? void 0 : _a.toAddress().toString(), " does not have any unspent outputs!"));
                         }
                         return [2 /*return*/];
                 }
@@ -39031,7 +39031,7 @@ var Wallet = /** @class */ (function () {
                                 }
                             }
                             else {
-                                throw Error("the wallet ran out of money " + this.fundingInputCount + " " + utxoSatoshis + " " + changeSatoshis);
+                                throw Error("the wallet ran out of money ".concat(this.fundingInputCount, " ").concat(utxoSatoshis, " ").concat(changeSatoshis));
                             }
                         }
                         txb = new TransactionBuilder_1.TransactionBuilder();
@@ -39191,7 +39191,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -39254,8 +39254,12 @@ Object.defineProperty(exports, "UnspentOutput", { enumerable: true, get: functio
 var IndexingService_1 = __importDefault(require("../src/IndexingService"));
 Object.defineProperty(exports, "IndexingService", { enumerable: true, get: function () { return IndexingService_1.default; } });
 window.MoneyStream = {
-    Buffer: Buffer, Hash: bsv_1.Hash, Aescbc: bsv_1.Aescbc,
-    Wallet: Wallet_1.Wallet, KeyPair: KeyPair_1.KeyPair, UnspentOutput: UnspentOutput_1.UnspentOutput,
+    Buffer: Buffer,
+    Hash: bsv_1.Hash,
+    Aescbc: bsv_1.Aescbc,
+    Wallet: Wallet_1.Wallet,
+    KeyPair: KeyPair_1.KeyPair,
+    UnspentOutput: UnspentOutput_1.UnspentOutput,
     IndexingService: IndexingService_1.default
 };
 
