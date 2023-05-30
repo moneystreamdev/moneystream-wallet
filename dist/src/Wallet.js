@@ -356,7 +356,7 @@ var Wallet = /** @class */ (function () {
     // legacy p2pkh spend
     // support paymail script
     // TODO: estimate fee
-    Wallet.prototype.makeSimpleSpend = function (satoshis, utxos, payTo, fee) {
+    Wallet.prototype.makeSimpleSpend = function (satoshis, utxos, payTo, fee, data) {
         if (fee === void 0) { fee = 300; }
         return __awaiter(this, void 0, void 0, function () {
             var filteredUtxos, _a, utxoSatoshis, changeSatoshis, txb;
@@ -396,6 +396,9 @@ var Wallet = /** @class */ (function () {
                         }
                         // change not working
                         // .change(this._keypair.toAddress())
+                        if (data) {
+                            this.addData(txb, data);
+                        }
                         this.lastTx = txb.buildAndSign(this._keypair);
                         return [2 /*return*/, {
                                 hex: this.lastTx.toHex(),

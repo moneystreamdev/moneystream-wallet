@@ -307,7 +307,10 @@ export class Wallet {
     // legacy p2pkh spend
     // support paymail script
     // TODO: estimate fee
-    async makeSimpleSpend(satoshis: Long, utxos?:OutputCollection, payTo?:typeof Script|string, fee:number=300): Promise<any> {
+    async makeSimpleSpend(satoshis: Long, utxos?:OutputCollection, payTo?:typeof Script|string,
+         fee:number=300,
+         data?: Buffer
+    ): Promise<any> {
         if (!this._keypair) { throw new Error('Load wallet before spending') }
         const filteredUtxos = utxos || await this.getAnUnspentOutput()
         if (!filteredUtxos || filteredUtxos.count < 1) {
@@ -333,6 +336,9 @@ export class Wallet {
         }
         // change not working
         // .change(this._keypair.toAddress())
+        if (data) {
+            this.addData(txb, data)
+        }
         this.lastTx = txb.buildAndSign(this._keypair)
         return {
             hex: this.lastTx.toHex(),
